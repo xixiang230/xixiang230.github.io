@@ -1,0 +1,712 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="GDB," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="云梦泽" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="源码编译，在编译前需要加上-g选项。123g++ -g -Wall -o house_roober 198_house_roober.cpp -std=c++11gcc -g -Wall -o house_roober 198_house_roober.cg++ -g hello.cpp -o hello   其中-g选项表示让编译器将符号表(对应程序的变量和代码行的内存地址列表)保存在生成的可">
+<meta name="keywords" content="GDB">
+<meta property="og:type" content="article">
+<meta property="og:title" content="GDB调试利器学习">
+<meta property="og:url" content="http://xixiang230.github.io/2016/06/21/GDB学习/index.html">
+<meta property="og:site_name" content="云梦泽">
+<meta property="og:description" content="源码编译，在编译前需要加上-g选项。123g++ -g -Wall -o house_roober 198_house_roober.cpp -std=c++11gcc -g -Wall -o house_roober 198_house_roober.cg++ -g hello.cpp -o hello   其中-g选项表示让编译器将符号表(对应程序的变量和代码行的内存地址列表)保存在生成的可">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-12-31T13:37:12.592Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="GDB调试利器学习">
+<meta name="twitter:description" content="源码编译，在编译前需要加上-g选项。123g++ -g -Wall -o house_roober 198_house_roober.cpp -std=c++11gcc -g -Wall -o house_roober 198_house_roober.cg++ -g hello.cpp -o hello   其中-g选项表示让编译器将符号表(对应程序的变量和代码行的内存地址列表)保存在生成的可">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> GDB调试利器学习 | 云梦泽 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">云梦泽</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">个人技术博客</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                GDB调试利器学习
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-06-21T22:33:15+08:00" content="2016-06-21">
+              2016-06-21
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/technique/" itemprop="url" rel="index">
+                    <span itemprop="name">技术</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <ol>
+<li>源码编译，在编译前需要加上-g选项。<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">g++ -g -Wall -o house_roober 198_house_roober.cpp -std=c++11</span><br><span class="line">gcc -g -Wall -o house_roober 198_house_roober.c</span><br><span class="line">g++ -g hello.cpp -o hello</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>其中-g选项表示让编译器将符号表(对应程序的变量和代码行的内存地址列表)保存在生成的可执行文件中，这样在<br>调试时就讷讷个在调试会话中引用源码的变量名和行号。  </p>
+<ol>
+<li>GDB启动<br>调试可执行文件<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">gdb &lt;program可执行文件&gt;</span><br><span class="line">gdb house_roober</span><br><span class="line">gdb a.out</span><br><span class="line">gdb -tui house_roober   #以tui模式运行GDB，可将终端分屏为源码窗口和控制窗口</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>调试core文件，core是程序非法执行后core dump后产生文件。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">gdb &lt;program&gt; &lt;core dump file&gt;</span><br><span class="line">gdb program core.11127</span><br></pre></td></tr></table></figure></p>
+<p>调试服务程序<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">gdb &lt;program&gt; &lt;PID&gt;</span><br><span class="line">gdb hello 11127</span><br></pre></td></tr></table></figure></p>
+<p>根据场景需求，选择相应的方式即可进入GDB调试模式。  </p>
+<ol>
+<li>GDB常用命令  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">回车    #重复上一次命令  </span><br><span class="line">quit    #退出GDB</span><br><span class="line">ctrl+d  #退出GDB</span><br><span class="line">return  #按下回车再次执行最近执行过的那条命令</span><br><span class="line">r或run     #执行程序，遇到断点时停在断点处等待用户输入下一步命令。    </span><br><span class="line">frame num #栈帧编号，当前正在执行的函数的帧编号为0，其父帧编号为1，依次类推。  </span><br><span class="line">up      #调到调用栈中的下一个父帧  </span><br><span class="line">down    #引向相反的方向  </span><br><span class="line">backtrace #显示整个栈  </span><br><span class="line">方向键  #滚动查看代码</span><br><span class="line">p       #输出当前值  </span><br><span class="line">ctrl+p  #浏览上一个GDB命令  </span><br><span class="line">ctrl+n  #浏览下一个GDB命令  </span><br><span class="line">call function(args)   #调用程序中可见的函数，并传递可参数</span><br><span class="line">call TestFun(55)</span><br><span class="line">quit或q #退出gdb</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>如果修改程序重新编译，不必重新启动GDB，GDB会在运行程序之前自动重新加载新的二分表和新的符号表。</p>
+<ol>
+<li><p>查看源码  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">l或list           #不带参数，从第一行开始或接着上一次list命令列出源码，默认每次显示10行  </span><br><span class="line">list LineNumber   #显示当前文件以行号为中心的前后共10行代码</span><br><span class="line">list 函数名       #显示函数名所在函数的源代码</span><br><span class="line">list main</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>断点设置命令  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">break LineNumber  #在LineNumber行上设置断点  </span><br><span class="line">break 16          #在源码第16行处设置断点  </span><br><span class="line">break FileName:LineNumber #在源码文件FileName的LineNumber行处设置断点  </span><br><span class="line">break FunctionName  #在FunctionName函数入口(第一行可执行代码)处设置断点。</span><br><span class="line">break func        #在函数func()入口处设置断点</span><br><span class="line">break FileName:FunctionName #在源码文件FileNaem的函数Function入口处设置断点。  </span><br><span class="line">b fn1 if a &gt; b             #条件断点设置</span><br><span class="line">delete n                   #删除第n个断点  </span><br><span class="line">disable n         #暂停第n个断点  </span><br><span class="line">enable n          #开启第n个断点</span><br><span class="line">lear LineNumber            #清除第n行的断点</span><br><span class="line">info b 或 info breakpoints #显示当前程序的断点设置情况  </span><br><span class="line">delete breakpoints         #清处所有断点</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>在函数名上设置断点相比行断点而言，如果修改了源代码，使得函数位置所在行发生变化，行断点就失去原来的作用了，<br>而函数断点仍然有效。但需要注意函数重载的情况。<br>当GDB使用多个断点中断一行源码时，只会中断一次。  </p>
+<ol>
+<li>条件断点  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">condition BreakNum Cond    #condition后跟断点编号和条件</span><br><span class="line">condition 1 num == 1         #当满足条件num==1时，GDB才会在断点行编号1处暂停程序的执行</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>如果以后要删除条件，但保持断点，键入:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cond BreakNum</span><br></pre></td></tr></table></figure></p>
+<p>用break if可以将break和condition命令组合成一个步骤<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">break BreakNum if cond  </span><br><span class="line">break 30 if num == 1  #条件语句可以用小括号括起来</span><br></pre></td></tr></table></figure></p>
+<h1 id="临时断点tbreak"><a href="#临时断点tbreak" class="headerlink" title="临时断点tbreak"></a>临时断点tbreak</h1><p>和break类似，但该命令设置的断点在首次到达该指定行后就不再有效  </p>
+<h1 id="删除断点"><a href="#删除断点" class="headerlink" title="删除断点"></a>删除断点</h1><ol>
+<li><p>break 可以基于标志符删除断点</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">delete BreakNum1 #删除指定断点编号 </span><br><span class="line">delte            #删除所有断点</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>clear 依据断点位置，工作方式删除，与break命令对应  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">clear function   </span><br><span class="line">clear FileName:function </span><br><span class="line">clear BreakNum  </span><br><span class="line">clear FileName:BreakNum</span><br><span class="line">clear          #清除GDB将执行的下一个指定处的断点</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>禁用与启用断点  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">disable BreakPointList  #用空格分隔开的多个断点标志符  </span><br><span class="line">disable                 #禁用现存所有断点  </span><br><span class="line">enable BreakPointList   #启用断点  </span><br><span class="line">enable once BreakPointList  #在下次引起GDB暂停执行后禁用</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>断点查看</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">info break              #查看断点信息</span><br><span class="line">info breakpoints </span><br><span class="line">i b</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>打印相关<br>print或p  表达式   #<br>表达式可以是任何当前正在被测试程序的有效表达式，比如当前正在调试C程序，那么表达式可以是任何C语言的有效表达式，包括数字，变量甚至函数调用。<br>print num         #打印整数num的值<br>print ++num       #把num值加1后打印<br>print name        #显示字符串name的值<br>print func(22)    #将整数22作为参数调用func函数<br>print func(a)     #将变量a作为参数调用func函数<br>display 表达式 #在单步运行时非常有用，使用display命令设置表达式后，将在每次单步进行指令后，紧接着输出被设置的表达式和值。<br>display a<br>whatis    #查询变量或函数的类型<br>info function  #查询函数<br>info locals    #显示当前堆栈页的所有变量  </p>
+</li>
+<li>查询运行信息<br>where/bt        #当前运行的堆栈列表<br>bt backtrace    #显示当前调用堆栈<br>up/down         #改变堆栈显示的深度<br>set args        #指定运行时的参数<br>show args       #查看设置好的参数<br>info program    #查看程序是否在运行，进程号，被暂停的原因  </li>
+<li>使用commands命令设置命令列表<br>让GDB在每次到达某个断点时自动执行一组命令，从而自动完成某一任务  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">commands BreakPointNumber  </span><br><span class="line">......</span><br><span class="line">commands</span><br><span class="line">......</span><br><span class="line">end</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>实例<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">commands 1     #首先输入GDB命令，进入commands模式</span><br><span class="line"></span><br><span class="line">[silent]       #可选的silent命令，在命令列表开始处设置，避免GDB输出冗长  </span><br><span class="line">printf &quot;fibonacci was passed %d .\n&quot;, n       #设置命令列表，这里的printf和C中printf用法类似，可省略括号。   </span><br><span class="line">end</span><br></pre></td></tr></table></figure></p>
+<h1 id="执行"><a href="#执行" class="headerlink" title="执行"></a>执行</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">step       #单步执行，单步进入 </span><br><span class="line">s          #单步执行</span><br><span class="line">next       #下一步，单步跟踪程序，当遇到函数调用时，不会进入函数体。</span><br><span class="line">n          #下一步</span><br></pre></td></tr></table></figure>
+<p>step与next区别: 在函数调用时，step会进入函数体，而next会导致下一次暂停出现在函数调用之后，而不会进入函数体。<br>setp与next后都可跟可选的一个数值，表要使用step或next执行的额外行数  </p>
+<h1 id="无条件恢复程序执行"><a href="#无条件恢复程序执行" class="headerlink" title="无条件恢复程序执行"></a>无条件恢复程序执行</h1><ol>
+<li>continue<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">continue(简写 c)</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>无条件恢复程序执行，继续执行，直到遇到下一个断点或程序结束<br>另外continue可接受一个可选的数值参数n，要求GDB忽略接下来的n个断点。  </p>
+<ol>
+<li>finish(fin) 和 until(u)命令恢复<br>finish命令指示GDB恢复执行，运行程序，直到恰好在当前帧完成之后为止(直到当前函数完成返回)，并打印函数返回时的堆栈地址和返回值以及参数值等信息。<br>until命令通常用来在不进一步循环中暂停(除了循环中的中间断点)的情况下完成正在执行的循环。until会执行循环的其余部分，当厌倦了在一个循环体内单步跟踪时，until可以运行程序直到退出循序体。<br>(如果遇到断点，还是会暂停)，让GDB在循环后面的第一行代码处暂停。<br>until命令也可以接受源码中的位置作为参数，用法与break命令相同。  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">until 行号     #运行至某行，不仅仅用来跳出循环  </span><br><span class="line">until 13</span><br><span class="line">until swap </span><br><span class="line">until swapflaw.c:13</span><br><span class="line">until swapflaw.c:swap</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>上述命令均可方便地使程序一直执行到swap()函数的入口。  </p>
+<p>#监视点<br>监视点是一种特殊类型的断点，区别在于监视点没有”住在”某一行源码中，而是指示GDB每当某个表达式改变了值就暂停<br>执行，即一旦被监视的表达式值改变，gdb将强行终止正在被调试的程序。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">watch a        #设置监视点，watch后跟变量名，也可以是复杂的表达式</span><br></pre></td></tr></table></figure></p>
+<p>监视点只能监视存在切在作用域中的变量，一旦遍历不再存在于调用栈的任何帧中，GDB会自动删除监视点。<br>GDB实际上是在遍历的内存位置改变值时中断。  </p>
+<ol>
+<li>窗口分割<br>layout      #用于分割窗口，可一边查代码一边测试<br>layout src  #显示源码窗口<br>layout asm  #显示反汇编窗口<br>layout regs #显示源码/反汇编和CPU寄存器窗口<br>layout split #显示源码和反汇编窗口<br>Ctrl+L      #涮新窗口</li>
+</ol>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/GDB/" rel="tag">#GDB</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/06/21/MySQL常用函数汇总/" rel="next" title="MySQL常用函数汇总">
+                <i class="fa fa-chevron-left"></i> MySQL常用函数汇总
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/06/26/动态规划/" rel="prev" title="动态规划">
+                动态规划 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="yunmengze" />
+          <p class="site-author-name" itemprop="name">yunmengze</p>
+          <p class="site-description motion-element" itemprop="description">求知若饥，虛心若愚</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">62</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">36</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/xixiang230" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/xixiang230" target="_blank" title="Twitter">
+                  
+                    <i class="fa fa-fw fa-twitter"></i>
+                  
+                  Twitter
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/your-user-name" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://douban.com/people/your-user-name" target="_blank" title="FaceBook">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  FaceBook
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#临时断点tbreak"><span class="nav-number">1.</span> <span class="nav-text">临时断点tbreak</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#删除断点"><span class="nav-number">2.</span> <span class="nav-text">删除断点</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#执行"><span class="nav-number">3.</span> <span class="nav-text">执行</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#无条件恢复程序执行"><span class="nav-number">4.</span> <span class="nav-text">无条件恢复程序执行</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">yunmengze</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+  
+  
+  
+
+  
+
+  
+
+</body>
+</html>

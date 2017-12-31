@@ -1,0 +1,799 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="k8s," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="云梦泽" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="src: /home/liuzekun/github/kubernetes/cmd/kube-apiserver/app/options/options.go 简述 &amp;gt;apiserver是K8S最重要的组成部分，不论是命令操作还是通过remoteAPI进行控制，实际都需要经过apiserver。apiserver是k8s系统中所有对象的增删改查盯的http/restful式服务端，其中盯是指">
+<meta name="keywords" content="k8s">
+<meta property="og:type" content="article">
+<meta property="og:title" content="kubernetes apiServer启动分析">
+<meta property="og:url" content="http://xixiang230.github.io/2017/10/09/kubernetes-apiServer启动分析/index.html">
+<meta property="og:site_name" content="云梦泽">
+<meta property="og:description" content="src: /home/liuzekun/github/kubernetes/cmd/kube-apiserver/app/options/options.go 简述 &amp;gt;apiserver是K8S最重要的组成部分，不论是命令操作还是通过remoteAPI进行控制，实际都需要经过apiserver。apiserver是k8s系统中所有对象的增删改查盯的http/restful式服务端，其中盯是指">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-12-31T13:37:12.594Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="kubernetes apiServer启动分析">
+<meta name="twitter:description" content="src: /home/liuzekun/github/kubernetes/cmd/kube-apiserver/app/options/options.go 简述 &amp;gt;apiserver是K8S最重要的组成部分，不论是命令操作还是通过remoteAPI进行控制，实际都需要经过apiserver。apiserver是k8s系统中所有对象的增删改查盯的http/restful式服务端，其中盯是指">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> kubernetes apiServer启动分析 | 云梦泽 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">云梦泽</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">个人技术博客</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                kubernetes apiServer启动分析
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2017-10-09T23:03:14+08:00" content="2017-10-09">
+              2017-10-09
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>src: /home/liuzekun/github/kubernetes/cmd/kube-apiserver/app/options/options.go</p>
+<h1 id="简述"><a href="#简述" class="headerlink" title="简述"></a>简述</h1><blockquote>
+<p>&gt;<br>apiserver是K8S最重要的组成部分，不论是命令操作还是通过remote<br>API进行控制，实际都需要经过apiserver。<br>apiserver是k8s系统中所有对象的增删改查盯的http/restful式服务端，其中盯是指watch操作。数据最终存储在分布式一致的etcd存储内，apiserver本身是无状态的，提供了这些数据访问的认证鉴权、缓存、api版本适配转换等一系列的功能。<br>// Package options contains flags and options for initializing an apiserver<br>package options</p>
+</blockquote>
+<p>import (<br>    “net”<br>    “strings”<br>    “time”</p>
+<pre><code>// 导入包时给包起别名
+utilnet &quot;k8s.io/apimachinery/pkg/util/net&quot;        
+genericoptions &quot;k8s.io/apiserver/pkg/server/options&quot;
+&quot;k8s.io/apiserver/pkg/storage/storagebackend&quot;
+&quot;k8s.io/kubernetes/pkg/api&quot;
+&quot;k8s.io/kubernetes/pkg/api/validation&quot;
+kubeoptions &quot;k8s.io/kubernetes/pkg/kubeapiserver/options&quot;
+kubeletclient &quot;k8s.io/kubernetes/pkg/kubelet/client&quot;
+&quot;k8s.io/kubernetes/pkg/master/ports&quot;
+&quot;k8s.io/kubernetes/pkg/master/reconcilers&quot;
+
+// add the kubernetes feature gates
+// _
+表只想执行一下某个代码包中的初始化函数，而不需要使用这个代码包中的任何程序实体
+_ &quot;k8s.io/kubernetes/pkg/features&quot;
+
+&quot;github.com/spf13/pflag&quot;
+</code></pre><p>)</p>
+<p>// DefaultServiceNodePortRange is the default port range for NodePort services.<br>var DefaultServiceNodePortRange = utilnet.PortRange{Base: 30000, Size: 2768}</p>
+<p>// ServerRunOptions runs a kubernetes api server.<br>type ServerRunOptions struct {<br>    GenericServerRunOptions <em>genericoptions.ServerRunOptions        //服务器通用的运行参数<br>    Etcd                    </em>genericoptions.EtcdOptions<br>    SecureServing           <em>genericoptions.SecureServingOptions<br>    InsecureServing         </em>kubeoptions.InsecureServingOptions<br>    Audit                   <em>genericoptions.AuditOptions<br>    Features                </em>genericoptions.FeatureOptions<br>    Admission               <em>genericoptions.AdmissionOptions<br>    Authentication          </em>kubeoptions.BuiltInAuthenticationOptions<br>    Authorization           <em>kubeoptions.BuiltInAuthorizationOptions<br>    CloudProvider           </em>kubeoptions.CloudProviderOptions<br>    StorageSerialization    <em>kubeoptions.StorageSerializationOptions<br>    APIEnablement           </em>kubeoptions.APIEnablementOptions</p>
+<pre><code>AllowPrivileged           bool    // 是否配置超级权限，即运行Pod中运行的容器拥有系统特权
+EnableLogsHandler         bool
+EventTTL                  time.Duration  // 事件留存事件，默认1h
+KubeletConfig             kubeletclient.KubeletClientConfig
+KubernetesServiceNodePort int
+MaxConnectionBytesPerSec  int64
+ServiceClusterIPRange     net.IPNet // TODO: make this a list
+ServiceNodePortRange      utilnet.PortRange
+SSHKeyfile                string
+SSHUser                   string
+
+ProxyClientCertFile string
+ProxyClientKeyFile  string
+
+EnableAggregatorRouting bool
+
+MasterCount            int
+EndpointReconcilerType string
+</code></pre><p>}</p>
+<p>// NewServerRunOptions creates a new ServerRunOptions object with default parameters<br>func NewServerRunOptions() *ServerRunOptions {<br>    s := ServerRunOptions{<br>        GenericServerRunOptions: genericoptions.NewServerRunOptions(),<br>        Etcd:                 genericoptions.NewEtcdOptions(storagebackend.NewDefaultConfig(kubeoptions.DefaultEtcdPathPrefix, api.Scheme, nil)),<br>        SecureServing:        kubeoptions.NewSecureServingOptions(),<br>        InsecureServing:      kubeoptions.NewInsecureServingOptions(),<br>        Audit:                genericoptions.NewAuditOptions(),<br>        Features:             genericoptions.NewFeatureOptions(),<br>        Admission:            genericoptions.NewAdmissionOptions(),<br>        Authentication:       kubeoptions.NewBuiltInAuthenticationOptions().WithAll(),<br>        Authorization:        kubeoptions.NewBuiltInAuthorizationOptions(),<br>        CloudProvider:        kubeoptions.NewCloudProviderOptions(),<br>        StorageSerialization: kubeoptions.NewStorageSerializationOptions(),<br>        APIEnablement:        kubeoptions.NewAPIEnablementOptions(),</p>
+<pre><code>    EnableLogsHandler:      true,
+    EventTTL:               1 * time.Hour,
+    MasterCount:            1,
+    EndpointReconcilerType: string(reconcilers.MasterCountReconcilerType),
+    KubeletConfig: kubeletclient.KubeletClientConfig{
+        Port:         ports.KubeletPort,
+        ReadOnlyPort: ports.KubeletReadOnlyPort,
+        PreferredAddressTypes: []string{
+            // --override-hostname
+            string(api.NodeHostName),
+
+            // internal, preferring DNS if reported
+            string(api.NodeInternalDNS),
+            string(api.NodeInternalIP),
+
+            // external, preferring DNS if reported
+            string(api.NodeExternalDNS),
+            string(api.NodeExternalIP),
+        },
+        EnableHttps: true,
+        HTTPTimeout: time.Duration(5) * time.Second,
+    },
+    ServiceNodePortRange: DefaultServiceNodePortRange,
+}
+// Overwrite the default for storage data format.
+s.Etcd.DefaultStorageMediaType = &quot;application/vnd.kubernetes.protobuf&quot;
+
+// register all admission plugins
+RegisterAllAdmissionPlugins(s.Admission.Plugins)
+// Set the default for admission plugins names
+s.Admission.PluginNames = []string{&quot;AlwaysAdmit&quot;}
+return &amp;s
+</code></pre><p>}</p>
+<p>// AddFlags adds flags for a specific APIServer to the specified FlagSet<br>func (s <em>ServerRunOptions) AddFlags(fs </em>pflag.FlagSet) {<br>    // Add the generic flags.<br>    s.GenericServerRunOptions.AddUniversalFlags(fs)<br>    s.Etcd.AddFlags(fs)<br>    s.SecureServing.AddFlags(fs)<br>    s.SecureServing.AddDeprecatedFlags(fs)<br>    s.InsecureServing.AddFlags(fs)<br>    s.InsecureServing.AddDeprecatedFlags(fs)<br>    s.Audit.AddFlags(fs)<br>    s.Features.AddFlags(fs)<br>    s.Authentication.AddFlags(fs)<br>    s.Authorization.AddFlags(fs)<br>    s.CloudProvider.AddFlags(fs)<br>    s.StorageSerialization.AddFlags(fs)<br>    s.APIEnablement.AddFlags(fs)<br>    s.Admission.AddFlags(fs)</p>
+<pre><code>// Note: the weird &quot;&quot;+ in below lines seems to be the only way to get gofmt to
+// arrange these text blocks sensibly. Grrr.
+
+fs.DurationVar(&amp;s.EventTTL, &quot;event-ttl&quot;, s.EventTTL,
+    &quot;Amount of time to retain events.&quot;)
+
+fs.BoolVar(&amp;s.AllowPrivileged, &quot;allow-privileged&quot;, s.AllowPrivileged,
+    &quot;If true, allow privileged containers. [default=false]&quot;)
+
+fs.BoolVar(&amp;s.EnableLogsHandler, &quot;enable-logs-handler&quot;, s.EnableLogsHandler,
+    &quot;If true, install a /logs handler for the apiserver logs.&quot;)
+
+fs.StringVar(&amp;s.SSHUser, &quot;ssh-user&quot;, s.SSHUser,
+    &quot;If non-empty, use secure SSH proxy to the nodes, using this user name&quot;)
+
+fs.StringVar(&amp;s.SSHKeyfile, &quot;ssh-keyfile&quot;, s.SSHKeyfile,
+    &quot;If non-empty, use secure SSH proxy to the nodes, using this user keyfile&quot;)
+
+fs.Int64Var(&amp;s.MaxConnectionBytesPerSec, &quot;max-connection-bytes-per-sec&quot;, s.MaxConnectionBytesPerSec, &quot;&quot;+
+    &quot;If non-zero, throttle each user connection to this number of bytes/sec. &quot;+
+    &quot;Currently only applies to long-running requests.&quot;)
+
+fs.IntVar(&amp;s.MasterCount, &quot;apiserver-count&quot;, s.MasterCount,
+    &quot;The number of apiservers running in the cluster, must be a positive number.&quot;)
+
+fs.StringVar(&amp;s.EndpointReconcilerType, &quot;alpha-endpoint-reconciler-type&quot;, string(s.EndpointReconcilerType),
+    &quot;Use an endpoint reconciler (&quot;+strings.Join(reconcilers.AllTypes.Names(), &quot;, &quot;)+&quot;)&quot;)
+
+// See #14282 for details on how to test/try this option out.
+// TODO: remove this comment once this option is tested in CI.
+fs.IntVar(&amp;s.KubernetesServiceNodePort, &quot;kubernetes-service-node-port&quot;, s.KubernetesServiceNodePort, &quot;&quot;+
+    &quot;If non-zero, the Kubernetes master service (which apiserver creates/maintains) will be &quot;+
+    &quot;of type NodePort, using this as the value of the port. If zero, the Kubernetes master &quot;+
+    &quot;service will be of type ClusterIP.&quot;)
+
+fs.IPNetVar(&amp;s.ServiceClusterIPRange, &quot;service-cluster-ip-range&quot;, s.ServiceClusterIPRange, &quot;&quot;+
+    &quot;A CIDR notation IP range from which to assign service cluster IPs. This must not &quot;+
+    &quot;overlap with any IP ranges assigned to nodes for pods.&quot;)
+
+fs.IPNetVar(&amp;s.ServiceClusterIPRange, &quot;portal-net&quot;, s.ServiceClusterIPRange,
+    &quot;DEPRECATED: see --service-cluster-ip-range instead.&quot;)
+fs.MarkDeprecated(&quot;portal-net&quot;, &quot;see --service-cluster-ip-range instead&quot;)
+
+fs.Var(&amp;s.ServiceNodePortRange, &quot;service-node-port-range&quot;, &quot;&quot;+
+    &quot;A port range to reserve for services with NodePort visibility. &quot;+
+    &quot;Example: &apos;30000-32767&apos;. Inclusive at both ends of the range.&quot;)
+fs.Var(&amp;s.ServiceNodePortRange, &quot;service-node-ports&quot;, &quot;DEPRECATED: see --service-node-port-range instead&quot;)
+fs.MarkDeprecated(&quot;service-node-ports&quot;, &quot;see --service-node-port-range instead&quot;)
+
+// Kubelet related flags:
+fs.BoolVar(&amp;s.KubeletConfig.EnableHttps, &quot;kubelet-https&quot;, s.KubeletConfig.EnableHttps,
+    &quot;Use https for kubelet connections.&quot;)
+
+fs.StringSliceVar(&amp;s.KubeletConfig.PreferredAddressTypes, &quot;kubelet-preferred-address-types&quot;, s.KubeletConfig.PreferredAddressTypes,
+    &quot;List of the preferred NodeAddressTypes to use for kubelet connections.&quot;)
+
+fs.UintVar(&amp;s.KubeletConfig.Port, &quot;kubelet-port&quot;, s.KubeletConfig.Port,
+    &quot;DEPRECATED: kubelet port.&quot;)
+fs.MarkDeprecated(&quot;kubelet-port&quot;, &quot;kubelet-port is deprecated and will be removed.&quot;)
+
+fs.UintVar(&amp;s.KubeletConfig.ReadOnlyPort, &quot;kubelet-read-only-port&quot;, s.KubeletConfig.ReadOnlyPort,
+    &quot;DEPRECATED: kubelet port.&quot;)
+
+fs.DurationVar(&amp;s.KubeletConfig.HTTPTimeout, &quot;kubelet-timeout&quot;, s.KubeletConfig.HTTPTimeout,
+    &quot;Timeout for kubelet operations.&quot;)
+
+fs.StringVar(&amp;s.KubeletConfig.CertFile, &quot;kubelet-client-certificate&quot;, s.KubeletConfig.CertFile,
+    &quot;Path to a client cert file for TLS.&quot;)
+
+fs.StringVar(&amp;s.KubeletConfig.KeyFile, &quot;kubelet-client-key&quot;, s.KubeletConfig.KeyFile,
+    &quot;Path to a client key file for TLS.&quot;)
+
+fs.StringVar(&amp;s.KubeletConfig.CAFile, &quot;kubelet-certificate-authority&quot;, s.KubeletConfig.CAFile,
+    &quot;Path to a cert file for the certificate authority.&quot;)
+
+// TODO: delete this flag as soon as we identify and fix all clients that send malformed updates, like #14126.
+fs.BoolVar(&amp;validation.RepairMalformedUpdates, &quot;repair-malformed-updates&quot;, validation.RepairMalformedUpdates, &quot;&quot;+
+    &quot;If true, server will do its best to fix the update request to pass the validation, &quot;+
+    &quot;e.g., setting empty UID in update request to its existing value. This flag can be turned off &quot;+
+    &quot;after we fix all the clients that send malformed updates.&quot;)
+
+fs.StringVar(&amp;s.ProxyClientCertFile, &quot;proxy-client-cert-file&quot;, s.ProxyClientCertFile, &quot;&quot;+
+    &quot;Client certificate used to prove the identity of the aggregator or kube-apiserver &quot;+
+    &quot;when it must call out during a request. This includes proxying requests to a user &quot;+
+    &quot;api-server and calling out to webhook admission plugins. It is expected that this &quot;+
+    &quot;cert includes a signature from the CA in the --requestheader-client-ca-file flag. &quot;+
+    &quot;That CA is published in the &apos;extension-apiserver-authentication&apos; configmap in &quot;+
+    &quot;the kube-system namespace. Components recieving calls from kube-aggregator should &quot;+
+    &quot;use that CA to perform their half of the mutual TLS verification.&quot;)
+fs.StringVar(&amp;s.ProxyClientKeyFile, &quot;proxy-client-key-file&quot;, s.ProxyClientKeyFile, &quot;&quot;+
+    &quot;Private key for the client certificate used to prove the identity of the aggregator or kube-apiserver &quot;+
+    &quot;when it must call out during a request. This includes proxying requests to a user &quot;+
+    &quot;api-server and calling out to webhook admission plugins.&quot;)
+
+fs.BoolVar(&amp;s.EnableAggregatorRouting, &quot;enable-aggregator-routing&quot;, s.EnableAggregatorRouting,
+    &quot;Turns on aggregator routing requests to endoints IP rather than cluster IP.&quot;)
+</code></pre><p>}</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/k8s/" rel="tag">#k8s</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/09/12/Docker-api源码阅读/" rel="next" title="Docker api源码阅读">
+                <i class="fa fa-chevron-left"></i> Docker api源码阅读
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/12/31/Hexo常用命令/" rel="prev" title="Hexo常用命令">
+                Hexo常用命令 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="yunmengze" />
+          <p class="site-author-name" itemprop="name">yunmengze</p>
+          <p class="site-description motion-element" itemprop="description">求知若饥，虛心若愚</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">62</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">36</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/xixiang230" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/xixiang230" target="_blank" title="Twitter">
+                  
+                    <i class="fa fa-fw fa-twitter"></i>
+                  
+                  Twitter
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/your-user-name" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://douban.com/people/your-user-name" target="_blank" title="FaceBook">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  FaceBook
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#简述"><span class="nav-number">1.</span> <span class="nav-text">简述</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">yunmengze</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+  
+  
+  
+
+  
+
+  
+
+</body>
+</html>

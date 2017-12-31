@@ -1,0 +1,701 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="HTML," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="云梦泽" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="HTML5的涉及准则之一就是化繁为简，极大地简化代码编写，一下这些新特性很多也是围绕这个目标实现。   文档类型声明在HTML5中文档类型的声明方式是1&amp;lt;!DOCTYPE html&amp;gt; 在HTML4中的DOCTYPE代码就长了，长的懒得展现了。而在HTML5中干净利索的解决了这个问题。     字符集声明同样在HTML4中字符集的声明也是一大坨，现在只要这样:1&amp;lt;meta char">
+<meta name="keywords" content="HTML">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HTML5新特性学习">
+<meta property="og:url" content="http://xixiang230.github.io/2016/06/18/HTML5新特性学习/index.html">
+<meta property="og:site_name" content="云梦泽">
+<meta property="og:description" content="HTML5的涉及准则之一就是化繁为简，极大地简化代码编写，一下这些新特性很多也是围绕这个目标实现。   文档类型声明在HTML5中文档类型的声明方式是1&amp;lt;!DOCTYPE html&amp;gt; 在HTML4中的DOCTYPE代码就长了，长的懒得展现了。而在HTML5中干净利索的解决了这个问题。     字符集声明同样在HTML4中字符集的声明也是一大坨，现在只要这样:1&amp;lt;meta char">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-12-31T13:37:12.592Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="HTML5新特性学习">
+<meta name="twitter:description" content="HTML5的涉及准则之一就是化繁为简，极大地简化代码编写，一下这些新特性很多也是围绕这个目标实现。   文档类型声明在HTML5中文档类型的声明方式是1&amp;lt;!DOCTYPE html&amp;gt; 在HTML4中的DOCTYPE代码就长了，长的懒得展现了。而在HTML5中干净利索的解决了这个问题。     字符集声明同样在HTML4中字符集的声明也是一大坨，现在只要这样:1&amp;lt;meta char">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> HTML5新特性学习 | 云梦泽 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">云梦泽</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">个人技术博客</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                HTML5新特性学习
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-06-18T08:47:08+08:00" content="2016-06-18">
+              2016-06-18
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/technique/" itemprop="url" rel="index">
+                    <span itemprop="name">技术</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>HTML5的涉及准则之一就是化繁为简，极大地简化代码编写，一下这些新特性很多也是围绕这个目标实现。  </p>
+<h1 id="文档类型声明"><a href="#文档类型声明" class="headerlink" title="文档类型声明"></a>文档类型声明</h1><p>在HTML5中文档类型的声明方式是<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;!DOCTYPE html&gt;</span><br></pre></td></tr></table></figure></p>
+<p>在HTML4中的DOCTYPE代码就长了，长的懒得展现了。而在HTML5中干净利索的解决了这个问题。    </p>
+<h1 id="字符集声明"><a href="#字符集声明" class="headerlink" title="字符集声明"></a>字符集声明</h1><p>同样在HTML4中字符集的声明也是一大坨，现在只要这样:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;meta charset=&quot;utf-8&quot;&gt;</span><br></pre></td></tr></table></figure></p>
+<h1 id="链接和脚本"><a href="#链接和脚本" class="headerlink" title="链接和脚本"></a>链接和脚本</h1><p>在HTML5中，无需再指定类型属性(no more types for scripts and links)<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;link ref=&quot;stylesheet&quot; href=&quot;path/tp/stylesheet.css&quot;&gt;</span><br><span class="line">&lt;script src=&quot;path/to/script.js&quot;&gt;&lt;/script&gt;</span><br></pre></td></tr></table></figure></p>
+<p>在HTML4和XHTML中链接和脚本都是要指名type属性的(分别是type=”text/css”和type=”text/javascript”)。  </p>
+<h1 id="语义Header和Footer"><a href="#语义Header和Footer" class="headerlink" title="语义Header和Footer"></a>语义Header和Footer</h1><p>在HTML5中，可用<code>&lt;header&gt;</code>和<code>&lt;footer&gt;</code>元素实现使得代码更加简洁。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;header&gt;</span><br><span class="line">...</span><br><span class="line">&lt;/header&gt;</span><br><span class="line">&lt;footer&gt;</span><br><span class="line">...</span><br><span class="line">&lt;/footer&gt;</span><br></pre></td></tr></table></figure></p>
+<p>而在HTML4和XHTML中，是借助<code>&lt;div id=&quot;header&quot;&gt;</code>和<code>&lt;div id=&quot;footer&quot;&gt;</code>来实现的。</p>
+<h1 id="hgroup"><a href="#hgroup" class="headerlink" title="hgroup"></a>hgroup</h1><p>hgroup为HTML5新引入元素之一，假设网站下面紧跟着一个子标题，一般可用<code>&lt;h1&gt;</code>和<code>&lt;h2&gt;</code>标签来定义，缺点是这并没有<br>说明二者之间的联系，且h2标签可能还会带来问题，比如在该页面上还有其他标题时。在HTML5中可用hgroup元素将他们分组。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;header&gt;</span><br><span class="line">&lt;hgroup&gt;</span><br><span class="line">    &lt;h1&gt;First Header&lt;/h1&gt;</span><br><span class="line">    &lt;h2&gt;Second Header&lt;/h2&gt;</span><br><span class="line">&lt;/hgroup&gt;</span><br><span class="line">&lt;/header&gt;</span><br></pre></td></tr></table></figure></p>
+<h1 id="标记元素"><a href="#标记元素" class="headerlink" title="标记元素"></a>标记元素</h1><p>标记元素<code>&lt;makr&gt;</code>可视之为高亮标签，该标签修饰的字符串应该和用户当前行为相关，用<code>&lt;mark&gt;</code>元素包围的字符串会<br>高亮显示。搜索关键词时，就可用用到该技术，将匹配到的字符用<code>&lt;mark&gt;</code>元素修饰。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;p&gt;Hello &lt;mark&gt;&quot;Baidu&quot;&lt;/mark&gt;&quot;&lt;/p&gt;</span><br></pre></td></tr></table></figure></p>
+<h1 id="图形元素"><a href="#图形元素" class="headerlink" title="图形元素"></a>图形元素</h1><p>HTML5中引入了<code>&lt;figure&gt;</code>元素，并可与<code>&lt;figcaption&gt;</code>元素结合，语义化地将注释和相应的图片联系。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;figure&gt;</span><br><span class="line">&lt;img src=&quot;path/to/image&quot; alt=&quot;About image&quot; /&gt;</span><br><span class="line">&lt;figcaption&gt;</span><br><span class="line">    &lt;p&gt;This is an image &lt;/p&gt;</span><br><span class="line">&lt;/figcaption&gt;</span><br><span class="line">&lt;/figure&gt;</span><br></pre></td></tr></table></figure></p>
+<h1 id="lt-small-gt-重定义"><a href="#lt-small-gt-重定义" class="headerlink" title="&lt;small&gt;重定义"></a><code>&lt;small&gt;</code>重定义</h1><p>在HTML5中，<code>&lt;small&gt;</code>可用来定义小字体，比如应用于网站底部的版权状态。  </p>
+<h1 id="占位符placeholder属性"><a href="#占位符placeholder属性" class="headerlink" title="占位符placeholder属性"></a>占位符placeholder属性</h1><p>占位符可用于提前设置一些信息，当用户开始输入时，文本框文字就会消失。在HTML5中引入了placeholder属性很好的解决了这个问题。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;input id=&quot;search&quot; type=&quot;text&quot; placeholder=&quot;预案名&quot; name=&quot;searchterm&quot;&gt;</span><br></pre></td></tr></table></figure></p>
+<h1 id="“必要”属性"><a href="#“必要”属性" class="headerlink" title="“必要”属性"></a>“必要”属性</h1><p>HTML5中引入了说明”必要”性的属性required，用于指名某一输入是否必须。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;input type=&quot;text&quot; required&gt;</span><br><span class="line">&lt;input type=&quot;text&quot; required=&quot;required&quot;&gt;</span><br></pre></td></tr></table></figure></p>
+<p>当文本框被指定了必要属性后，如果空白的话表格就不能提交。例:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;form method=&quot;post&quot; action=&quot;&quot;&gt;</span><br><span class="line">&lt;lablel for=&quot;some-input&quot;&gt;You Name: &lt;/label&gt;</span><br><span class="line">&lt;input type=&quot;text&quot; placeholder=&quot;Jim&quot; required&gt;</span><br><span class="line">&lt;button type=&quot;submit&quot;&gt;OK&lt;/button&gt;</span><br><span class="line">&lt;/form&gt;</span><br></pre></td></tr></table></figure></p>
+<p>如果输入内容为空，在提交表格时，输入框将被高亮显示。  </p>
+<h1 id="autofocus属性"><a href="#autofocus属性" class="headerlink" title="autofocus属性"></a>autofocus属性</h1><p>如果一定特定的输入应该是”选择”或聚焦，默认情况下，可以利用自动聚焦属性。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;input type=&quot;text&quot; placeholder=&quot;jim&quot; required autofocus&gt;</span><br></pre></td></tr></table></figure></p>
+<h1 id="Audio支持"><a href="#Audio支持" class="headerlink" title="Audio支持"></a>Audio支持</h1><p>在HTML5中，引入了<code>&lt;audio&gt;</code>元素<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;audio autoplay=&quot;autoplay&quot; constols=&quot;controls&quot;&gt;</span><br><span class="line">    &lt;source src=&quot;file.ogg&quot; /&gt;</span><br><span class="line">    &lt;source src=&quot;file.mp3&quot; /&gt;</span><br><span class="line">    &lt;a href=&quot;file.mp3&quot;&gt;Download this file&lt;/a&gt;</span><br><span class="line">&lt;/audio&gt;</span><br></pre></td></tr></table></figure></p>
+<h1 id="Video支持"><a href="#Video支持" class="headerlink" title="Video支持"></a>Video支持</h1><p>HTML5支持<code>&lt;audio&gt;</code>，和<code>&lt;audio&gt;</code>类似，HTML5也没有指定视频解码器，留给浏览器来决定。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;vido controls preload&gt;</span><br><span class="line">&lt;source src=&quot;cohagenPhoneCall.ogv&quot; type=&quot;video/ogg; codecs=&apos;vorbis, theora&apos;&quot; /&gt;</span><br><span class="line">&lt;source src=&quot;cohagenPhoneCall.mp4&quot; type=&quot;video/mp4; &apos;codecs=&apos;avc1.42E01E, mp4a.40.2&apos;&quot; /&gt;</span><br><span class="line">&lt;p&gt; Your browser is old. &lt;a href=&quot;cohagenPhoneCall.mp4&quot;&gt;Download this video instead.&lt;/a&gt; &lt;/p&gt;</span><br><span class="line">&lt;/video&gt;</span><br></pre></td></tr></table></figure></p>
+<h1 id="视频预载-preload-attribute-in-video-element"><a href="#视频预载-preload-attribute-in-video-element" class="headerlink" title="视频预载(preload attribute in video element)"></a>视频预载(preload attribute in video element)</h1><p>当用户访问页面时，preload属性使得视频可以预载<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;video preload&gt;</span><br><span class="line">&lt;video preload=&quot;preload&quot;&gt;</span><br><span class="line">```  </span><br><span class="line"># 显示控制条(Display controls)  </span><br><span class="line">为了渲染出播放控制条，必须在video元素内知道controls属性</span><br></pre></td></tr></table></figure></p>
+<p><video preload="" controls><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 正则表达式  </span><br><span class="line">在HTML4或XHTML中，需要用一些正则表达式来验证特定的文本，HTML5中引入了新的pattern属性，可在标签处直接插入一个正则表达式。</span><br></pre></td></tr></table></figure></video></p>
+<p><form action="" method="post"></form></p>
+<p><label for="username">Create a Username</label></p>
+<p><input type="text" ,="" placeholder="4 <> 10" pattern="[A-Za-z]{4,10}" autofocus required></p>
+<p><button type="submit">OK</button><br><br>```</p>
+<h1 id="新的片段类元素"><a href="#新的片段类元素" class="headerlink" title="新的片段类元素"></a>新的片段类元素</h1><table>
+<thead>
+<tr>
+<th>元素名</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>header</td>
+<td>标记头部区域的内容，用于整个页面或页面中的一块区域</td>
+</tr>
+<tr>
+<td>footer</td>
+<td>标记脚部取悦的内容，用于整个页面或 页面中的一块区域</td>
+</tr>
+<tr>
+<td>section</td>
+<td>web页面中的一块区域</td>
+</tr>
+<tr>
+<td>article</td>
+<td>独立的文章内容</td>
+</tr>
+<tr>
+<td>aside</td>
+<td>相关内容或者引文</td>
+</tr>
+<tr>
+<td>nav</td>
+<td>导航类辅助内容</td>
+</tr>
+</tbody>
+</table>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/HTML/" rel="tag">#HTML</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/06/18/编程总结/" rel="next" title="编程总结">
+                <i class="fa fa-chevron-left"></i> 编程总结
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/06/18/HTML5错误用法/" rel="prev" title="HTML5错误用法建议">
+                HTML5错误用法建议 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="yunmengze" />
+          <p class="site-author-name" itemprop="name">yunmengze</p>
+          <p class="site-description motion-element" itemprop="description">求知若饥，虛心若愚</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">62</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">36</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/xixiang230" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/xixiang230" target="_blank" title="Twitter">
+                  
+                    <i class="fa fa-fw fa-twitter"></i>
+                  
+                  Twitter
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/your-user-name" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://douban.com/people/your-user-name" target="_blank" title="FaceBook">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  FaceBook
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#文档类型声明"><span class="nav-number">1.</span> <span class="nav-text">文档类型声明</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#字符集声明"><span class="nav-number">2.</span> <span class="nav-text">字符集声明</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#链接和脚本"><span class="nav-number">3.</span> <span class="nav-text">链接和脚本</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#语义Header和Footer"><span class="nav-number">4.</span> <span class="nav-text">语义Header和Footer</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#hgroup"><span class="nav-number">5.</span> <span class="nav-text">hgroup</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#标记元素"><span class="nav-number">6.</span> <span class="nav-text">标记元素</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#图形元素"><span class="nav-number">7.</span> <span class="nav-text">图形元素</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#lt-small-gt-重定义"><span class="nav-number">8.</span> <span class="nav-text">&lt;small&gt;重定义</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#占位符placeholder属性"><span class="nav-number">9.</span> <span class="nav-text">占位符placeholder属性</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#“必要”属性"><span class="nav-number">10.</span> <span class="nav-text">“必要”属性</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#autofocus属性"><span class="nav-number">11.</span> <span class="nav-text">autofocus属性</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Audio支持"><span class="nav-number">12.</span> <span class="nav-text">Audio支持</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Video支持"><span class="nav-number">13.</span> <span class="nav-text">Video支持</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#视频预载-preload-attribute-in-video-element"><span class="nav-number">14.</span> <span class="nav-text">视频预载(preload attribute in video element)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#新的片段类元素"><span class="nav-number">15.</span> <span class="nav-text">新的片段类元素</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">yunmengze</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+  
+  
+  
+
+  
+
+  
+
+</body>
+</html>

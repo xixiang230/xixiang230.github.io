@@ -1,0 +1,668 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="C++," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="云梦泽" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="前言 mem_fun     (C++98)  #把成员函数转换为函数对象，使用对象指针进行绑定，即使用于容器元素为对象指针的场景。   mem_fun_ref (C++98)  #把成员函数转换为函数对象，使用对象(引用)进行绑定，即使用与容器元素为对象或对象引用的场景。   mem_fn      (C++11)  #把成员函数转换为函数对象，不区分上述两种场景，使用对象指针或对象(引用)均可">
+<meta name="keywords" content="C++">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C++ Effective STL系列阅读笔记之ptr_fun, mem_fun, mem_fun_ref">
+<meta property="og:url" content="http://xixiang230.github.io/2016/06/10/C-Effective-STL系列阅读笔记之ptr-fun-mem-fun-mem-fun-ref/index.html">
+<meta property="og:site_name" content="云梦泽">
+<meta property="og:description" content="前言 mem_fun     (C++98)  #把成员函数转换为函数对象，使用对象指针进行绑定，即使用于容器元素为对象指针的场景。   mem_fun_ref (C++98)  #把成员函数转换为函数对象，使用对象(引用)进行绑定，即使用与容器元素为对象或对象引用的场景。   mem_fn      (C++11)  #把成员函数转换为函数对象，不区分上述两种场景，使用对象指针或对象(引用)均可">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-12-31T13:37:12.591Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="C++ Effective STL系列阅读笔记之ptr_fun, mem_fun, mem_fun_ref">
+<meta name="twitter:description" content="前言 mem_fun     (C++98)  #把成员函数转换为函数对象，使用对象指针进行绑定，即使用于容器元素为对象指针的场景。   mem_fun_ref (C++98)  #把成员函数转换为函数对象，使用对象(引用)进行绑定，即使用与容器元素为对象或对象引用的场景。   mem_fn      (C++11)  #把成员函数转换为函数对象，不区分上述两种场景，使用对象指针或对象(引用)均可">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> C++ Effective STL系列阅读笔记之ptr_fun, mem_fun, mem_fun_ref | 云梦泽 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">云梦泽</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">个人技术博客</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                C++ Effective STL系列阅读笔记之ptr_fun, mem_fun, mem_fun_ref
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-06-10T09:03:45+08:00" content="2016-06-10">
+              2016-06-10
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/technique/" itemprop="url" rel="index">
+                    <span itemprop="name">技术</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><ul>
+<li>mem_fun     (C++98)  #把成员函数转换为函数对象，使用对象指针进行绑定，即使用于容器元素为对象指针的场景。  </li>
+<li>mem_fun_ref (C++98)  #把成员函数转换为函数对象，使用对象(引用)进行绑定，即使用与容器元素为对象或对象引用的场景。  </li>
+<li>mem_fn      (C++11)  #把成员函数转换为函数对象，不区分上述两种场景，使用对象指针或对象(引用)均可，推荐使用。   <a id="more"></a>
+<h1 id="C-对象调用函数三种方式"><a href="#C-对象调用函数三种方式" class="headerlink" title="C++对象调用函数三种方式"></a>C++对象调用函数三种方式</h1>假设需要在对象x上调用函数f，C++语法提供如下三种模式:  <figure class="highlight"><pre><font face="monospace"><span id="L1" style="background-color: #808080"><font color="#00ff00"><b>1&#xA0;</b></font></span><font color="#8080ff">f</font>(x);&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;<font color="#00ff00"><b>//f&#x4E3A;&#x975E;&#x6210;&#x5458;&#x51FD;&#x6570;</b></font>
+<span id="L2" style="background-color: #808080"><font color="#00ff00"><b>2&#xA0;</b></font></span>x.<font color="#8080ff">f</font>();&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;<font color="#00ff00"><b>//f&#x4E3A;&#x6210;&#x5458;&#x51FD;&#x6570;&#xFF0C;x&#x4E3A;&#x5BF9;&#x8C61;&#x6216;&#x5BF9;&#x8C61;&#x7684;&#x5F15;&#x7528;</b></font>
+<span id="L3" style="background-color: #808080"><font color="#00ff00"><b>3&#xA0;</b></font></span>ptrX-&gt;<font color="#8080ff">f</font>();&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;<font color="#00ff00"><b>//f&#x4E3A;&#x6210;&#x5458;&#x51FD;&#x6570;&#xFF0C;ptrX&#x4E3A;&#x6307;&#x5411;&#x5BF9;&#x8C61;x&#x7684;&#x6307;&#x9488;</b></font>
+</font></pre></figure>
+现假设有一个X类型对象的容器vecX，f函数为非成员函数，为了遍历所有容易元素并执行调用函数f可以这样:<figure class="highlight"><pre><font face="monospace"><span id="L1" style="background-color: #808080"><font color="#00ff00"><b>1&#xA0;</b></font></span><font color="#8080ff">for_each</font>(vecX.<font color="#8080ff">begin</font>(), vec.<font color="#8080ff">end</font>(), f);&#xA0;&#xA0;
+<span id="L2" style="background-color: #808080"><font color="#00ff00"><b>2&#xA0;</b></font></span><font color="#8080ff">for_each</font>(vecX.<font color="#8080ff">begin</font>(), vec.<font color="#8080ff">end</font>(),&#xA0;<font color="#8080ff">ptr_fun</font>(f));&#xA0;&#xA0;<font color="#00ff00"><b>//ptr_fun&#x53EF;&#x6709;&#x53EF;&#x65E0;&#xFF0C;&#x4E5F;&#x65E0;&#x8FD0;&#x884C;&#x65F6;&#x7684;&#x6027;&#x80FD;&#x635F;&#x5931;&#x3002;</b></font>
+</font></pre></figure>
+上述代码可编译成功，是因为for_each的实现是这样的:  <figure class="highlight"><pre><font face="monospace"><span id="L1" style="background-color: #808080"><font color="#00ff00"><b>1&#xA0;</b></font></span><font color="#ffff00">template</font>&lt;<font color="#ffff00">typename</font>&#xA0;InputIterator,&#xA0;<font color="#ffff00">typename</font>&#xA0;Function&gt;
+<span id="L2" style="background-color: #808080"><font color="#00ff00"><b>2&#xA0;</b></font></span>Function&#xA0;<font color="#8080ff">for_each</font>(InputIterator begin, InputIterator end, Function f)&#xA0;{
+<span id="L3" style="background-color: #808080"><font color="#00ff00"><b>3&#xA0;</b></font></span>&#xA0;&#xA0;&#xA0;&#xA0;<font color="#00ff00">while</font>&#xA0;(begin != end)&#xA0;{
+<span id="L4" style="background-color: #808080"><font color="#00ff00"><b>4&#xA0;</b></font></span>&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;&#xA0;<font color="#8080ff">f</font>(*begin++);
+<span id="L5" style="background-color: #808080"><font color="#00ff00"><b>5&#xA0;</b></font></span>}
+</font></pre></figure>
+也就是说for_each算法的实现基于f(x)这种调用方式，即以非成员函数的语法实现。</li>
+</ul>
+<h1 id="调用成员函数"><a href="#调用成员函数" class="headerlink" title="调用成员函数"></a>调用成员函数</h1><p>假设f为对象成员函数，对应存放类型X的容器vecX和存放对象X的指针容器vecPtrX，立刻可联想到如下调用方式:<br><figure class="highlight"><pre><font face="monospace"><span id="L1" style="background-color: #808080"><font color="#00ff00"><b>1&#xA0;</b></font></span><font color="#8080ff">for_each</font>(vecX.<font color="#8080ff">begin</font>(), vecX.<font color="#8080ff">end</font>(), &amp;X::f);&#xA0;&#xA0;
+<span id="L2" style="background-color: #808080"><font color="#00ff00"><b>2&#xA0;</b></font></span><font color="#8080ff">for_each</font>(vecPtrX.<font color="#8080ff">begin</font>(), vecPtrX.<font color="#8080ff">end</font>(), &amp;X::f);&#xA0;&#xA0;
+</font></pre></figure><br>但由于for<em>each的实现，这样实质上这样遍历容器中的所有元素: X::f(x); X::f(ptrX); 这显然是有问题的，编译也不会通过。为了使成员函数调用也表现得如同非成员函数，需要将成员函数转换为函数对象。<br>这时就需要借助men</em>系列函数了，然而当容器元素为X类型对象或引用和容器元素为X类型指针时，我们知道其调用方式其实是不一样的，这时men_fun_ref和men_fun就出来了，它们都是函数模板，声明类似如下:<br><figure class="highlight"><pre><font face="monospace"><span id="L1" style="background-color: #808080"><font color="#00ff00"><b>1&#xA0;</b></font></span><font color="#ffff00">template</font>&lt;<font color="#ffff00">typename</font>&#xA0;R,&#xA0;<font color="#ffff00">typename</font>&#xA0;C&gt;&#xA0;&#xA0;
+<span id="L2" style="background-color: #808080"><font color="#00ff00"><b>2&#xA0;</b></font></span>men_fun_t&lt;R,C&gt;&#xA0;<font color="#8080ff">mem_fun</font>(<font color="#8080ff">R&#xA0;</font>(C::*pmf));&#xA0;&#xA0;<font color="#00ff00"><b>//&#x975E;const&#x6210;&#x5458;&#x51FD;&#x6570;&#xFF0C;C&#x662F;&#x7C7B;&#xFF0C;R&#x662F;&#x6240;&#x6307;&#x5411;&#x7684;&#x6210;&#x5458;&#x51FD;&#x6570;&#x7684;&#x8FD4;&#x56DE;&#x7C7B;&#x578B;&#xFF0C;&#x5408;&#x8D77;&#x6765;R (C::*pmf)&#x4E3A;&#x51FD;&#x6570;&#x7684;&#x7C7B;&#x578B;&#x3002;&#xA0;&#xA0;</b></font>
+</font></pre></figure><br>即mem_fun的参数为一个指向某个成员函数的指针pmf，返回一个mem_fun_t类型的对象。mem_fun_t为一个仿函数，拥有成员函数的指针，并提供operator()操作函数，operator()操作函数就是通过调用传进来的成员函数来实现对对象成员的成员函数调用的。<br><figure class="highlight"><pre><font face="monospace"><span id="L1" style="background-color: #808080"><font color="#00ff00"><b>1&#xA0;</b></font></span><font color="#8080ff">for_each</font>(vecPtrX.<font color="#8080ff">begin</font>(), vecPtrX.<font color="#8080ff">end</font>(),&#xA0;<font color="#8080ff">mem_fun</font>(&amp;X::f));
+<span id="L2" style="background-color: #808080"><font color="#00ff00"><b>2&#xA0;</b></font></span><font color="#8080ff">for_each</font>(vecX.<font color="#8080ff">begin</font>(), vecX.<font color="#8080ff">end</font>(),&#xA0;<font color="#8080ff">mem_fun_ref</font>(&amp;X::f));
+</font></pre></figure><br>总的来说，mem_fun和mem_fun_ref就是将成员函数变换成仿函数，实现成员函数的调用方式变化成非成员函数的调用方式，从而兼容for_each算法的实现。而像men_fun_t这样的类成为函数对象配接器对象。<br>当然，随着C++11中men_fn的引入，我们再也无需区分容器元素到底是对象还是指针而纠结用men_fun还是men_fun_ref了。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/C/" rel="tag">#C++</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/06/10/Hexo使用github作为图片链接源/" rel="next" title="Hexo使用github作为图片链接源">
+                <i class="fa fa-chevron-left"></i> Hexo使用github作为图片链接源
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/06/10/jQuery之添加HTML元素/" rel="prev" title="jQuery之添加HTML元素">
+                jQuery之添加HTML元素 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="yunmengze" />
+          <p class="site-author-name" itemprop="name">yunmengze</p>
+          <p class="site-description motion-element" itemprop="description">求知若饥，虛心若愚</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">62</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">36</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/xixiang230" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/xixiang230" target="_blank" title="Twitter">
+                  
+                    <i class="fa fa-fw fa-twitter"></i>
+                  
+                  Twitter
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/your-user-name" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://douban.com/people/your-user-name" target="_blank" title="FaceBook">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  FaceBook
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#C-对象调用函数三种方式"><span class="nav-number">2.</span> <span class="nav-text">C++对象调用函数三种方式</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#调用成员函数"><span class="nav-number">3.</span> <span class="nav-text">调用成员函数</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">yunmengze</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+  
+  
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,820 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="推荐算法," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="云梦泽" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="推荐算法的分类推荐系统算法通常基于某类推荐模型而实现，负责获取和分析相关数据，对用户偏好进行预测完成推荐。推荐算法通常分为如下四大类: 协同过滤推荐算法协同过滤推荐算法是通过在用户的一系列行为中寻找特定模式来产生用户特殊推荐的。其输入仅仅依赖与惯用数据，比如用户的评价，购买，下载等用户偏好行为。协同过滤推荐算法又分为如下类型:  基于邻域的协同过滤(基于用户和基于项)   基于模型的系统过滤(矩阵">
+<meta name="keywords" content="推荐算法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="推荐算法笔记之综述篇">
+<meta property="og:url" content="http://xixiang230.github.io/2016/07/16/推荐算法阅读比较之综述篇/index.html">
+<meta property="og:site_name" content="云梦泽">
+<meta property="og:description" content="推荐算法的分类推荐系统算法通常基于某类推荐模型而实现，负责获取和分析相关数据，对用户偏好进行预测完成推荐。推荐算法通常分为如下四大类: 协同过滤推荐算法协同过滤推荐算法是通过在用户的一系列行为中寻找特定模式来产生用户特殊推荐的。其输入仅仅依赖与惯用数据，比如用户的评价，购买，下载等用户偏好行为。协同过滤推荐算法又分为如下类型:  基于邻域的协同过滤(基于用户和基于项)   基于模型的系统过滤(矩阵">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-12-31T13:37:12.595Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="推荐算法笔记之综述篇">
+<meta name="twitter:description" content="推荐算法的分类推荐系统算法通常基于某类推荐模型而实现，负责获取和分析相关数据，对用户偏好进行预测完成推荐。推荐算法通常分为如下四大类: 协同过滤推荐算法协同过滤推荐算法是通过在用户的一系列行为中寻找特定模式来产生用户特殊推荐的。其输入仅仅依赖与惯用数据，比如用户的评价，购买，下载等用户偏好行为。协同过滤推荐算法又分为如下类型:  基于邻域的协同过滤(基于用户和基于项)   基于模型的系统过滤(矩阵">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> 推荐算法笔记之综述篇 | 云梦泽 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">云梦泽</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">个人技术博客</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                推荐算法笔记之综述篇
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-07-16T17:31:13+08:00" content="2016-07-16">
+              2016-07-16
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/technique/" itemprop="url" rel="index">
+                    <span itemprop="name">技术</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="推荐算法的分类"><a href="#推荐算法的分类" class="headerlink" title="推荐算法的分类"></a>推荐算法的分类</h1><p><blockquote><p>推荐系统算法通常基于某类推荐模型而实现，负责获取和分析相关数据，对用户偏好进行预测完成推荐。</p></blockquote><br>推荐算法通常分为如下四大类:</p>
+<h2 id="协同过滤推荐算法"><a href="#协同过滤推荐算法" class="headerlink" title="协同过滤推荐算法"></a>协同过滤推荐算法</h2><p>协同过滤推荐算法是通过在用户的一系列行为中寻找特定模式来产生用户特殊推荐的。其输入仅仅依赖与惯用数据，比如用户的评价，购买，下载等用户偏好行为。协同过滤推荐算法又分为如下类型:</p>
+<ol>
+<li>基于邻域的协同过滤(基于用户和基于项)  </li>
+<li>基于模型的系统过滤(矩阵因子分解，受限玻尔兹曼机，贝叶斯网络等)<br>协同过滤推荐算法的优劣势列表</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>优势</th>
+<th>劣势</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>需要最小域</td>
+<td>冷启动问题</td>
+<td></td>
+</tr>
+<tr>
+<td>不需要用户和项</td>
+<td>需要标准化产品</td>
+<td></td>
+</tr>
+<tr>
+<td>大多数场景中都能产生足够好的结果</td>
+<td>需要很高的用户和项的比例(1:10)</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>流行度偏见(有长尾的时候表现不够好)</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>难于提供解释</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h2 id="基于内容的推荐算法"><a href="#基于内容的推荐算法" class="headerlink" title="基于内容的推荐算法"></a>基于内容的推荐算法</h2><p>基于内容的推荐算法用于向用户推荐其过去喜欢的内容(元数据，描述，话题等)相似的项。其输入仅仅依赖于用户和项的内容和描述(除了惯用数据)。类型可分为:</p>
+<ol>
+<li>信息检索(例如tf-idf和Okapi BM 25)    </li>
+<li>机器学习(例如朴素贝叶斯，支持向量机，决策树等)<br>基于内容的推荐算法的优劣势列表:</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>优势</th>
+<th>劣势</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>没有冷启动问题</td>
+<td>项内容必须是机器可读的和有意义的</td>
+<td></td>
+</tr>
+<tr>
+<td>不需要惯用数据</td>
+<td>容易归档用户</td>
+<td></td>
+</tr>
+<tr>
+<td>没有流行度偏见，可以推荐有罕见特性的项</td>
+<td>很难有意外，缺少多样性</td>
+<td></td>
+</tr>
+<tr>
+<td>可以使用用户内容特性来提供解释</td>
+<td>很难联合多个项的特征</td>
+</tr>
+</tbody>
+</table>
+<h2 id="混合推荐算法"><a href="#混合推荐算法" class="headerlink" title="混合推荐算法"></a>混合推荐算法</h2><p>混合推荐算法综合利用了协同过滤算法和基于内容的推荐算法各自的优点，同时抵消了各自的缺点。其输入是:同时使用用户和项内容特征与惯用数据，同时从两种输入类型中获益。有如下类型:</p>
+<ol>
+<li>加权  </li>
+<li>交换</li>
+<li>混合  </li>
+<li>特征组合</li>
+<li>案例  </li>
+<li>特征增强</li>
+<li>元层次<br>由于混合使用协同过滤推荐算法和基于内容的推荐算法，混合推荐算法综合了二者的特点，同时也引入了一定的复杂性，其优劣势列表如下:</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>优势</th>
+<th>劣势</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>没有冷启动问题</td>
+<td>需要通过大量的工作才能得到正确的平衡</td>
+<td></td>
+</tr>
+<tr>
+<td>没有流行度偏见，可推荐有罕有特性的项</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>可产生意外，实现多样性</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h2 id="流行度推荐算法"><a href="#流行度推荐算法" class="headerlink" title="流行度推荐算法"></a>流行度推荐算法</h2><p>流行度推荐算法是一种推荐流行项的方法(例如最多下载，最多浏览，最大影响的项)，其输入为：使用惯用数据和项的内容（例如类目）</p>
+<table>
+<thead>
+<tr>
+<th>优势</th>
+<th>劣势</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>相对容易实现</td>
+<td>需要标准化产品</td>
+<td></td>
+</tr>
+<tr>
+<td>良好的基准算法</td>
+<td>经常需要一些项的类型进行分类</td>
+<td></td>
+</tr>
+<tr>
+<td>有助于解决新用户冷启动问题</td>
+<td>不会推荐新项(很少有机会被观测到)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="高级非传统推荐算法"><a href="#高级非传统推荐算法" class="headerlink" title="高级非传统推荐算法"></a>高级非传统推荐算法</h2><p>主要有如下类型:</p>
+<ol>
+<li>深度学习</li>
+<li>学习等级  </li>
+<li>Multi-armed bandits(探索/开发)  </li>
+<li>上下文感知推荐 </li>
+<li>张量分解  </li>
+<li>分解机  </li>
+<li>社会推荐 </li>
+<li>基于内容的推荐算法  </li>
+<li>混合推荐算法  </li>
+<li>流行度推荐算法<br>高级非传统推荐算法的优劣列表如下:</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>优势</th>
+<th>劣势</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>利于勉强维持最终性能百分点</td>
+<td>难于理解</td>
+<td></td>
+</tr>
+<tr>
+<td>你可以说你正在使用渐进的方式缺乏推荐工具支持</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>没有为你的首歌推荐系统提供推荐的方式</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><a href="http://www.infoq.com/cn/articles/recommendation-algorithm-overview-part01" target="_blank" rel="noopener">参考</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/推荐算法/" rel="tag">#推荐算法</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/07/16/提升SQL执行效率的书写方法/" rel="next" title="提升SQL执行效率的书写方法">
+                <i class="fa fa-chevron-left"></i> 提升SQL执行效率的书写方法
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/07/16/论文阅读之Build-Your-Own-Music-Recommender-by-Modeling-Internet-Radio-Streams/" rel="prev" title="论文阅读之Build Your Own Music Recommender by Modeling Internet Radio Streams">
+                论文阅读之Build Your Own Music Recommender by Modeling Internet Radio Streams <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="yunmengze" />
+          <p class="site-author-name" itemprop="name">yunmengze</p>
+          <p class="site-description motion-element" itemprop="description">求知若饥，虛心若愚</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">62</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">36</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/xixiang230" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/xixiang230" target="_blank" title="Twitter">
+                  
+                    <i class="fa fa-fw fa-twitter"></i>
+                  
+                  Twitter
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/your-user-name" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://douban.com/people/your-user-name" target="_blank" title="FaceBook">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  FaceBook
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#推荐算法的分类"><span class="nav-number">1.</span> <span class="nav-text">推荐算法的分类</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#协同过滤推荐算法"><span class="nav-number">1.1.</span> <span class="nav-text">协同过滤推荐算法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基于内容的推荐算法"><span class="nav-number">1.2.</span> <span class="nav-text">基于内容的推荐算法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#混合推荐算法"><span class="nav-number">1.3.</span> <span class="nav-text">混合推荐算法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#流行度推荐算法"><span class="nav-number">1.4.</span> <span class="nav-text">流行度推荐算法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#高级非传统推荐算法"><span class="nav-number">1.5.</span> <span class="nav-text">高级非传统推荐算法</span></a></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">yunmengze</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+  
+  
+  
+
+  
+
+  
+
+</body>
+</html>

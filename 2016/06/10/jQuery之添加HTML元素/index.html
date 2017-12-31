@@ -1,0 +1,725 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="jQuery," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="云梦泽" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="jQuery添加HTML元素方法汇总Adding content at the end of an element (or elements)  append()  //在指定的元素内的尾部添加一个新内容。">
+<meta name="keywords" content="jQuery">
+<meta property="og:type" content="article">
+<meta property="og:title" content="jQuery之添加HTML元素">
+<meta property="og:url" content="http://xixiang230.github.io/2016/06/10/jQuery之添加HTML元素/index.html">
+<meta property="og:site_name" content="云梦泽">
+<meta property="og:description" content="jQuery添加HTML元素方法汇总Adding content at the end of an element (or elements)  append()  //在指定的元素内的尾部添加一个新内容。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-12-31T13:37:12.594Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="jQuery之添加HTML元素">
+<meta name="twitter:description" content="jQuery添加HTML元素方法汇总Adding content at the end of an element (or elements)  append()  //在指定的元素内的尾部添加一个新内容。">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> jQuery之添加HTML元素 | 云梦泽 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">云梦泽</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">个人技术博客</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                jQuery之添加HTML元素
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-06-10T11:21:41+08:00" content="2016-06-10">
+              2016-06-10
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="jQuery添加HTML元素方法汇总"><a href="#jQuery添加HTML元素方法汇总" class="headerlink" title="jQuery添加HTML元素方法汇总"></a>jQuery添加HTML元素方法汇总</h1><p>Adding content at the end of an element (or elements)</p>
+<ul>
+<li><p>append()  //在指定的元素内的尾部添加一个新内容。  </p>
+<a id="more"></a>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">//Append a DOM element object </span><br><span class="line">var newPara = document.createElement(&apos;p&apos;);</span><br><span class="line">var newParaText = doucument.createTextNode(&quot;hello word&quot;);</span><br><span class="line">newPara.appendChild(nexParText);</span><br><span class="line">$(&apos;#myDiv&apos;).append(newPara);</span><br><span class="line"></span><br><span class="line">//Append a string of HTML  </span><br><span class="line">$(&apos;#myDiv&apos;).append(&quot;&lt;p&gt;hello world&lt;/p&gt;&quot;);  </span><br><span class="line"></span><br><span class="line">//Append a jQuery object  </span><br><span class="line">$(&apos;#myDiv&apos;).append($(&quot;&lt;p&gt;hello world&lt;/p&gt;&quot;));  </span><br><span class="line"></span><br><span class="line">//Append the output from a callback function  </span><br><span class="line">$(&apos;#myDiv&apos;).append(sayHello);</span><br><span class="line"></span><br><span class="line">function sayHello() &#123;</span><br><span class="line">    return &quot;&lt;p&gt;hello world&lt;/p&gt;&quot;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//appendTo()  </span><br><span class="line">$(&quot;&lt;p&gt;hello world&lt;/p&gt;&quot;).appendTo(&apos;#myDiv&apos;);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>appendTo()  </p>
+</li>
+</ul>
+<p>Adding content at the start of an element (or elements). 换句话说，该方法把新增元素作为被选元素的第一个孩子。  </p>
+<ul>
+<li>prepend() //在指定的元素内的前部添加一个新内容。其参数可以是:  </li>
+</ul>
+<ol>
+<li><p>由JavaScript DOM 函数比如doucument.getElementById()或者document.createElement()等获取或创建的元素对象。  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">var newPara = document.createElement(&apos;p&apos;);</span><br><span class="line">var newParaText = document.createTextNode(&apos;hello world&apos;);</span><br><span class="line">newPara.appendChild(newParaText);</span><br><span class="line">$(&apos;#myDiv&apos;).prepend(newPara);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>需要添加内容的HTML字符串。  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$(&apos;#myDiv&apos;).prepend(&quot;&lt;p&gt;hello world&lt;/p&gt;&quot;);  //效果同1</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>jQuery对象。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">var newPara = $(&quot;&lt;p&gt;hello world&lt;/p&gt;&quot;);  //可以非常便捷地通过传递一个HTML字符串给jQuery函数$来创建一个HTML元素。  </span><br><span class="line">$(&apos;#myDiv&apos;).prepend(newPara);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>prepend()回调函数function(index, html)。<br>prepend的回调函数必须返回一个欲新增元素内容的HTML字符串，用于追加到匹配元素里。该回调需要接受2个参数：<br>a) 当前元素的元素集合中的索引位置。<br>b) 当前元素过去的HTML内容。  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">function addHeadingNumber(index, oldMarkup) &#123;</span><br><span class="line">    return ((index) + &apos;.&apos;);</span><br><span class="line">&#125;</span><br><span class="line">function init() &#123;</span><br><span class="line">    return (&apos;.myDiv&gt;h1&apos;).prepend(addHeadingNumber);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>多元素上调用prepend()<br>此时，jQuery在每一个指定元素里最开始处插入新的内容。</p>
+</li>
+</ol>
+<ul>
+<li>prependTo()  </li>
+</ul>
+<ol>
+<li>prepend() 和prependTo()<br>prepend()和prependTo()完成的工作一样，只是语法表达上的差异。prepend()可理解为在jQuery对象上调用插入指定内容。prependTo()则可理解为将插入内容绑定到指定jQuert对象上。  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$(&apos;#myDiv&apos;).prepend(&quot;&lt;p&gt;hello world&lt;/p&gt;&quot;);      //等效于如下: </span><br><span class="line">$(&quot;&lt;p&gt;hello world&lt;/p&gt;&quot;).prependTo(&apos;#myDiv&apos;);</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>prependTo()的参数可以是:<br>a) 选择器<br>b) jQuery对象<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">var existingContent = $(&quot;&lt;div&gt;&lt;p&gt;Existing text&lt;/p&gt;&lt;/div&gt;&quot;); //创建了一个新的jQuery对象</span><br><span class="line">var newContent = $(&quot;&lt;p&gt;hello world&lt;/p&gt;&quot;);   //创建另一个新的jQuery对象  </span><br><span class="line">newContent.prependTo(existingContent); //在newContent对象上调用prependTo()，将自己绑定到existingContent内容的最开始处。   </span><br><span class="line">existingContent.prependTo(&apos;#myDiv&apos;);  //在existingContent对象上调用prependTo()，将自己绑定到选择器选中的#myDiv内容的最开始处。</span><br></pre></td></tr></table></figure></p>
+<p>输出如下:  </p>
+<p><div id="myDiv"><br>    <div><br>        <p>hello world</p><br>        <p>Existing text</p><br>    </div><br></div><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">如果传递给prependTo()的参数有多个元素，则每个元素的开头都将插入新的内容。  </span><br><span class="line">$(&quot;p&quot;).append(txt1, txt2, txt3);</span><br></pre></td></tr></table></figure></p>
+<p>Adding content after an element (or elements).</p>
+<ul>
+<li>after()   //在指定元素的前面添加新内容。</li>
+<li>insertAfter()  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">// Insert a DOM element object</span><br><span class="line">  var newPara = document.createElement( &apos;p&apos; );</span><br><span class="line">  var newParaText = document.createTextNode( &quot;Here&apos;s a DOM element&quot; );</span><br><span class="line">  newPara.appendChild( newParaText );</span><br><span class="line">  $(&apos;#myDiv&apos;).after( newPara );</span><br><span class="line"></span><br><span class="line">  // Insert a string of HTML</span><br><span class="line">  $(&apos;#myDiv&apos;).after( &quot;&lt;p&gt;Here&apos;s a string of HTML&lt;/p&gt;&quot; );</span><br><span class="line"></span><br><span class="line">  // Insert a jQuery object</span><br><span class="line">  $(&apos;#myDiv&apos;).after( $(&quot;&lt;p&gt;Here&apos;s a jQuery object&lt;/p&gt;&quot;) );</span><br><span class="line"></span><br><span class="line">  // Insert the output from a callback function</span><br><span class="line">  $(&apos;#myDiv&apos;).after( sayHello );</span><br><span class="line"></span><br><span class="line">  function sayHello() &#123;</span><br><span class="line">    return &quot;&lt;p&gt;Hello! This is the output from a callback function&lt;/p&gt;&quot;;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  // Append some content using insertAfter()</span><br><span class="line">  $(&quot;&lt;p&gt;Here&apos;s some content inserted using insertAfter()&lt;/p&gt;&quot;).insertAfter(&apos;#myDiv&apos;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>Adding content before an element (or elements), directly before an element.</p>
+<ul>
+<li>before()  //在指定元素的后面添加新内容。  </li>
+<li>insertBefore()<br>与append和prepend不同的是，before回调不接受元素索引或HTML。  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">//Insert a DOM element object  </span><br><span class="line">var newPara = document.createElement(&apos;p&apos;);  </span><br><span class="line">var newParaText = document.createTextNode(&quot;Here&apos;s a DOM element&quot;);  </span><br><span class="line">newPara.appendChild(newParaText);  </span><br><span class="line">$(&apos;#myDiv&apos;).before(newPara);  </span><br><span class="line"></span><br><span class="line">//Insert a string of HTML  </span><br><span class="line">$(&apos;#myDiv&apos;).before(&apos;&lt;p&gt;Here&apos;s a string of HTML&lt;/p&gt;&quot;);  </span><br><span class="line"></span><br><span class="line">//Insert a jQuery object  </span><br><span class="line">$(&apos;#myDiv&apos;).before($(&quot;&lt;p&gt;Here&apos;s a jQuery object&lt;/p&gt;&quot;));  </span><br><span class="line"></span><br><span class="line">//Insert the output from a callback function  </span><br><span class="line">$(&apos;#myDiv&apos;).before(sayHello);  </span><br><span class="line">function sayHello() &#123;</span><br><span class="line">    retrun &quot;&lt;p&gt;Hello! This is the output from a callback function&lt;/p&gt;&quot;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>输出:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line">&lt;p&gt; hello world&lt;/p&gt;</span><br><span class="line">&lt;p&gt;Here&apos;s a string of HTML&lt;/p&gt;</span><br><span class="line">&lt;p&gt;Here&apos;s a jQuery object&lt;/p&gt;</span><br><span class="line">&lt;p&gt;Hello! This is the output from a callback function&lt;/p&gt;</span><br><span class="line">&lt;div id=&quot;myDiv&quot;&gt;</span><br><span class="line">...</span><br></pre></td></tr></table></figure></p>
+<p>insertBefore()对应于before类似于prependTo()对应于prepend()。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">var existingContent = $(&quot;&lt;div&gt;&lt;p&gt;Existing text&lt;/p&gt;&lt;/div&gt;&quot;);</span><br><span class="line">var newContent = $(&quot;&lt;p&gt;Here&apos;s some new text&lt;/p&gt;&quot;);</span><br><span class="line">newContent.insertBefore( existingContent );</span><br><span class="line">existingContent.insertBefore( &apos;#myDiv&apos; );</span><br></pre></td></tr></table></figure></p>
+<p>after()和before()也支持同时插入多个元素。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$(&quot;img&quot;).after(txt1, txt2, txt3);</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>appendTo 与append区别<br>append()和appendTo()完成的功能一样，都是添加一个新文本或HTML内容，其主要区别在于语法上的不同:  </li>
+</ul>
+<ol>
+<li><p>$(‘selector’).append(‘content’)  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$(&apos;.box&apos;).append(&quot;&lt;div class=&apos;newbox&apos;&gt;I&apos;m new box by prepend&lt;/div&gt;&quot;);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>$(‘content’).appendTo(‘selector’);  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$(&quot;&lt;div class=&apos;newbox&apos;&gt;I&apos;m new box by appendTo&lt;/div&gt;&quot;).appendTo(&apos;.box&apos;);</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>同理，prepend()和prependTo()。<br>Wrapping content around an element (or elements), or aroun an element’s contents.</p>
+<ul>
+<li>wrap()<br>wraps an HTML structure around an existing element or elements. If wrapping around multiple elements, the structure is wrapped around each element in the set.<br>wrap()的语法类似before()和after()。可以传递给他DOM对象，HTML字符串，jQuery对象或者一个返回HTML结构的回调函数。<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">// Wrap a DOM element object around #myDiv</span><br><span class="line">  var newDiv = document.createElement( &apos;div&apos; );</span><br><span class="line">  newDiv.id = &quot;newDiv1&quot;;</span><br><span class="line">  $(&apos;#myDiv&apos;).wrap( newDiv );</span><br><span class="line"></span><br><span class="line">  // Wrap a string of HTML around #myDiv</span><br><span class="line">  $(&apos;#myDiv&apos;).wrap( &apos;&lt;div id=&quot;newDiv2&quot; /&gt;&apos; );</span><br><span class="line"></span><br><span class="line">  // Wrap a jQuery object around #myDiv</span><br><span class="line">  $(&apos;#myDiv&apos;).wrap( $(&apos;&lt;div id=&quot;newDiv3&quot; /&gt;&apos;) );</span><br><span class="line"></span><br><span class="line">  // Wrap the output from a callback function around #myDiv</span><br><span class="line">  $(&apos;#myDiv&apos;).wrap( generateDiv );</span><br><span class="line"></span><br><span class="line">  function generateDiv() &#123;</span><br><span class="line">    return &apos;&lt;div id=&quot;newDiv4&quot; /&gt;&apos;;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  // Wrap a nested HTML structure around #myDiv</span><br><span class="line">  $(&apos;#myDiv&apos;).wrap( &apos;&lt;div id=&quot;outer&quot;&gt;&lt;div id=&quot;inner&quot;&gt;&lt;/div&gt;&lt;/div&gt;&apos; );</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>输出:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&lt;div id=&quot;newDiv1&quot;&gt;</span><br><span class="line">   &lt;div id=&quot;newDiv2&quot;&gt;</span><br><span class="line">     &lt;div id=&quot;newDiv3&quot;&gt;</span><br><span class="line">       &lt;div id=&quot;newDiv4&quot;&gt;</span><br><span class="line">         &lt;div id=&quot;outer&quot;&gt;</span><br><span class="line">           &lt;div id=&quot;inner&quot;&gt;</span><br><span class="line">             &lt;div id=&quot;myDiv&quot;&gt;</span><br><span class="line">               &lt;p&gt;Existing paragraph&lt;/p&gt;</span><br><span class="line">             &lt;/div&gt;</span><br><span class="line">           &lt;/div&gt;</span><br><span class="line">         &lt;/div&gt;</span><br><span class="line">       &lt;/div&gt; </span><br><span class="line">     &lt;/div&gt;</span><br><span class="line">   &lt;/div&gt;</span><br><span class="line"> &lt;/div&gt;</span><br></pre></td></tr></table></figure></p>
+<p>每一个新的div都被增加在上次最后新增的div里边，因为每次都是在#myDiv上调用wrap()。  </p>
+<ul>
+<li>wrapAll()<br>is similar to wrap(). However, if wrapping around multiple elements, the structure is wrapped around the whole set, rather than around individual elements.<br>与wrap()用法类似，区别主要在于如下两点:  </li>
+</ul>
+<ol>
+<li>If you call wrapAll() on a set of multiple elements then the HTML structure is wrapped once around the entire set, rather than around each element.</li>
+<li>You can’t use a callback function with wrapAll().  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">// Wrap a div around #myDiv1 and another div around #myDiv2</span><br><span class="line">  $(&apos;.type1&apos;).wrap( &apos;&lt;div class=&quot;newDiv1&quot; /&gt;&apos; );</span><br><span class="line"></span><br><span class="line">  // Wrap a single div around #myDiv3 and #myDiv4</span><br><span class="line">  $(&apos;.type2&apos;).wrapAll( &apos;&lt;div class=&quot;newDiv2&quot; /&gt;&apos; );</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">&lt;div class=&quot;newDiv1&quot;&gt;</span><br><span class="line">    &lt;div id=&quot;myDiv1&quot; class=&quot;type1&quot;&gt;</span><br><span class="line">      &lt;p&gt;Existing paragraph&lt;/p&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">  &lt;div class=&quot;newDiv1&quot;&gt;</span><br><span class="line">    &lt;div id=&quot;myDiv2&quot; class=&quot;type1&quot;&gt;</span><br><span class="line">      &lt;p&gt;Existing paragraph&lt;/p&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line"></span><br><span class="line">  &lt;div class=&quot;newDiv2&quot;&gt;  </span><br><span class="line">    &lt;div id=&quot;myDiv3&quot; class=&quot;type2&quot;&gt;</span><br><span class="line">      &lt;p&gt;Existing paragraph&lt;/p&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">    &lt;div id=&quot;myDiv4&quot; class=&quot;type2&quot;&gt;</span><br><span class="line">      &lt;p&gt;Existing paragraph&lt;/p&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">  &lt;/div&gt;</span><br></pre></td></tr></table></figure>
+<p>可以看到，”type1”的div(#myDiv1和#myDiv2)各自拥有新的div包围，而对于”type2”的div(#myDiv3和#myDiv4)则成为一个整体被新的div包围。  </p>
+<ul>
+<li>wrapInner()<br>wraps an HTML structure around the contents of an element or elements.<br>wrapInner()和wrap()类似，用于在每个匹配元素的所有子节点(包括文本节点，注释节点等任意节点类型)外部包裹指定的HTML结构，<br>区别：wrap()新增的内容包围在给定元素外面(around)，而wrapInner()则将新增的内容包围住被选元素自己的内容。<br>wrapInner()的参数可以是string，element，jQuery，Function类型，用来包裹匹配元素的节点。如果参数为字符串，则视为jQuery选择器<br>或html字符串，具体jQuery会自行判断。参数为函数时，wrapInner()会根据匹配的所有元素上遍历执行该函数，函数中的this指向<br>对应当前遍历到的DOM元素，另外wrapInner还会为函数传入一个当前遍历元素在匹配元素中的索引，函数的返回值应该是用于包裹节点<br>的内容，可以是html字符串，选择器，DOM元素或jQuery对象等。</li>
+</ul>
+<p>注:</p>
+<ol>
+<li>如果选择器参数匹配多个元素，则只将第一个元素作为包裹元素。  </li>
+<li>如果参数是多层嵌套的元素(比如：<code>&quot;&lt;p&gt;&lt;i&gt;&lt;/i&gt;&lt;/p&gt;&quot;</code>)，则wrapInner()将从外往内检查每层嵌套的第一个节点。如果该节点没有<br>子节点或者第一个子节点不是Element节点(比如文本节点，注释节点等)，就停止向内查找，直接在当前节点内部的末尾追加(append())当前匹配元素。</li>
+<li>即使参数是当前页面中的元素，wrpaInner()使用的是该元素的副本来包裹目标元素。<br>返回值:<br>wrapInner()的返回值为jQuery类型，返回当前jQuery对象本身（以便进行链式风格的编程）<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">// Wrap a div around #myDiv1</span><br><span class="line">  $(&apos;#myDiv1&apos;).wrap( &apos;&lt;div id=&quot;newDiv1&quot; /&gt;&apos; );</span><br><span class="line"></span><br><span class="line">  // Wrap a div around the contents of #myDiv2</span><br><span class="line">  $(&apos;#myDiv2&apos;).wrapInner( &apos;&lt;div id=&quot;newDiv2&quot; /&gt;&apos; );</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>输出:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&lt;div id=&quot;newDiv1&quot;&gt;</span><br><span class="line">    &lt;div id=&quot;myDiv1&quot;&gt;</span><br><span class="line">      &lt;p&gt;Existing paragraph&lt;/p&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">&lt;/div&gt;</span><br><span class="line"></span><br><span class="line">&lt;div id=&quot;myDiv2&quot;&gt;</span><br><span class="line">  &lt;div id=&quot;newDiv2&quot;&gt;</span><br><span class="line">    &lt;p&gt;Existing paragraph&lt;/p&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;/div&gt;</span><br></pre></td></tr></table></figure></p>
+<p>在比如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&lt;p&gt; para 1 &lt;span&gt;&lt;/span&gt;&lt;/p&gt;</span><br><span class="line">&lt;p&gt; para 2 &lt;span&gt;&lt;/span&gt;&lt;/p&gt;</span><br><span class="line">&lt;script&gt;</span><br><span class="line">$(&quot;p&quot;).wrapInner(&apos;&lt;em&gt;&lt;/em&gt;&apos;);</span><br><span class="line">&lt;/script&gt;</span><br><span class="line">&lt;!-- 执行后html内容 --&gt;</span><br><span class="line">&lt;p&gt;&lt;em&gt; para 1 &lt;span&gt;&lt;/span&gt;&lt;/em&gt;&lt;/p&gt;</span><br><span class="line">&lt;p&gt;&lt;em&gt; para 2 &lt;span&gt;&lt;/span&gt;&lt;/em&gt;&lt;/p&gt;</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&lt;p&gt;</span><br><span class="line">    &lt;span&gt;foo&lt;/span&gt;</span><br><span class="line">&lt;/p&gt;</span><br><span class="line">&lt;p&gt;</span><br><span class="line">    &lt;label&gt;baidu&lt;/label&gt;</span><br><span class="line">    &lt;span&gt;tecent&lt;/span&gt;</span><br><span class="line">&lt;/p&gt;</span><br><span class="line">&lt;script&gt;</span><br><span class="line">    $(&quot;p&quot;).wrapInner(&apos;&lt;strong&gt;&lt;/strong&gt;&apos;);</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+<p>这里p元素的所有子节点外部都hi包裹stong元素。wrapperInner()将在每个p元素的开始标记之后，结束标记之前<br>分别插入包裹元素的开始标记和结束标记，甚至都不添加额外的空白字符。输入如下内容:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;p&gt;&lt;strong&gt;</span><br><span class="line">    &lt;span&gt;foo&lt;/span&gt;</span><br><span class="line">&lt;/strong&gt;&lt;/p&gt;</span><br><span class="line">&lt;p&gt;&lt;strong&gt;</span><br><span class="line">    &lt;label&gt;baidu&lt;/label&gt;</span><br><span class="line">    &lt;span&gt;bar&lt;/span&gt;</span><br><span class="line">&lt;/strong&gt;&lt;/p&gt;</span><br></pre></td></tr></table></figure></p>
+<p>可见，调用wrap()是将内容around the outside of #myDiv1，而当调用#wrapInner()则是将新增内容around the inside contents of #myDiv2。</p>
+<ul>
+<li>html()  </li>
+<li>text()  </li>
+</ul>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>prepend() and prependTo() to add content as the first child of an element (or elements)<br>append() and appendTo() to add content as the last child of an element (or elements)<br>before() and insertBefore() to add content before an element (or elements)<br>after() and insertAfter() to add content after an element (or elements)<br>wrap(), wrapAll() and wrapInner() to wrap content around an element (or elements), or around an element’s contents  </p>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/jQuery/" rel="tag">#jQuery</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/06/10/C-Effective-STL系列阅读笔记之ptr-fun-mem-fun-mem-fun-ref/" rel="next" title="C++ Effective STL系列阅读笔记之ptr_fun, mem_fun, mem_fun_ref">
+                <i class="fa fa-chevron-left"></i> C++ Effective STL系列阅读笔记之ptr_fun, mem_fun, mem_fun_ref
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/06/11/红黑树-R-B-Tree/" rel="prev" title="红黑树(R-B Tree)">
+                红黑树(R-B Tree) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="yunmengze" />
+          <p class="site-author-name" itemprop="name">yunmengze</p>
+          <p class="site-description motion-element" itemprop="description">求知若饥，虛心若愚</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">62</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">36</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/xixiang230" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/xixiang230" target="_blank" title="Twitter">
+                  
+                    <i class="fa fa-fw fa-twitter"></i>
+                  
+                  Twitter
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/your-user-name" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://douban.com/people/your-user-name" target="_blank" title="FaceBook">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  FaceBook
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#jQuery添加HTML元素方法汇总"><span class="nav-number">1.</span> <span class="nav-text">jQuery添加HTML元素方法汇总</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-number">2.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">yunmengze</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+  
+  
+  
+
+  
+
+  
+
+</body>
+</html>

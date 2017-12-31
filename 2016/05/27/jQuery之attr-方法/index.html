@@ -1,0 +1,671 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="jQuery," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="云梦泽" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="用法attr()方法用于设置或返回被选元素的属性值   返回属性值123456$(selector).attr(attribute);$(&amp;quot;img&amp;quot;).attr(&amp;quot;width&amp;quot;);$(&amp;quot;a&amp;quot;).attr(&amp;quot;href&amp;quot;);```  ## 设置属性值 $(selector).attr(attribute, value);$">
+<meta name="keywords" content="jQuery">
+<meta property="og:type" content="article">
+<meta property="og:title" content="jQuery之attr()方法">
+<meta property="og:url" content="http://xixiang230.github.io/2016/05/27/jQuery之attr-方法/index.html">
+<meta property="og:site_name" content="云梦泽">
+<meta property="og:description" content="用法attr()方法用于设置或返回被选元素的属性值   返回属性值123456$(selector).attr(attribute);$(&amp;quot;img&amp;quot;).attr(&amp;quot;width&amp;quot;);$(&amp;quot;a&amp;quot;).attr(&amp;quot;href&amp;quot;);```  ## 设置属性值 $(selector).attr(attribute, value);$">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-12-31T13:37:12.593Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="jQuery之attr()方法">
+<meta name="twitter:description" content="用法attr()方法用于设置或返回被选元素的属性值   返回属性值123456$(selector).attr(attribute);$(&amp;quot;img&amp;quot;).attr(&amp;quot;width&amp;quot;);$(&amp;quot;a&amp;quot;).attr(&amp;quot;href&amp;quot;);```  ## 设置属性值 $(selector).attr(attribute, value);$">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> jQuery之attr()方法 | 云梦泽 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">云梦泽</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">个人技术博客</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                jQuery之attr()方法
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-05-27T23:38:26+08:00" content="2016-05-27">
+              2016-05-27
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/technique/" itemprop="url" rel="index">
+                    <span itemprop="name">技术</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/technique/前端/" itemprop="url" rel="index">
+                    <span itemprop="name">前端</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="用法"><a href="#用法" class="headerlink" title="用法"></a>用法</h1><p>attr()方法用于设置或返回被选元素的属性值  </p>
+<h2 id="返回属性值"><a href="#返回属性值" class="headerlink" title="返回属性值"></a>返回属性值</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$(selector).attr(attribute);</span><br><span class="line">$(&quot;img&quot;).attr(&quot;width&quot;);</span><br><span class="line">$(&quot;a&quot;).attr(&quot;href&quot;);</span><br><span class="line">```  </span><br><span class="line"></span><br><span class="line">## 设置属性值</span><br></pre></td></tr></table></figure>
+<p>$(selector).attr(attribute, value);<br>$(“img”).attr(“width”, “180”);<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">## 设置多个属性/值</span><br></pre></td></tr></table></figure></p>
+<p>$(selector).attr({attribute1:value1, arrtibute2:value2, …});<br>//用大括号包围多对属性/值对，逗号分隔<br>$(“img”).attr({width:”50”, height:”80”});<br>```</p>
+<h1 id="其他使用jQuery获得内容和属性的方法"><a href="#其他使用jQuery获得内容和属性的方法" class="headerlink" title="其他使用jQuery获得内容和属性的方法"></a>其他使用jQuery获得内容和属性的方法</h1><ul>
+<li>text() 设置或返回所选元素的文本内容，注意只是文本内容  </li>
+<li>html() 设置或返回所选元素的内容(包括HTML标记)  </li>
+<li>val() 设置或返回表单字段值  <h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1>|函数名|说明|例子|<br>|——|—-|—-|<br>|attr(name)|取得第一个匹配元素的属性值|$(“input”).attr(“value”)|<br>|attr(property)|将所有匹配元素以一个”名/值”形式的对象设置其属性|$(“input”).attr({value: “txt”, title: “text”});|<br>|attr(key, value)|为所有匹配的元素设置一个属性值|$(“input”).attr(“value”, “txt”);|<br>|attr(key, fn)|未所有匹配的元素设置一个计算属性值|$(“input”).attr(“title”, function() {return this.value});|<br>|removeAttr(name)|从所有匹配的元素中删除一个属性|$(“input”).removeAttr(“value”);|  </li>
+</ul>
+<h1 id="jQuery访问value，innerHTML"><a href="#jQuery访问value，innerHTML" class="headerlink" title="jQuery访问value，innerHTML"></a>jQuery访问value，innerHTML</h1><p>|—|—|—|<br>|函数名|说明|例子|<br>|val()|获取第一个匹配元素的value值|$(“#txt1”).val()|<br>|val(val)|为匹配的元素shezvalue值|$(“#txt1”).val(“txt1”)|<br>|html()|获取第一个匹配元素的html内容|$(“#dv1”).html()|<br>|html(val)|设置每一个匹配元素的html内容|$(“#dv1”).html(“this is a div”)|<br>|text()|取得所有匹配文本节点的内容，冰将其连接起来|$(“div”).text()|<br>|text(val)|将所有匹配元素的值设置为val|$(“div”).text(“divs”)|  </p>
+<h1 id="使用jQuery操作CSS"><a href="#使用jQuery操作CSS" class="headerlink" title="使用jQuery操作CSS"></a>使用jQuery操作CSS</h1><p>|函数名|说明|例子|<br>|addClass(classes)|为每个匹配的元素添加指定的类名|$(“input”).addClass(“colorRed borderBlack”);|<br>|hasClass(class)|判断匹配元素集合中是否至少有一个包含了指定的css类，如果有返回true|alert($(“input”).hasClass(“borderBlack”));<br>|removeClass([classes])|从匹配元素中移除所有或指定的css类|$(“input”).removeClass(“colorRed borderBlack”);<br>|toggleClass(classes)|如果存在则删除指定类，如果不存在则添加指定类|($(“input”).toogleClass(“colorRed borderBlack”);|<br>|toogleClass(classes, switch)|当switch为true时，添加类，switch为false时，删除类|$(“input”).toggleClass(“colorRed borderBlack”, true);|  </p>
+<p>addClass、removeClass、toggleClass均可添加多个类，多个类之间用空格隔开。<br>removeClass方法的参数可选，如果有参数则删除指定class，如果无参数则删除匹配元素的所有class。  </p>
+<h1 id="修改CSS样式"><a href="#修改CSS样式" class="headerlink" title="修改CSS样式"></a>修改CSS样式</h1><p>|—|—|<br>|函数名|说明|例子|<br>|css(name)|访问第一个匹配元素的样式属性|$(“input”).css(“color”)|<br>|css(properties)|把一个”名/值”对设置给所有匹配元素的样式属性|$(“input”).css({border:”solid 3px silver”, color: “red”})|<br>|css(name, value)|为匹配的元素守则同一个样式属性，如果是数字，将自动转换未像素值|$(“input”).css(“border-width”, “5”);|  </p>
+<p>对于一些常用属性，比如width，height之类，使用attr(“width”)和css(“width”)无法正常获取其值，需要如下方式获取:  </p>
+<ol>
+<li>高、宽相关<br>|–|–|–|<br>|函数名|说明|例子|<br>|width()|获取第一个匹配元素的宽度，默认为px|$(“#txt1”).width()|<br>|width(val)|为匹配的元素设置宽度值，默认为px|$(“#txt1”).width(200)|<br>|height()|获取第一个匹配元素的高度，默认为px|$(“#txt1”).height()|<br>|height(val)|为匹配的元素设置宽度值，默认为px|$(“#txt1”).height(20)|<br>|innerWidth()|获取第一个匹配元素内部区域宽度(包括padding，不包括border)|$(“#txt1”).innerWidth()|<br>|innerHeight()|获取第一个匹配元素内部区域高度(包括padding，不包括border)|$(“#txt1”).innerHeight()|<br>|outerWidth([margin])|获取第一个匹配元素外部区域宽度(包括padding，border)，margin为true则包括margin，否则不包括|$(“#txt1”).outerWidth()|<br>|outerHeight([margin])|获取第一个匹配元素外部区域高度(包括padding，border)，margin为true则包括margin，否则不包括|$(“#txt1”).outerHegiht(true)|</li>
+</ol>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/jQuery/" rel="tag">#jQuery</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/05/19/Hexo安装部署/" rel="next" title="Hexo安装部署">
+                <i class="fa fa-chevron-left"></i> Hexo安装部署
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/05/27/jQuery选择器模糊匹配/" rel="prev" title="jQuery选择器模糊匹配">
+                jQuery选择器模糊匹配 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="yunmengze" />
+          <p class="site-author-name" itemprop="name">yunmengze</p>
+          <p class="site-description motion-element" itemprop="description">求知若饥，虛心若愚</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">62</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">36</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/xixiang230" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/xixiang230" target="_blank" title="Twitter">
+                  
+                    <i class="fa fa-fw fa-twitter"></i>
+                  
+                  Twitter
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/your-user-name" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://douban.com/people/your-user-name" target="_blank" title="FaceBook">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  FaceBook
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#用法"><span class="nav-number">1.</span> <span class="nav-text">用法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#返回属性值"><span class="nav-number">1.1.</span> <span class="nav-text">返回属性值</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#其他使用jQuery获得内容和属性的方法"><span class="nav-number">2.</span> <span class="nav-text">其他使用jQuery获得内容和属性的方法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-number">3.</span> <span class="nav-text">总结</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#jQuery访问value，innerHTML"><span class="nav-number">4.</span> <span class="nav-text">jQuery访问value，innerHTML</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#使用jQuery操作CSS"><span class="nav-number">5.</span> <span class="nav-text">使用jQuery操作CSS</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#修改CSS样式"><span class="nav-number">6.</span> <span class="nav-text">修改CSS样式</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">yunmengze</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+  
+  
+  
+
+  
+
+  
+
+</body>
+</html>

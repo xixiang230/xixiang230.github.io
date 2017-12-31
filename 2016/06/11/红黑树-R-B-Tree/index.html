@@ -1,0 +1,698 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="algorithm," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="云梦泽" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="红黑树简介红黑树是一种自平衡二叉树，或者说类平衡树、特殊的二叉查找树，可以在O(log n)时间内就完成查找、插入、删除等基本操作，在统计性能上要好于平衡二叉树(AVL树)。相比普通的二叉树，它在每个节点上增加了一个存储位来表示节点的颜色(Red or Black)。通过对任何一条从根到叶子的路径上各个节点着色方式的限制，红黑树可确保没有一条路径会比其他路径长出两倍，从而达到接近平衡的目的。 相比">
+<meta name="keywords" content="algorithm">
+<meta property="og:type" content="article">
+<meta property="og:title" content="红黑树(R-B Tree)">
+<meta property="og:url" content="http://xixiang230.github.io/2016/06/11/红黑树-R-B-Tree/index.html">
+<meta property="og:site_name" content="云梦泽">
+<meta property="og:description" content="红黑树简介红黑树是一种自平衡二叉树，或者说类平衡树、特殊的二叉查找树，可以在O(log n)时间内就完成查找、插入、删除等基本操作，在统计性能上要好于平衡二叉树(AVL树)。相比普通的二叉树，它在每个节点上增加了一个存储位来表示节点的颜色(Red or Black)。通过对任何一条从根到叶子的路径上各个节点着色方式的限制，红黑树可确保没有一条路径会比其他路径长出两倍，从而达到接近平衡的目的。 相比">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://github.com/xixiang230/xixiang230.github.io/blob/master/images/brtree.png?raw=true">
+<meta property="og:image" content="http://xixiang230.github.io/2016/06/11/红黑树-R-B-Tree/(https://github.com/xixiang230/xixiang230.github.io/blob/master/images/brtree_left.png?raw=true">
+<meta property="og:image" content="http://xixiang230.github.io/2016/06/11/红黑树-R-B-Tree/(https://github.com/xixiang230/xixiang230.github.io/blob/master/images/brtree_right.png?raw=true">
+<meta property="og:image" content="http://xixiang230.github.io/2016/06/11/红黑树-R-B-Tree/(https://github.com/xixiang230/xixiang230.github.io/blob/master/images/brtree_pu_red.png?raw=true">
+<meta property="og:image" content="http://xixiang230.github.io/2016/06/11/红黑树-R-B-Tree/(https://github.com/xixiang230/xixiang230.github.io/blob/master/images/brtree_pu_rb_r.png?raw=true">
+<meta property="og:image" content="http://xixiang230.github.io/2016/06/11/红黑树-R-B-Tree/(https://github.com/xixiang230/xixiang230.github.io/blob/master/images/brtree_pu_rb_l.png?raw=true">
+<meta property="og:updated_time" content="2017-12-31T13:37:12.595Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="红黑树(R-B Tree)">
+<meta name="twitter:description" content="红黑树简介红黑树是一种自平衡二叉树，或者说类平衡树、特殊的二叉查找树，可以在O(log n)时间内就完成查找、插入、删除等基本操作，在统计性能上要好于平衡二叉树(AVL树)。相比普通的二叉树，它在每个节点上增加了一个存储位来表示节点的颜色(Red or Black)。通过对任何一条从根到叶子的路径上各个节点着色方式的限制，红黑树可确保没有一条路径会比其他路径长出两倍，从而达到接近平衡的目的。 相比">
+<meta name="twitter:image" content="https://github.com/xixiang230/xixiang230.github.io/blob/master/images/brtree.png?raw=true">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> 红黑树(R-B Tree) | 云梦泽 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">云梦泽</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">个人技术博客</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                红黑树(R-B Tree)
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-06-11T12:55:58+08:00" content="2016-06-11">
+              2016-06-11
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/technique/" itemprop="url" rel="index">
+                    <span itemprop="name">技术</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="红黑树简介"><a href="#红黑树简介" class="headerlink" title="红黑树简介"></a>红黑树简介</h1><p>红黑树是一种<font color="red">自平衡二叉树</font>，或者说类平衡树、特殊的二叉查找树，可以在O(log n)时间内就完成查找、插入、删除等基本操作，<br>在统计性能上要好于平衡二叉树(AVL树)。相比普通的二叉树，它在每个节点上增加了一个存储位来表示节点的颜色(Red or Black)。<br>通过对任何一条从根到叶子的路径上各个节点着色方式的限制，红黑树可确保没有一条路径会比其他路径长出两倍，从而达到接近平衡的目的。</p>
+<p>相比AVL树，红黑树不是高度平衡的，对树的每次修改，无需每次都rebalance，在插入新节点时顶多两次旋转，在删除节点时顶多<br>三次旋转，从而节省了开销，非常适合对搜索效率要求比较高，对数据修改比较频繁的场景，在C++的STL中，包括set, multiset, map, multimap等容器，<br>以及Linux虚拟内存的管理等都是基于红黑树实现。</p>
+<a id="more"></a>
+<p>红黑树首先是一棵二叉查找树，以下简单回顾一把二叉查找树。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">对于树中的每一个节点，如果它有左子树，则左子树中的所有节点的值都不大于该节点的值，如果有右子树，则右子树中的所有节点的值都不小于该节点的值。</span><br><span class="line">根据这个性质，二叉搜索树执行查找、插入、删除等操作的时间复杂度是O(log n)，而当这颗树在最坏情况下，退化成一棵具有n个节点线性链，此时运行时间复杂度为O(n)。</span><br></pre></td></tr></table></figure></p>
+<p>知道二叉树在最坏场景下可能退化成线性链，增加操作时间复杂度后，红黑树就是能通过保持树的平衡来确保最坏情况不会退化成线性链，<br>来保证树的高度近似平衡来保证性能的，其基本的动态几何操作时间保持为O(log n)。  </p>
+<h1 id="红黑树时间复杂度分析"><a href="#红黑树时间复杂度分析" class="headerlink" title="红黑树时间复杂度分析"></a>红黑树时间复杂度分析</h1><p>红黑树的时间复杂度为: O(log n)<br>定理: 一棵含有n个节点的红黑树的高度至多为2log(n+1)。  </p>
+<h1 id="红黑树性质"><a href="#红黑树性质" class="headerlink" title="红黑树性质"></a>红黑树性质</h1><p>红黑树每个节点是一个五元组，五个域分别是：color(颜色), key(数据), left(指向左孩子指针), right(指向父孩子指针), p(指向父节点指针)。  </p>
+<ol>
+<li>红黑树的每个节点要么是红的，要么是黑的(非红即黑)。   </li>
+<li>根节点永远都是黑的（出生树根就是黑的）。  </li>
+<li>每个叶节点(树尾的NIL节点或NULL节点，此处的叶子节点不是一个真正的子节点，但可以理解为是一个并不真实存在的NULL节点)也是黑的（树根树叶都是黑的）。  </li>
+<li>如果一个节点是红的，则它的两个儿子都是黑的(红黑原理，不可连续两个节点为红)。   </li>
+<li>从于任意一节点到叶子节点(树尾端NIL或NULL指针)的每一条路径都包含相同数目的黑节点。<br>性质4和性质5结合：假设从树根到树叶共会n个黑色节点，那么最短的一条路径可能就是有这n个纯黑节点组成，而最长的一条就是红黑交替组成的路径。<br>也就是说，红黑树上不会存在任何路径多余其他路径的两倍长，顶多是等于两倍。    </li>
+</ol>
+<p><img src="https://github.com/xixiang230/xixiang230.github.io/blob/master/images/brtree.png?raw=true" alt="&quot;红黑树&quot;"><br>注: 前面所说的叶节点或NULL节点，就是图中的NIL节点，并不包含数据，只是一个充当树在此结束的指示，并不真实存在。  </p>
+<p>二叉树的红黑性，决定了从树根到树叶的最长可能路径不会超过最短路径的两倍。  </p>
+<h1 id="树的旋转"><a href="#树的旋转" class="headerlink" title="树的旋转"></a>树的旋转</h1><p>在对红黑树数据节点进行插入或删除操作时，可能使得树违背红黑树的性质，这时需要对该树进行旋转变化，比如修改节点颜色或者指向，以保证树的红黑性。</p>
+<ol>
+<li>左旋<br><img src="(https://github.com/xixiang230/xixiang230.github.io/blob/master/images/brtree_left.png?raw=true" alt="&quot;左旋&quot;"><br>当以plvot节点为中心做左旋时，假设plvot的右孩子Y非NIL，pivot可以是树的任意左孩子，也非NIL节点。  左旋将以pivot到Y之间的链作为支轴<br>进行，它将使得Y成为子树新的根，而y的左左孩子b则成为pivot的右孩子(可以这样理解，以pivot为中心的链条:a-&gt;pivot-&gt;Y左滑一个位置，于是P<br>就链上Y了，接着pivot脱节，与P断链，垂直掉了下来，同时把正下方的b和Y的链接砸掉了，取代b自己和Y链上，最后b在下掉过程中被pivot的右支<br>拉住连接上。  </li>
+<li>右旋<br><img src="(https://github.com/xixiang230/xixiang230.github.io/blob/master/images/brtree_right.png?raw=true" alt="&quot;右旋&quot;"></li>
+<li>双旋<br>双旋只是单旋的两次应用。  </li>
+</ol>
+<p>#二叉树的插入和删除<br>二叉查找树插入原则: 比当前值大往右走，比当前值小往左走，插入在树枝上进行。  </p>
+<p>二叉查找树删除技巧: </p>
+<ol>
+<li>查找到需要删除的节点X。  </li>
+<li>在X的左子树中找到最大元素M或者在它的右子树中找到最小元素M，交换(M，X)。此时M节点必然至多只有一个孩子。  </li>
+<li>用M的子节点代替M节点。<br>综上，二叉查找树的删除操作归结于删除一个至多只有一个孩子的节点。在删除这个节点后，用它的孩子节点替换就好了。  </li>
+</ol>
+<h1 id="红黑树的查找"><a href="#红黑树的查找" class="headerlink" title="红黑树的查找"></a>红黑树的查找</h1><p>红黑树首先是一棵二叉查找树，所以其查找操作和普通二叉查找树类似。  </p>
+<p>红黑树的插入、删除操作会导致可能失去树的红黑性，而恢复其红黑性需要调整部分节点的颜色O(log n)和不超过三次的树的旋转操作(插入<br>操作最多只需两次)。</p>
+<h1 id="红黑树的插入"><a href="#红黑树的插入" class="headerlink" title="红黑树的插入"></a>红黑树的插入</h1><p>红黑树的插入操作和二叉查找树一样是在树叶上进行，且插入的新节点总是红色节点。向一个含有n个节点的红黑树插入一个新节点的操作可以在O(log n)时间内完成。可概括为如下几个步骤:    </p>
+<ol>
+<li>查找要插入的位置，时间复杂度为: O(log n)  </li>
+<li>将新节点颜色赋值为红色<br>若赋为黑色，则会导致树根到树叶的一条路径上多一个额外的黑节点，由前面的红黑树性质可知，任何路径上的黑节点数目是一致的，这样<br>赋为黑色节点再调整麻烦就大了。而设为红色节点，顶多导致两个连续红色节点 的冲突，这可以通过颜色调换和树的旋转操作来调整。  </li>
+<li>自下而上重新调整红黑树  </li>
+</ol>
+<p>假设需要插入的节点为N，其父节点为P，其父P的兄弟节点为U，其祖父节点为G(即P和U都是G的两个子节点)。  </p>
+<ol>
+<li>如果P是黑色的，则整棵树无需调整。因为插入新节点后，出现连续两个黑节点或者是红黑交替都没关系。  </li>
+<li>如果P是红色的(此时祖父节点G一定是黑的)，则插入新节点N后，会违背不能连续出现红节点的性质，此时需要调整。  </li>
+</ol>
+<p>(a)既然新节点的父节点P是红的，再观察下他叔叔U，若U也是红色的则:<br>将P和U变为黑色，这样新插入的红色节点N就安全咯，但是红黑性质5说各个路径上的黑节点数目是一致的，P和U边黑了，那么应该将祖父节点<br>G变红才好，已确保各条路上的黑节点数不变，当然，祖父节点G的父节点也有可能是红的，G变红了，那么G的父节点就得变黑，即在祖父节点上需要递归调整颜色，<br>直到满足树的红黑性，如果恰好把根节点染成了红色，可强制调整为黑。<br><img src="(https://github.com/xixiang230/xixiang230.github.io/blob/master/images/brtree_pu_red.png?raw=true" alt="&quot;pu_red&quot;"></p>
+<p>(b)如果新节点的父节点P是红的，而它叔叔U为黑或者空缺，且N是右孩子，则：<br>对父节点P进行一次左旋操作，如果还是有两个连续红节点，则按下面情形处理。<br><img src="(https://github.com/xixiang230/xixiang230.github.io/blob/master/images/brtree_pu_rb_r.png?raw=true" alt="&quot;pu_rb_r&quot;"></p>
+<p>(c)如果新节点的父节点P是红的，而它叔叔U为黑，且N是左孩子，则：<br>对祖父节点G进行一次右旋操作。并交换以前父节点P和祖父节点G的颜色。以为调整后P为黑色，所以无需顾虑调整后P的父节点是否为红的情况。<br><img src="(https://github.com/xixiang230/xixiang230.github.io/blob/master/images/brtree_pu_rb_l.png?raw=true" alt="&quot;pu_rb_l&quot;"></p>
+<h1 id="红黑树的删除"><a href="#红黑树的删除" class="headerlink" title="红黑树的删除"></a>红黑树的删除</h1><ol>
+<li>如果删除的是红色节点，不破坏树的红黑性质。  </li>
+<li>如果删除的是红色节点，则这个路径上会少一个黑色节点，需要重新着色或旋转解决。  </li>
+</ol>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/algorithm/" rel="tag">#algorithm</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/06/10/jQuery之添加HTML元素/" rel="next" title="jQuery之添加HTML元素">
+                <i class="fa fa-chevron-left"></i> jQuery之添加HTML元素
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/06/12/bootstrap-slider插件/" rel="prev" title="bootstrap-slider插件">
+                bootstrap-slider插件 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="yunmengze" />
+          <p class="site-author-name" itemprop="name">yunmengze</p>
+          <p class="site-description motion-element" itemprop="description">求知若饥，虛心若愚</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">62</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">36</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/xixiang230" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/xixiang230" target="_blank" title="Twitter">
+                  
+                    <i class="fa fa-fw fa-twitter"></i>
+                  
+                  Twitter
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/your-user-name" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://douban.com/people/your-user-name" target="_blank" title="FaceBook">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  FaceBook
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#红黑树简介"><span class="nav-number">1.</span> <span class="nav-text">红黑树简介</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#红黑树时间复杂度分析"><span class="nav-number">2.</span> <span class="nav-text">红黑树时间复杂度分析</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#红黑树性质"><span class="nav-number">3.</span> <span class="nav-text">红黑树性质</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#树的旋转"><span class="nav-number">4.</span> <span class="nav-text">树的旋转</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#红黑树的查找"><span class="nav-number">5.</span> <span class="nav-text">红黑树的查找</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#红黑树的插入"><span class="nav-number">6.</span> <span class="nav-text">红黑树的插入</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#红黑树的删除"><span class="nav-number">7.</span> <span class="nav-text">红黑树的删除</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">yunmengze</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+  
+  
+  
+
+  
+
+  
+
+</body>
+</html>

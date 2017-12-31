@@ -1,0 +1,798 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="git," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="云梦泽" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="初始化配置git一共有3个配置文件：一是仓库级配置文件，位于当前仓库下(./.git/config)；二是全局配置文件(~/.gitconfig)；三是系统级别配置文件（/etc/gitconfig)。   对于git而言，各个配置文件的权重比较为：仓库 &amp;gt; 全局 &amp;gt; 系统。git使用这一系列的配置文件来存储个人偏好，在工作时首先查找/etc/gitconfig文件（系统级），其次查找">
+<meta name="keywords" content="git">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Git常用命令整理">
+<meta property="og:url" content="http://xixiang230.github.io/2017/12/31/Git常用命令整理/index.html">
+<meta property="og:site_name" content="云梦泽">
+<meta property="og:description" content="初始化配置git一共有3个配置文件：一是仓库级配置文件，位于当前仓库下(./.git/config)；二是全局配置文件(~/.gitconfig)；三是系统级别配置文件（/etc/gitconfig)。   对于git而言，各个配置文件的权重比较为：仓库 &amp;gt; 全局 &amp;gt; 系统。git使用这一系列的配置文件来存储个人偏好，在工作时首先查找/etc/gitconfig文件（系统级），其次查找">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-12-31T13:37:12.592Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Git常用命令整理">
+<meta name="twitter:description" content="初始化配置git一共有3个配置文件：一是仓库级配置文件，位于当前仓库下(./.git/config)；二是全局配置文件(~/.gitconfig)；三是系统级别配置文件（/etc/gitconfig)。   对于git而言，各个配置文件的权重比较为：仓库 &amp;gt; 全局 &amp;gt; 系统。git使用这一系列的配置文件来存储个人偏好，在工作时首先查找/etc/gitconfig文件（系统级），其次查找">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> Git常用命令整理 | 云梦泽 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">云梦泽</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">个人技术博客</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Git常用命令整理
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2017-12-31T21:37:12+08:00" content="2017-12-31">
+              2017-12-31
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/technique/" itemprop="url" rel="index">
+                    <span itemprop="name">技术</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="初始化配置"><a href="#初始化配置" class="headerlink" title="初始化配置"></a>初始化配置</h1><p>git一共有3个配置文件：一是仓库级配置文件，位于当前仓库下(./.git/config)；二是全局配置文件(~/.gitconfig)；三是系统级别配置文件（/etc/gitconfig)。  </p>
+<p>对于git而言，各个配置文件的权重比较为：仓库 &gt; 全局 &gt; 系统。git使用这一系列的配置文件来存储个人偏好，在工作时首先查找/etc/gitconfig文件（系统级），其次查找~/.gitconfig文件（全局级），最后查找仓库下的配置文件.git/config(仓库级)，以上三层配置层层推进，如有冲突，会以最后一次为准。虽然可手动编辑配置，但使用git config命令更为便捷。</p>
+<p>当安装git后首先要做的就是设置用户名和e-mail地址，因为git的每次提交都会使用这两个信息，嵌入到提交之中。  </p>
+<ul>
+<li><p>配置使用git仓库的人员姓名<br><code>git config --global user.name &quot;xixiang230&quot;</code></p>
+</li>
+<li><p>配置使用git仓库人员的email<br><code>git config --global user.email &quot;371524660@qq.com&quot;</code></p>
+</li>
+</ul>
+<a id="more"></a>
+<ul>
+<li><p>打开用户git配置文件目录<br><code>vim ~/.gitconfig</code></p>
+</li>
+<li><p>查看git配置，列出git可以在该处找出的所有配置  (–list)<br><code>git config --list</code><br><code>git config -l</code>  </p>
+</li>
+<li><p>编辑git配置（–edit）<br><code>git config --local -e</code>  #编辑仓库级配置文件<br><code>git config --global -e</code> #编辑全局级配置文件<br><code>git config --system -e</code> #编辑系统级配置文件  </p>
+</li>
+<li><p>增加一个配置项(–add)<br><code>git config --add section.key value</code>  #(和前面一样，默认都操作local配置)<br>其中add选项后面section，key，value一项都不能少。<br><code>git config --add cat.name Tom</code>  </p>
+</li>
+<li><p>使用git查找特定关键字的有效值（–get）<br><code>git config --get section.key</code>     #（默认获取local配置中的内容）<br><code>git config --get cat.age</code><br>等效于<br><code>git config user.name</code>  </p>
+</li>
+<li><p>命令别名(git co 代替git checkout)<br><code>git config --global alias.co checkout</code>  </p>
+</li>
+</ul>
+<blockquote>
+<pre><code>通过git config 工具可获取和设置配置变量，这些变量可以控制Git的外观和操作。  
+--global选项，使得git config工具读写用户账户下的配置文件(~/.gitconfig)  
+--system选项，使得git config工具读写系统账户下的配置文件(/etc/gitconfig)
+--local选项或不带选项，使得git config工具读写当前仓库的配置文件(.git/config)  
+</code></pre></blockquote>
+<ul>
+<li><p>删除一个配置项（–unset）<br><code>git config [-local|--global|--sysytem] --unset section.key</code><br><code>git config --local --unset cat.name</code>  </p>
+</li>
+<li><p>配置编辑器<br><code>git config --global core.editor vim</code><br>git在需要输入一些消息时会使用该指定的文本编辑器。  </p>
+</li>
+<li><p>配置比较工具<br><code>git config --global merge.tool vimdiff</code>  </p>
+</li>
+</ul>
+<hr>
+<h1 id="初始化仓库"><a href="#初始化仓库" class="headerlink" title="初始化仓库"></a>初始化仓库</h1><ul>
+<li>初始化一个版本仓库<br><code>git init</code>  </li>
+</ul>
+<hr>
+<h1 id="添加文件"><a href="#添加文件" class="headerlink" title="添加文件"></a>添加文件</h1><ul>
+<li>取消对文件的修改<br><code>git checkout -- readme.txt</code><br><code>git co --  &lt;file&gt;</code><br><code>git co .</code>  </li>
+<li>获取远端分支<br><code>git checkout -b sf origin/serverfix</code>  </li>
+<li><p>将工作文件修改提交到本地暂存区<br><code>git add &lt;file&gt;</code>  </p>
+</li>
+<li><p>将所有修改过的工作文件提交到暂存区<br><code>git add .</code>    </p>
+</li>
+</ul>
+<hr>
+<h1 id="删除文件"><a href="#删除文件" class="headerlink" title="删除文件"></a>删除文件</h1><ul>
+<li>从版本库中删除文件<br><code>git rm &lt;file&gt;</code>  </li>
+<li>移除跟踪，但不删除文件<br><code>git rm --cached readme.txt</code>  </li>
+</ul>
+<hr>
+<h1 id="移动文件"><a href="#移动文件" class="headerlink" title="移动文件"></a>移动文件</h1><ul>
+<li>移动文件<br><code>git mv file_from file_to</code>  </li>
+</ul>
+<hr>
+<h1 id="查看文件diff"><a href="#查看文件diff" class="headerlink" title="查看文件diff"></a>查看文件diff</h1><ul>
+<li><p>比较当前文件和暂存区文件差异<br><code>git difff &lt;file&gt;</code><br><code>git diff</code>  </p>
+</li>
+<li><p>比较两次提交之间的差异<br><code>git diff &lt;$id1&gt; &lt;$id2&gt;</code>  </p>
+</li>
+<li><p>比较已暂存文件和上次提交文件的差异  </p>
+<h2 id="git-diff-cached"><a href="#git-diff-cached" class="headerlink" title="git diff --cached  "></a><code>git diff --cached</code>  </h2><h1 id="查看提交记录"><a href="#查看提交记录" class="headerlink" title="查看提交记录"></a>查看提交记录</h1></li>
+<li>查看提交的历史记录<br><code>git log</code><br><code>git log &lt;file&gt;</code>  </li>
+<li>查看最近两次提交内容的差异<br><code>git log -p -2</code>  </li>
+<li>简要显示增改行数统计<br><code>git log --stat</code>   </li>
+</ul>
+<hr>
+<h1 id="取得Git仓库"><a href="#取得Git仓库" class="headerlink" title="取得Git仓库"></a>取得Git仓库</h1><ul>
+<li><p>Clone远程版本库<br><code>git clone git@github.com:xixiang230/hello-word.git</code><br><code>git clone https://github.com/xixiang230/hello-word.git</code></p>
+</li>
+<li><p>为本地仓库添加一个远程仓库地址<br><code>git remote add origin git@github.com:xixiang230/hello-word.git</code>  </p>
+</li>
+<li><p>删除远程仓库<br><code>git remote rm &lt;repository&gt;</code>  </p>
+</li>
+<li><p>查看远程仓库，-v列出远程服务器地址和仓库名称<br><code>git remote -v</code><br>  git remote -v<br>  origin    git@github.com:xixiang230/blog.git (fetch)<br>  origin    git@github.com:xixiang230/blog.git (push)  </p>
+<p>  git remote<br>  origin  </p>
+</li>
+<li><p>查看远程服务器仓库状态（显示远程信息）<br><code>git remote show origin</code>  </p>
+</li>
+<li><p>从远程仓库抓取数据(更新同步)<br><code>git fetch</code>  </p>
+</li>
+<li><p>抓取远程仓库所有分支更新并合并到本地<br><code>git pull</code>  </p>
+</li>
+<li><p>推送数据到远程仓库（把本地仓库master分支跟踪到远程分支）<br><code>git push origin master</code>  </p>
+</li>
+<li><p>push 所有分支<br><code>git push</code>  </p>
+</li>
+<li><p>查看远程仓库信息<br><code>git remote show origin</code>  </p>
+</li>
+<li><p>远程仓库的删除和重命名(pb改为paul)<br><code>git remote rename pb paul</code>  </p>
+</li>
+<li><p>修改远程分支地址<br><code>git remote set-url origin remote_git_address</code>  </p>
+</li>
+</ul>
+<hr>
+<h1 id="添加与提交"><a href="#添加与提交" class="headerlink" title="添加与提交"></a>添加与提交</h1><ul>
+<li><p>添加当前目前下所有修改文件到暂存区<br><code>git add .</code><br><code>git add *.c</code>  #添加以.c为后缀的文件<br><code>git add file</code>  #添加指定文件或目录<br>git add 是将file的信息添加到git仓库的索引库中，并没有真正添加到库</p>
+</li>
+<li><p>提交修改到本地仓库<br><code>git commit -m &quot;message&quot;</code><br>git commit会将索引库中的内容向git仓库进行提交，这步之后文件file才真正提交到git仓库中。  </p>
+</li>
+<li><p>把已经跟踪的文件全部提交（添加并提交）<br><code>git commit -a -m &quot;message&quot;</code>  </p>
+</li>
+</ul>
+<p>现在文件已经提交到本地仓库了，接下来需要推送到远程仓库   </p>
+<ul>
+<li>为本地仓库添加一个远程仓库（将本地仓库与远程仓库关联）<br><code>git remote add origin git@github.com:xixiang230/remote.git</code>  </li>
+<li><p>推送更新到远程服务器(将本地master分支跟踪到远程分支)<br><code>git push origin master</code><br>在git仓库建立之初就有一个默认的master分支，如果建立了其他分支，也可用同样的方法跟踪。  </p>
+</li>
+<li><p>查看仓库当前的提交状态<br><code>git status</code>  </p>
+</li>
+</ul>
+<hr>
+<h1 id="取消暂存文件"><a href="#取消暂存文件" class="headerlink" title="取消暂存文件"></a>取消暂存文件</h1><ul>
+<li><p>取消已经暂存的文件<br><code>git reset HEAD fileName</code>  </p>
+</li>
+<li><p>假设已经使用如下命令，将修改过的文件a,b添加到暂存区<br><code>git add .</code><br>现在只想提交a文件，不想提交b文件，执行如下命令<br><code>git reset HEAD b</code></p>
+</li>
+<li><p>从暂存区恢复到工作文件<br><code>git reset &lt;file&gt;</code><br><code>git reset -- .</code>  </p>
+</li>
+<li><p>恢复最近一次提交，即放弃上次提交后的所有本次修改<br><code>git reset --hard</code>  </p>
+</li>
+<li><p>取消对文件的修改，回滚到未修改状态<br><code>git checkout -- fileName</code></p>
+</li>
+<li><p>从暂存区恢复到工作文件<br><code>git reset &lt;file&gt;</code>  </p>
+</li>
+</ul>
+<hr>
+<h1 id="创建分支"><a href="#创建分支" class="headerlink" title="创建分支"></a>创建分支</h1><ul>
+<li>创建test分支<br><code>git branch test</code>  </li>
+<li>切换到test分支<br><code>git checkout test</code>  </li>
+<li>创建并切换到test分支<br><code>git checkout -b test</code>  </li>
+<li>分支合并到当前分支<br><code>git merge hotfix</code>  </li>
+</ul>
+<hr>
+<h1 id="查看分支"><a href="#查看分支" class="headerlink" title="查看分支"></a>查看分支</h1><ul>
+<li>查看最后一次commit信息<br><code>git branch -v</code>  </li>
+<li>筛选出已经/尚未与当前分支合并的分支<br><code>git branch --merged</code><br><code>git branch --no-merger</code>  </li>
+<li>查看所有分支信息<br><code>git branch -r</code>  </li>
+</ul>
+<hr>
+<h1 id="删除分支"><a href="#删除分支" class="headerlink" title="删除分支"></a>删除分支</h1><ul>
+<li>删除test分支<br><code>git branch -D test</code>  </li>
+</ul>
+<hr>
+<h1 id="git新建仓库操作流程"><a href="#git新建仓库操作流程" class="headerlink" title="git新建仓库操作流程"></a>git新建仓库操作流程</h1><ol>
+<li><p>global用户配置信息设置<br> git config –global user.name “xixiang230”<br> git config –global user.emai “371524660@qq.com”  </p>
+</li>
+<li><p>新建仓库和关联<br> mkdir newrepository<br> cd new repository<br> git init           #  git本地初始化<br> touch README.md<br> git add README.md<br> git add .         #   将所有文件添加到版本控制系统<br> git commit -m “first commit”<br> git remote add origin git@github.com:xixiang230/newrepository.git   # 添加远程仓库<br> git push -u origin master   # 将本地版本库推送到远程仓库<br>第一次推送master分支时可加上-u参数，git不但会把本地master分支内容推送到远程新的master分支，还会把本地master分支和远程master分支关联起来，在之后的推送或拉取时简化命令。    </p>
+</li>
+</ol>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/git/" rel="tag">#git</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/12/31/Hexo常用命令/" rel="next" title="Hexo常用命令">
+                <i class="fa fa-chevron-left"></i> Hexo常用命令
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/12/31/hello-world/" rel="prev" title="Hello World">
+                Hello World <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="yunmengze" />
+          <p class="site-author-name" itemprop="name">yunmengze</p>
+          <p class="site-description motion-element" itemprop="description">求知若饥，虛心若愚</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">62</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">36</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/xixiang230" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/xixiang230" target="_blank" title="Twitter">
+                  
+                    <i class="fa fa-fw fa-twitter"></i>
+                  
+                  Twitter
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/your-user-name" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://douban.com/people/your-user-name" target="_blank" title="FaceBook">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  FaceBook
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#初始化配置"><span class="nav-number">1.</span> <span class="nav-text">初始化配置</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#初始化仓库"><span class="nav-number">2.</span> <span class="nav-text">初始化仓库</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#添加文件"><span class="nav-number">3.</span> <span class="nav-text">添加文件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#删除文件"><span class="nav-number">4.</span> <span class="nav-text">删除文件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#移动文件"><span class="nav-number">5.</span> <span class="nav-text">移动文件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#查看文件diff"><span class="nav-number">6.</span> <span class="nav-text">查看文件diff</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#git-diff-cached"><span class="nav-number">6.1.</span> <span class="nav-text">git diff --cached  </span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#查看提交记录"><span class="nav-number">7.</span> <span class="nav-text">查看提交记录</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#取得Git仓库"><span class="nav-number">8.</span> <span class="nav-text">取得Git仓库</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#添加与提交"><span class="nav-number">9.</span> <span class="nav-text">添加与提交</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#取消暂存文件"><span class="nav-number">10.</span> <span class="nav-text">取消暂存文件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#创建分支"><span class="nav-number">11.</span> <span class="nav-text">创建分支</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#查看分支"><span class="nav-number">12.</span> <span class="nav-text">查看分支</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#删除分支"><span class="nav-number">13.</span> <span class="nav-text">删除分支</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#git新建仓库操作流程"><span class="nav-number">14.</span> <span class="nav-text">git新建仓库操作流程</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">yunmengze</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+  
+  
+  
+
+  
+
+  
+
+</body>
+</html>
