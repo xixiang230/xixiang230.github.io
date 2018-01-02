@@ -246,6 +246,496 @@
             
               
                 
+                <a class="post-title-link" href="/2016/05/16/golang之net-url包学习/" itemprop="url">
+                  golang之net/url包学习
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-05-16T11:33:00+08:00" content="2016-05-16">
+              2016-05-16
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="URL编码解码"><a href="#URL编码解码" class="headerlink" title="URL编码解码"></a>URL编码解码</h1><p>escape采用ISO Latin字符集对指定的字符串进行编码。所有的空格符、标点符号、特殊字符以及其他非ASCII字符都将被转化成%xx格式的字符编码(xx等于该字符在字符集表里面的编码的16进制数字)。类escape函数是一个可转换编码的函数,比如javascript 的 ajax 中,向a.php传递参数?city=北京,可先将”北京”用escape重新编码,再进行传递,在服务器端接收后再解码才不会出现乱码。escape一般用于传递URL参数和类似urlencode base64_encode函数是类似的。  </p>
+<pre><code>func QueryEscape(s string) string  
+</code></pre><p>QueryEscape escapes the string so it can be safely placed inside a URL query.  </p>
+<pre><code>func QueryUnescape(s string) (string, error)  
+</code></pre><p>QueryUnescape does the inverse transformation of QueryEscape, converting %AB into the byte 0xAB and ‘+’ into ‘ ‘ (space). It returns an error if any % is not followed by two hexadecimal digits.  </p>
+<pre><code>str := &quot;abc#cba&quot;  
+out := url.QueryEscape(str)  
+fmt.Println(out)                 # abc%23cba
+re, _ := url.QueryUnescape(str)  # abc#cba
+fmt.Println(re)  
+</code></pre><p>QueryUnescape<br>%AB  —-&gt; 0xAB<br>‘+’  —-&gt; ‘ ‘  </p>
+<pre><code>strA := &quot;abc%23cba&quot;  
+strB := &quot;abc+cba&quot;  
+reA, _ := url.QueryUnescape(strA)  
+fmt.Println(reA)  # abc#cba
+reB, _ := url.QueryUnescape(strB)  
+fmt.Println(reB)  # abc cbd  
+</code></pre><hr>
+<h1 id="错误"><a href="#错误" class="headerlink" title="错误"></a>错误</h1><ul>
+<li><p>type Error  </p>
+<pre><code>type Error struct {  
+  Op  string  
+  URL string  
+  Err error  
+}  
+</code></pre></li>
+</ul>
+<p>Error reports an error and the operation and URL that caused it. </p>
+<ul>
+<li>func (e *Error) Error() string    </li>
+<li>func (e *Error) Temporary() bool  </li>
+<li>func (e *Error) Timeout() bool  </li>
+<li>type EscapeError string  </li>
+<li>func (EscapeError) Error() string  </li>
+<li>type InvalidHostError  </li>
+<li>type InvalidHostError string  </li>
+<li>func (e InvalidHostError) Error() string </li>
+</ul>
+<hr>
+<h1 id="请求参数"><a href="#请求参数" class="headerlink" title="请求参数"></a>请求参数</h1><ol>
+<li><p>type Values  </p>
+<pre><code>type Values map[string][]string  
+</code></pre><p>Values maps a string key to a list of values. It is typically used for query parameters and form values. Unlike in the http.Header map, the keys in a Values map are case-sensitive.  </p>
+</li>
+<li><p>func (Values) Add  </p>
+<pre><code>func (v Values) Add(key, value string)  
+</code></pre><p>Add adds the value to key. It appends to any existing values associated with key.  </p>
+</li>
+<li><p>func (Values) Del  </p>
+<pre><code>func (v Values) Del(key string)  
+</code></pre><p>Del deletes the values associated with key.  </p>
+</li>
+<li><p>func (Values) Encode  </p>
+<pre><code>func (v Values) Encode() string  
+</code></pre><p>Encode encodes the values into “URL encoded” form (“bar=baz&amp;foo=quux”) sorted by key.  </p>
+</li>
+<li><p>func (Values) Get  </p>
+<pre><code>func (v Values) Get(key string) string  
+</code></pre><p>Get gets the first value associated with the given key. If there are no values associated with the key, Get returns the empty string. To access multiple values, use the map directly.  </p>
+</li>
+<li><p>func (Values) Set  </p>
+<pre><code>func (v Values) Set(key, value string)  
+</code></pre><p>Set sets the key to value. It replaces any existing values.  </p>
+</li>
+<li><p>func ParseQuery  </p>
+<pre><code>func ParseQuery(query string) (m Values, err error)  
+</code></pre><p>ParseQuery parses the URL-encoded query string and returns a map listing the values specified for each key. ParseQuery always returns a non-nil map containing all the valid query parameters found; err describes the first decoding error encountered, if any.  </p>
+</li>
+</ol>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/05/15/git-push失败-ERROR-Repository-not-found/" itemprop="url">
+                  git push失败 -- ERROR: Repository not found --
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-05-15T17:49:45+08:00" content="2016-05-15">
+              2016-05-15
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h1><pre><code>git push -u origin master  
+ERROR: Repository not found.  
+fatal: The remote end hung up unexpectedly  
+</code></pre><h1 id="解决办法"><a href="#解决办法" class="headerlink" title="解决办法"></a>解决办法</h1><pre><code>ssh -T git@github.com  #make sure what was the github account used
+git remote -v  
+git remote rm origin   #if tips: fatal: remote origin already exists
+git remote add origin git@github.com:xixiang230/blog.git  
+git push -u origin master  
+</code></pre>
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/05/15/git-push本地代码到github出错/" itemprop="url">
+                  git push本地代码到github出错
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-05-15T17:37:27+08:00" content="2016-05-15">
+              2016-05-15
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/technique/" itemprop="url" rel="index">
+                    <span itemprop="name">技术</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p><img src="https://github.com/xixiang230/xixiang230.github.io/blob/master/images/git.png?raw=true" alt=""></p>
+<h1 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h1><pre><code>git push -u origin master  
+To git@github.com:******/Demo.git  
+! [rejected] master -&gt; master (non-fast-forward)  
+error: failed to push some refs to &apos;git@github.com:******/Demo.git&apos;  
+hint: Updates were rejected because the tip of your current branch is behind  
+hint: its remote counterpart. Merge the remote changes (e.g. &apos;git pull&apos;)  
+hint: before pushing again.  
+hint: See the &apos;Note about fast-forwards&apos; in &apos;git push --help&apos; for details.    
+</code></pre><h1 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h1><p>远程repository和本地的repository冲突导致的，在github创建版本库时，在github的版本库页面点击了创建README.md文件的按钮创建了说明文档，但是却没有pull到本地。因为远程仓库比你的本地库更新，这样就产生了版本冲突的问题，所以得先 pull下来，再 push上去就ok了。  </p>
+<h1 id="解决办法"><a href="#解决办法" class="headerlink" title="解决办法"></a>解决办法</h1><ol>
+<li>强制push<br><code>git push -u origin master -f</code><br>这样会使远程修改丢失，一般是不可取的，尤其是多人协作开发的时候。  </li>
+<li><p>push前先将远程repository修改pull下来  </p>
+<pre><code>git pull origin master  
+git push -u origin master
+</code></pre><p>没有设定远程跟踪分支的话 你要使用这个命令 git pull origin master  </p>
+</li>
+<li><p>若不想merge远程和本地修改，可以先创建新的分支：<br><code>git branch [name]</code><br>然后push<br><code>git push -u origin [name]</code>  </p>
+</li>
+</ol>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/05/15/git拉取失败-You-have-not-concluded-your-merge-MERGE-HEAD-exists/" itemprop="url">
+                  git拉取失败 -- You have not concluded your merge (MERGE_HEAD exists)
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-05-15T17:19:19+08:00" content="2016-05-15">
+              2016-05-15
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">git pull  </span><br><span class="line">You have not concluded your merge (MERGE_HEAD exists).  </span><br><span class="line">Please, commit your changes before you can merge.  </span><br><span class="line">```  </span><br><span class="line"># 错误原因  </span><br><span class="line">可能是因为在以前pull下来的代码没有自动合并导致的 </span><br><span class="line"></span><br><span class="line"># 解决办法  </span><br><span class="line">保留本地修改</span><br></pre></td></tr></table></figure>
+<p>git merge –abort<br>git reset –merge<br>git pull           #获取线上仓库<br>``` </p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/05/15/markdown基本语法/" itemprop="url">
                   markdown基本语法
                 </a>
@@ -517,7 +1007,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">62</span>
+              <span class="site-state-item-count">66</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -525,7 +1015,7 @@
           
             <div class="site-state-item site-state-categories">
               <a href="/categories">
-                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-count">6</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -534,7 +1024,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">36</span>
+                <span class="site-state-item-count">37</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -616,7 +1106,7 @@
         <div class="copyright" >
   
   &copy;  2016 - 
-  <span itemprop="copyrightYear">2017</span>
+  <span itemprop="copyrightYear">2018</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

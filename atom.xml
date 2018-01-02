@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://xixiang230.github.io/"/>
-  <updated>2017-12-31T13:37:12.593Z</updated>
+  <updated>2018-01-02T14:56:17.211Z</updated>
   <id>http://xixiang230.github.io/</id>
   
   <author>
@@ -17,13 +17,107 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>Hello World</title>
+    <title>ZooKeeper源码阅读之服务启动</title>
+    <link href="http://xixiang230.github.io/2018/01/02/ZooKeeper%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB%E4%B9%8B%E6%9C%8D%E5%8A%A1%E5%90%AF%E5%8A%A8/"/>
+    <id>http://xixiang230.github.io/2018/01/02/ZooKeeper源码阅读之服务启动/</id>
+    <published>2018-01-02T14:17:22.000Z</published>
+    <updated>2018-01-02T14:56:17.211Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>分布式系统本质上来说就是不同节点上的进程并发执行，并且相互之间对进程的行为进行协调处理的过程。不同节点上的进程互相协调行为的过程叫做分布式同步。许多分布式系统都需要一个进程来作为任务的协调者，执行一些其它进程并不执行的特殊操作，自动选举出一个协调者的过程就是分布式选举，Zookeeper正是为了解决这一系列问题。</p><h1 id="ZK服务启动"><a href="#ZK服务启动" class="headerlink" title="ZK服务启动"></a>ZK服务启动</h1><p>Zk服务的启动方式有：单机模式，伪分布式模式，分布式模式。</p><h1 id="单机模式"><a href="#单机模式" class="headerlink" title="单机模式"></a>单机模式</h1><p>单机模式意味着只有一台机器，流程简单，通过读物conf目录下的zoo.cfg配置文件启动。几个重要参数：</p><ol><li>tickTime：用于ZK服务端和客户端的会话控制，包括心跳，一般会话超时时间为该值得两倍，单位为毫秒。</li><li>dataDir：该目录用来存放数据库的镜像和操作数据库的日志。</li><li>clientPort：ZK服务端监听客户端的端口，默认2181。<br>ZK服务启动后，可通过ps或jps命令查看。<br>也可以通过启动脚本自带参数status来查看ZK进程状态<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./zkServer.sh status</span><br></pre></td></tr></table></figure></li></ol><p>ZK服务运行后，可以通过命令行工具访问之<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./zkCli.sh -server localhost:2181</span><br></pre></td></tr></table></figure></p><h1 id="分布式模式"><a href="#分布式模式" class="headerlink" title="分布式模式"></a>分布式模式</h1><p>多台ZK机器构成一个集群，集群内的所有机器成为quorum。集群最小配置为3台，最佳配置为5台。其中1台为Leader，另外4台为Follower，一旦Leader宕机，剩余的Follower就会重新选举出Leader。<br>分布式字段</p><ul><li>initLimit：follower对于leader的初始化连接timeout时间；</li><li>syncLimit：follower对于leader的同步timeout时间</li><li>timeout的计算公式为：initLimit<em>tickTime，syncLimit</em>tickTime<br>另外，对于配置：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">server.ID=node1:port1:port2</span><br></pre></td></tr></table></figure></li></ul><p>其中port1用于follower和leader之间的通信，采用TCP方式，port2用于选举leader用。</p><h1 id="流程源码解释"><a href="#流程源码解释" class="headerlink" title="流程源码解释"></a>流程源码解释</h1><p>ZK的启动由zkServer.sh发起，真正的起源是Java类QuorumPeerMain，然后进行一系列配置后启动负责ZK服务的线程。</p><h2 id="zkServer-sh"><a href="#zkServer-sh" class="headerlink" title="zkServer.sh"></a>zkServer.sh</h2><p>这个脚本有好几种参数选择，包括start，start-foregroud，print-cmd，stop等<br>对于start方法，脚本使用nohup命令提交作业</p><h2 id="QuorumPeerMain"><a href="#QuorumPeerMain" class="headerlink" title="QuorumPeerMain"></a>QuorumPeerMain</h2><p>QuorumPeerMain类的Main函数很简单，直接调用initializeAndRun方法，参数即为zkServer.sh传入的参数，比如“start”，在initializeAndRun方法内部，首先启动的是定时清除镜像任务，默认设置为保留3分，由于<br>purgeInterval 这个参数默认设置为 0，所以不会启动镜像定时清除机制<br>接下来，如果配置的 ZooKeeper 服务器大于 1 台，调用 runFromConfig<br>方法进行集群信息配置，并启动 QuorumPeer 线程。<br>每个 QuorumPeer 线程启动之前都会先启动一个 cnxnFactory 线程，首先初始化<br>ServerCnxnFactory，这个是用来接收来自客户端的连接的，也就是这里启动的是一个 TCP<br>服务器。在 ZooKeeper 里提供两种 TCP 服务器的实现，一个是使用 Java 原生 NIO<br>的方式，另外一个是使用 NETTY。默认是 NIO 的方式，一个典型的 Reactor 模型，</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h1 id=&quot;背景&quot;&gt;&lt;a href=&quot;#背景&quot; class=&quot;headerlink&quot; title=&quot;背景&quot;&gt;&lt;/a&gt;背景&lt;/h1&gt;&lt;p&gt;分布式系统本质上来说就是不同节点上的进程并发执行，并且相互之间对进程的行为进行协调处理的过程。不同节点上的进程互相协调行为的过程叫做分布式同
+      
+    
+    </summary>
+    
+    
+      <category term="zookeeper" scheme="http://xixiang230.github.io/tags/zookeeper/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>logstash过滤器</title>
+    <link href="http://xixiang230.github.io/2018/01/01/logstash%E8%BF%87%E6%BB%A4%E5%99%A8/"/>
+    <id>http://xixiang230.github.io/2018/01/01/logstash过滤器/</id>
+    <published>2018-01-01T14:36:32.000Z</published>
+    <updated>2018-01-01T15:02:28.494Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="grok正则捕获"><a href="#grok正则捕获" class="headerlink" title="grok正则捕获"></a>grok正则捕获</h1><p>grok是logstash最重要的插件，可以在grok里预定义好命名正则表达式，并在后面的处理中引用之。<br>下面是给配置文件添加一个过滤器区段的配置。配置要添加在输入和输出区段之间，虽然说logstash执行区段的时候并不依赖于书写时的次序，不过为了看得方便，尽量按次序书写：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">input &#123;stdin&#123;&#125;&#125;</span><br><span class="line">filter &#123;</span><br><span class="line">  grok  &#123;</span><br><span class="line">    match =&gt; &#123;</span><br><span class="line">        &quot;message&quot; =&gt; &quot;\s+(?&lt;request_time&gt;\d+(?:\.\d+)?\s+&quot;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">output &#123;stdout&#123;&#125;&#125;</span><br></pre></td></tr></table></figure></p><p>运行logstash进程然后输入”begin 123.456 end”，将会看到类似如下输出：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    “message&quot; =&gt; &quot;begin 123.456 end&quot;,</span><br><span class="line">    &quot;@version&quot; =&gt; &quot;1&quot;,</span><br><span class="line">    &quot;@timestamp&quot; =&gt; &quot;2014-08-09T11:55:32.186Z&quot;,</span><br><span class="line">    &quot;host&quot; =&gt; &quot;host&quot;,</span><br><span class="line">    &quot;request_time&quot; =&gt; &quot;123.456&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p><p>上面输出结果美中不足的地方是request_time应该是数值而不是字符串。不过我们有办法来做字段值类型转换。</p><h1 id="grok表达式语法"><a href="#grok表达式语法" class="headerlink" title="grok表达式语法"></a>grok表达式语法</h1><p>grok支持把预定义的grok表达式写入到文件，在新版的logstash里，pattern目录已经为空，示例：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">USERNAME [a-zA-Z0-9._-]+</span><br><span class="line">USER %&#123;USERNAME&#125;</span><br></pre></td></tr></table></figure></p><p>上面第一行为用普通的正则表达式来定义一个grok表达式；<br>第二行，通过打印赋值格式，用前面定义好的grok表达式来定义另一个grok表达式。<br>grok表达式的打印复制格式的完整语法如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">%&#123;pattern_name:capture_name:data_type&#125;</span><br></pre></td></tr></table></figure></p><p>data_type当前只支持int和float。<br>现在，我们可以改进前面的配置如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">filter &#123;</span><br><span class="line">    grok &#123;</span><br><span class="line">        match =&gt; &#123;</span><br><span class="line">            &quot;message&quot; =&gt; &quot;%&#123;WORD:request_time:float&#125; %&#123;WORD&#125;&quot;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p><p>重新运行进程后结果如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    &quot;message&quot; =&gt; &quot;begin 123.456&quot;,</span><br><span class="line">    &quot;@version&quot; =&gt; &quot;1&quot;,</span><br><span class="line">    &quot;@timestamp&quot; =&gt; &quot;2014-08-09T12:23:36.634Z&quot;</span><br><span class="line">    &quot;host&quot; =&gt; &quot;host&quot;,</span><br><span class="line">    &quot;request_time =&gt; 123.456</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p><p>现在，request_time就是数值类型了。</p><h1 id="最佳实践"><a href="#最佳实践" class="headerlink" title="最佳实践"></a>最佳实践</h1><p>实际运用中，需要处理各种各样的日志文件，如果都是在配置文件里各自些一行自己的表达式，就难以管理了，所以建议把所有的grok表达式统一写入到一个地方，然后用filter/grok的patterns_dir选项来指明。</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h1 id=&quot;grok正则捕获&quot;&gt;&lt;a href=&quot;#grok正则捕获&quot; class=&quot;headerlink&quot; title=&quot;grok正则捕获&quot;&gt;&lt;/a&gt;grok正则捕获&lt;/h1&gt;&lt;p&gt;grok是logstash最重要的插件，可以在grok里预定义好命名正则表达式，并在后面的处
+      
+    
+    </summary>
+    
+    
+      <category term="logstash" scheme="http://xixiang230.github.io/tags/logstash/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>MySQL性能优化总结</title>
+    <link href="http://xixiang230.github.io/2018/01/01/MySQL%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E6%80%BB%E7%BB%93/"/>
+    <id>http://xixiang230.github.io/2018/01/01/MySQL性能优化总结/</id>
+    <published>2018-01-01T00:45:35.000Z</published>
+    <updated>2018-01-01T00:59:33.081Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="为查询缓存而优化你的查询"><a href="#为查询缓存而优化你的查询" class="headerlink" title="为查询缓存而优化你的查询"></a>为查询缓存而优化你的查询</h1><p>开启MySQL服务器的查询缓存是提高性能最有效的方式之一。当有很多相同查询呗执行了多次时，这些查询结果会被放到一个缓存里，后续的相同查询就不用操作表而变成直接访问缓存结果了。</p><p>但问题是某些查询语句会让MySQL不使用缓存，这是我们要注意的。例：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">// 查询缓存不开启</span><br><span class="line">$r = mysql_query(&apos;SELECT username FROM tb WHERE sigdate &gt;= CURDATE()&apos;);</span><br><span class="line">// 开启查询缓存</span><br><span class="line">$today = date(&quot;Y-m-d&quot;);</span><br><span class="line">$r = mysql_query(&quot;SELECT username FROM tb WHERE sigdate &gt;= &apos;$today&apos;&quot;);</span><br></pre></td></tr></table></figure></p><p>上面两条SQL语句差别在于CURDATE()函数的使用，MySQL的查询缓存对这个函数不起作用，像NOW()、RAND()或是其它类似SQL函数都不会开启查询缓存，因为这些函数的返回值是不定的，是易变的，所以你需要用个变量来代替MySQL的函数，从而开启缓存。</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h1 id=&quot;为查询缓存而优化你的查询&quot;&gt;&lt;a href=&quot;#为查询缓存而优化你的查询&quot; class=&quot;headerlink&quot; title=&quot;为查询缓存而优化你的查询&quot;&gt;&lt;/a&gt;为查询缓存而优化你的查询&lt;/h1&gt;&lt;p&gt;开启MySQL服务器的查询缓存是提高性能最有效的方式之一。当
+      
+    
+    </summary>
+    
+    
+      <category term="MySQL" scheme="http://xixiang230.github.io/tags/MySQL/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>TRUNK介绍</title>
+    <link href="http://xixiang230.github.io/2018/01/01/TRUNK%E4%BB%8B%E7%BB%8D/"/>
+    <id>http://xixiang230.github.io/2018/01/01/TRUNK介绍/</id>
+    <published>2018-01-01T00:16:09.000Z</published>
+    <updated>2018-01-01T00:41:01.601Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>VLAN的作用是<strong>分割广播域</strong>，处于不同VLAN的端口在二层是无法通信的，而两台交换机上处于同一VLAN间的端口要想通信，需要用线连接起来，一台交换机上VLAN最多可以设定4000多个，两台交换机之间当然不可能连4000多跟线了。</p><h1 id="trunk"><a href="#trunk" class="headerlink" title="trunk"></a>trunk</h1><p>为了解决上面问题，可以用一根<strong>骨干链路trunk</strong>来连接两台交换机，实现让两台交换机上处于相同VLAN的端口能相互通信，trunk上用特定的封装方式来支持转发不同VLAN的帧，封装主要是因为trunk上是允许转发不同VLAN的帧，所以需要打上特殊标记来区分帧到底属于哪个VLAN。比如，收到VLAN2的帧后会打上VLAN2的标记，通过trunk链路转发出去，对方交换机收到帧后，发现是VLAN2的帧，就讲VLAN2的标记去掉后发送到VLAN2的端口，实现相同VLAN在不同交换机间的通信。</p><h1 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h1><p><img src="https://github.com/xixiang230/xixiang230.github.io/blob/master/images/trunk.jpg?raw=true" alt="trunk"><br>上图两台交换机的f0/1口配置为VLAN2，f0/0口配置成trunk接口，这样R1和R2就相当于直连可以互相ping通。R1发出的包，经过SW1在二层上呗打上VLAN2的标记，通过trunk链路转发到SW2，SW2去掉帧上的VLAN2的标记，经过VLAN2的端口即f0/1口发送到R2。</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h1 id=&quot;背景&quot;&gt;&lt;a href=&quot;#背景&quot; class=&quot;headerlink&quot; title=&quot;背景&quot;&gt;&lt;/a&gt;背景&lt;/h1&gt;&lt;p&gt;VLAN的作用是&lt;strong&gt;分割广播域&lt;/strong&gt;，处于不同VLAN的端口在二层是无法通信的，而两台交换机上处于同一VLAN间的端
+      
+    
+    </summary>
+    
+      <category term="网络" scheme="http://xixiang230.github.io/categories/%E7%BD%91%E7%BB%9C/"/>
+    
+    
+      <category term="trunk" scheme="http://xixiang230.github.io/tags/trunk/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Hexo 学习</title>
     <link href="http://xixiang230.github.io/2017/12/31/hello-world/"/>
     <id>http://xixiang230.github.io/2017/12/31/hello-world/</id>
-    <published>2017-12-31T13:37:12.593Z</published>
-    <updated>2017-12-31T13:37:12.593Z</updated>
+    <published>2017-12-31T14:59:55.614Z</published>
+    <updated>2017-12-31T14:59:55.609Z</updated>
     
-    <content type="html"><![CDATA[<p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p><h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p><h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p><h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p><h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>]]></content>
+    <content type="html"><![CDATA[<p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p><h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p><h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p><h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p><h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p><h3 id="配置文件"><a href="#配置文件" class="headerlink" title="配置文件"></a>配置文件</h3>]]></content>
     
     <summary type="html">
     
@@ -34,6 +128,29 @@
     
     </summary>
     
+    
+  </entry>
+  
+  <entry>
+    <title>Hexo常用命令</title>
+    <link href="http://xixiang230.github.io/2017/12/31/Hexo%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/"/>
+    <id>http://xixiang230.github.io/2017/12/31/Hexo常用命令/</id>
+    <published>2017-12-31T13:37:12.592Z</published>
+    <updated>2017-12-31T13:37:12.592Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="基本命令"><a href="#基本命令" class="headerlink" title="基本命令"></a>基本命令</h1><ul><li>hexo安装命令<br><code>npm install hexo -g</code>  <a id="more"></a></li><li><p>hexo升级<br><code>npm update hexo -g</code>  </p></li><li><p>hexo初始化目录<br><code>hexo init</code>  </p></li><li><p>创建新文章<br><code>hexo n</code>  </p></li><li><p>生成静态页面（需在init的目录下执行）<br><code>hexo g</code><br><code>hexo generate</code>  </p></li><li><p>部署<br><code>hexo d</code><br><code>hexo deploy</code>  </p></li><li><p>生成并部署<br><code>hexo d -g</code>  </p></li><li><p>本地启动，进行文章预览调试<br><code>hexo server</code><br><code>hexo s</code><br>输入<a href="http://localhost:4000即可查看本地预览效果" target="_blank" rel="noopener">http://localhost:4000即可查看本地预览效果</a>  </p></li><li><p>更改端口<br><code>hexo server -p 5000</code></p></li><li><p>清除缓存<br><code>hexo clean</code>  </p></li><li><p>创建新页面<br><code>hexo new page &quot;tags&quot;</code><br>此时在source下就多了一个tags目录，里面有个index.md文件，回到主题配置文件下，为memu项添加：<br><code>tags: /tags</code></p></li></ul><h1 id="模板"><a href="#模板" class="headerlink" title="模板"></a>模板</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">title: 使用Hexo搭建个人博客</span><br><span class="line">layout: post</span><br><span class="line">date: 2016-05-15 19:07：43</span><br><span class="line">comments: true</span><br><span class="line">categories: Blog</span><br><span class="line">tags: [Hexo]</span><br><span class="line">keywords: Hexo, Blog</span><br><span class="line">description: 生命在于折腾</span><br></pre></td></tr></table></figure><h1 id="部署设置"><a href="#部署设置" class="headerlink" title="部署设置"></a>部署设置</h1><p>修改 _config.yml为<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># Deployment</span><br><span class="line">\#\# Docs: http://hexo.io/docs/deployment.html</span><br><span class="line">deploy:</span><br><span class="line">  type: git  </span><br><span class="line">  repository: git@github.com:xixiang230/xixiang230.github.io.git  </span><br><span class="line">  branch: master</span><br></pre></td></tr></table></figure></p><h1 id="报错"><a href="#报错" class="headerlink" title="报错"></a>报错</h1><ol><li>找不到git部署<br><code>ERROR Deployer not found: git</code><br><strong>解决方法</strong><br><code>npm install hexo-deployer-git --save</code>  <h1 id="显示RSS"><a href="#显示RSS" class="headerlink" title="显示RSS"></a>显示RSS</h1></li></ol><ul><li>安装RSS插件<br><code>npm install hexo-generator-feed --save</code>  <h1 id="开启RSS功能"><a href="#开启RSS功能" class="headerlink" title="开启RSS功能"></a>开启RSS功能</h1>编辑hexo/_config.yml，添加如下代码<br>rss: /atom.xml  </li></ul>]]></content>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;基本命令&quot;&gt;&lt;a href=&quot;#基本命令&quot; class=&quot;headerlink&quot; title=&quot;基本命令&quot;&gt;&lt;/a&gt;基本命令&lt;/h1&gt;&lt;ul&gt;
+&lt;li&gt;hexo安装命令&lt;br&gt;&lt;code&gt;npm install hexo -g&lt;/code&gt;
+    
+    </summary>
+    
+      <category term="技术" scheme="http://xixiang230.github.io/categories/technique/"/>
+    
+    
+      <category term="Hexo" scheme="http://xixiang230.github.io/tags/Hexo/"/>
     
   </entry>
   
@@ -64,29 +181,6 @@
     
     
       <category term="git" scheme="http://xixiang230.github.io/tags/git/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Hexo常用命令</title>
-    <link href="http://xixiang230.github.io/2017/12/31/Hexo%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/"/>
-    <id>http://xixiang230.github.io/2017/12/31/Hexo常用命令/</id>
-    <published>2017-12-31T13:37:12.592Z</published>
-    <updated>2017-12-31T13:37:12.592Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="基本命令"><a href="#基本命令" class="headerlink" title="基本命令"></a>基本命令</h1><ul><li>hexo安装命令<br><code>npm install hexo -g</code>  <a id="more"></a></li><li><p>hexo升级<br><code>npm update hexo -g</code>  </p></li><li><p>hexo初始化目录<br><code>hexo init</code>  </p></li><li><p>创建新文章<br><code>hexo n</code>  </p></li><li><p>生成静态页面（需在init的目录下执行）<br><code>hexo g</code><br><code>hexo generate</code>  </p></li><li><p>部署<br><code>hexo d</code><br><code>hexo deploy</code>  </p></li><li><p>生成并部署<br><code>hexo d -g</code>  </p></li><li><p>本地启动，进行文章预览调试<br><code>hexo server</code><br><code>hexo s</code><br>输入<a href="http://localhost:4000即可查看本地预览效果" target="_blank" rel="noopener">http://localhost:4000即可查看本地预览效果</a>  </p></li><li><p>更改端口<br><code>hexo server -p 5000</code></p></li><li><p>清除缓存<br><code>hexo clean</code>  </p></li><li><p>创建新页面<br><code>hexo new page &quot;tags&quot;</code><br>此时在source下就多了一个tags目录，里面有个index.md文件，回到主题配置文件下，为memu项添加：<br><code>tags: /tags</code></p></li></ul><h1 id="模板"><a href="#模板" class="headerlink" title="模板"></a>模板</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">title: 使用Hexo搭建个人博客</span><br><span class="line">layout: post</span><br><span class="line">date: 2016-05-15 19:07：43</span><br><span class="line">comments: true</span><br><span class="line">categories: Blog</span><br><span class="line">tags: [Hexo]</span><br><span class="line">keywords: Hexo, Blog</span><br><span class="line">description: 生命在于折腾</span><br></pre></td></tr></table></figure><h1 id="部署设置"><a href="#部署设置" class="headerlink" title="部署设置"></a>部署设置</h1><p>修改 _config.yml为<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># Deployment</span><br><span class="line">\#\# Docs: http://hexo.io/docs/deployment.html</span><br><span class="line">deploy:</span><br><span class="line">  type: git  </span><br><span class="line">  repository: git@github.com:xixiang230/xixiang230.github.io.git  </span><br><span class="line">  branch: master</span><br></pre></td></tr></table></figure></p><h1 id="报错"><a href="#报错" class="headerlink" title="报错"></a>报错</h1><ol><li>找不到git部署<br><code>ERROR Deployer not found: git</code><br><strong>解决方法</strong><br><code>npm install hexo-deployer-git --save</code>  <h1 id="显示RSS"><a href="#显示RSS" class="headerlink" title="显示RSS"></a>显示RSS</h1></li></ol><ul><li>安装RSS插件<br><code>npm install hexo-generator-feed --save</code>  <h1 id="开启RSS功能"><a href="#开启RSS功能" class="headerlink" title="开启RSS功能"></a>开启RSS功能</h1>编辑hexo/_config.yml，添加如下代码<br>rss: /atom.xml  </li></ul>]]></content>
-    
-    <summary type="html">
-    
-      &lt;h1 id=&quot;基本命令&quot;&gt;&lt;a href=&quot;#基本命令&quot; class=&quot;headerlink&quot; title=&quot;基本命令&quot;&gt;&lt;/a&gt;基本命令&lt;/h1&gt;&lt;ul&gt;
-&lt;li&gt;hexo安装命令&lt;br&gt;&lt;code&gt;npm install hexo -g&lt;/code&gt;
-    
-    </summary>
-    
-      <category term="技术" scheme="http://xixiang230.github.io/categories/technique/"/>
-    
-    
-      <category term="Hexo" scheme="http://xixiang230.github.io/tags/Hexo/"/>
     
   </entry>
   
@@ -390,114 +484,6 @@
     
     
       <category term="bootstrap" scheme="http://xixiang230.github.io/tags/bootstrap/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>动态规划</title>
-    <link href="http://xixiang230.github.io/2016/06/26/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/"/>
-    <id>http://xixiang230.github.io/2016/06/26/动态规划/</id>
-    <published>2016-06-26T12:09:37.000Z</published>
-    <updated>2017-12-31T13:37:12.595Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="动态规划简介"><a href="#动态规划简介" class="headerlink" title="动态规划简介"></a>动态规划简介</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dynamic programming is a method for solving a complex proble by breaking it down into a collection of simpler subproblems.</span><br></pre></td></tr></table></figure><p>动态规划是通过将问题拆分，定义问题状态和状态直接的关系，使得问题能够以递推(分治)的方法解决。如何拆分问题，才是动态规划的<br>核心，而拆分问题靠的就是状态的定义和状态转义方程的定义。  </p><h2 id="状态的定义"><a href="#状态的定义" class="headerlink" title="状态的定义"></a>状态的定义</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">给定长度为N的数列，求这个数列的最长上升(递增)子数列(LIS)的长度。以数列:[1, 7, 2, 8, 3, 4]为列，其最长递增子数列为: [1, 2, 3, 4]，</span><br><span class="line">长度为4，次长的长度为3，分别为[1, 7, 8]，[1, 2, 3]。</span><br></pre></td></tr></table></figure><p>要解决这个问题，首先就是要定义这个问题和这个问题的子问题。需要说明的是题目中描述的问题是字面上的问题，找不出子问题，没有<br>子问题，题目就无法利用动态规划求解。<br>于是重新定义问题如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">给定长度为N的数列  </span><br><span class="line">设F(k)为: 以数列中第k项结尾的最长递增子序列的长度  </span><br><span class="line">求F(1)， F(2)，F(3)， ... F(N)中的最大值</span><br></pre></td></tr></table></figure></p><p>显然，新问题和原问题等价。<br>而对于F(k)而言，F(1)，F(2)，F(k-1)都是F(k)的子问题，因为以第k项结尾的最长递增子序列(LIS)，包含着已第1, … k-1中某项结尾<br>的LIS。上面新问题F(k)可以叫做状态，其中”F(k)为数列中第k项结尾的LIS的长度”叫做对对状态的定义。之所以把F(k)称之为”状态”而<br>不是”问题”，一是避免与原问题混淆，二是这个新问题是数学化定义的。  </p><p>对于状态的定义可能不止一种，设置可以是二维的，以完全不同的视角定义，比如这里，还可以这样定义:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">给定一个长度为N的数列，设F(i, k)为在前i项中的，长度为k的最长增长递增子序列中，最后一位的最小值。1&lt;=k&lt;=N。若在前i项中，</span><br><span class="line">不存在长度为k的最长递增子序列，则F(i, k)为正无穷。求最大的x，使得F(N, x)不为正无穷。上述的F(i, k)就是状态，定义中的F(i, k)</span><br><span class="line">为在前i项中，长度为k的最长递增子序列中，最后一位的最小值就是对状态的定义。</span><br></pre></td></tr></table></figure></p><h2 id="状态转义方程"><a href="#状态转义方程" class="headerlink" title="状态转义方程"></a>状态转义方程</h2><p>定义好状态后，状态和状态之间的关系式就叫做状态转义方程。例如对应LIS问题的第一种定义<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">设F(k)为以数列中第k项结尾的最长递增子序列的长度。</span><br></pre></td></tr></table></figure></p><p>设A为题中的数列，状态转移方程为:<br>F(1) = 1 (根据状态定义导出边界情况)<br>F(k) = max(F(i) +1 | A(k) &gt; A(i), i (- (1 .. k-1)) (k &gt; 1)<br>问题解释如下:<br>以第k项结尾的LIS的长度是: 保证第i项比第k项小的情况下，以第i项结尾的LIS长度加1的最大值，取遍i的所有值(i &lt; k)。</p><p>第二种定义：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">设F(i, K)为数列前i项中，长度为k的递增子序列中，最后一位的最小值。</span><br></pre></td></tr></table></figure></p><p>设A为题中数列，状态转义方程为：<br>若A(i) &gt; F(i-1, k-1)，则F(i,k) = min(A(i), F(i-1,k)<br>否则: F(i,k) = F(i-1,k)<br>可以看错，这里的状态转义方程就是定义了问题和子问题之间的关系，可以看出，状态转移方程就是带有条件的地递推式。  </p><h2 id="动态规划思考"><a href="#动态规划思考" class="headerlink" title="动态规划思考"></a>动态规划思考</h2><ol><li>缓存 重叠子问题 记忆化<br>这三个名词，都是在阐述递推式求解的技巧。以Fibonacci数列为例，计算第100项的时候，需要计算第99项和第98项，在计算<br>第101项的时候，需要第100项和第99项，这时你还需要重新计算第99项吗？不需要，只要在第一个计算的时候把他记下来就可以了。</li></ol>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h1 id=&quot;动态规划简介&quot;&gt;&lt;a href=&quot;#动态规划简介&quot; class=&quot;headerlink&quot; title=&quot;动态规划简介&quot;&gt;&lt;/a&gt;动态规划简介&lt;/h1&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gut
-      
-    
-    </summary>
-    
-      <category term="技术" scheme="http://xixiang230.github.io/categories/technique/"/>
-    
-    
-      <category term="动态规划" scheme="http://xixiang230.github.io/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>GDB调试利器学习</title>
-    <link href="http://xixiang230.github.io/2016/06/21/GDB%E5%AD%A6%E4%B9%A0/"/>
-    <id>http://xixiang230.github.io/2016/06/21/GDB学习/</id>
-    <published>2016-06-21T14:33:15.000Z</published>
-    <updated>2017-12-31T13:37:12.592Z</updated>
-    
-    <content type="html"><![CDATA[<ol><li>源码编译，在编译前需要加上-g选项。<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">g++ -g -Wall -o house_roober 198_house_roober.cpp -std=c++11</span><br><span class="line">gcc -g -Wall -o house_roober 198_house_roober.c</span><br><span class="line">g++ -g hello.cpp -o hello</span><br></pre></td></tr></table></figure></li></ol><p>其中-g选项表示让编译器将符号表(对应程序的变量和代码行的内存地址列表)保存在生成的可执行文件中，这样在<br>调试时就讷讷个在调试会话中引用源码的变量名和行号。  </p><ol><li>GDB启动<br>调试可执行文件<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">gdb &lt;program可执行文件&gt;</span><br><span class="line">gdb house_roober</span><br><span class="line">gdb a.out</span><br><span class="line">gdb -tui house_roober   #以tui模式运行GDB，可将终端分屏为源码窗口和控制窗口</span><br></pre></td></tr></table></figure></li></ol><p>调试core文件，core是程序非法执行后core dump后产生文件。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">gdb &lt;program&gt; &lt;core dump file&gt;</span><br><span class="line">gdb program core.11127</span><br></pre></td></tr></table></figure></p><p>调试服务程序<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">gdb &lt;program&gt; &lt;PID&gt;</span><br><span class="line">gdb hello 11127</span><br></pre></td></tr></table></figure></p><p>根据场景需求，选择相应的方式即可进入GDB调试模式。  </p><ol><li>GDB常用命令  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">回车    #重复上一次命令  </span><br><span class="line">quit    #退出GDB</span><br><span class="line">ctrl+d  #退出GDB</span><br><span class="line">return  #按下回车再次执行最近执行过的那条命令</span><br><span class="line">r或run     #执行程序，遇到断点时停在断点处等待用户输入下一步命令。    </span><br><span class="line">frame num #栈帧编号，当前正在执行的函数的帧编号为0，其父帧编号为1，依次类推。  </span><br><span class="line">up      #调到调用栈中的下一个父帧  </span><br><span class="line">down    #引向相反的方向  </span><br><span class="line">backtrace #显示整个栈  </span><br><span class="line">方向键  #滚动查看代码</span><br><span class="line">p       #输出当前值  </span><br><span class="line">ctrl+p  #浏览上一个GDB命令  </span><br><span class="line">ctrl+n  #浏览下一个GDB命令  </span><br><span class="line">call function(args)   #调用程序中可见的函数，并传递可参数</span><br><span class="line">call TestFun(55)</span><br><span class="line">quit或q #退出gdb</span><br></pre></td></tr></table></figure></li></ol><p>如果修改程序重新编译，不必重新启动GDB，GDB会在运行程序之前自动重新加载新的二分表和新的符号表。</p><ol><li><p>查看源码  </p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">l或list           #不带参数，从第一行开始或接着上一次list命令列出源码，默认每次显示10行  </span><br><span class="line">list LineNumber   #显示当前文件以行号为中心的前后共10行代码</span><br><span class="line">list 函数名       #显示函数名所在函数的源代码</span><br><span class="line">list main</span><br></pre></td></tr></table></figure></li><li><p>断点设置命令  </p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">break LineNumber  #在LineNumber行上设置断点  </span><br><span class="line">break 16          #在源码第16行处设置断点  </span><br><span class="line">break FileName:LineNumber #在源码文件FileName的LineNumber行处设置断点  </span><br><span class="line">break FunctionName  #在FunctionName函数入口(第一行可执行代码)处设置断点。</span><br><span class="line">break func        #在函数func()入口处设置断点</span><br><span class="line">break FileName:FunctionName #在源码文件FileNaem的函数Function入口处设置断点。  </span><br><span class="line">b fn1 if a &gt; b             #条件断点设置</span><br><span class="line">delete n                   #删除第n个断点  </span><br><span class="line">disable n         #暂停第n个断点  </span><br><span class="line">enable n          #开启第n个断点</span><br><span class="line">lear LineNumber            #清除第n行的断点</span><br><span class="line">info b 或 info breakpoints #显示当前程序的断点设置情况  </span><br><span class="line">delete breakpoints         #清处所有断点</span><br></pre></td></tr></table></figure></li></ol><p>在函数名上设置断点相比行断点而言，如果修改了源代码，使得函数位置所在行发生变化，行断点就失去原来的作用了，<br>而函数断点仍然有效。但需要注意函数重载的情况。<br>当GDB使用多个断点中断一行源码时，只会中断一次。  </p><ol><li>条件断点  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">condition BreakNum Cond    #condition后跟断点编号和条件</span><br><span class="line">condition 1 num == 1         #当满足条件num==1时，GDB才会在断点行编号1处暂停程序的执行</span><br></pre></td></tr></table></figure></li></ol><p>如果以后要删除条件，但保持断点，键入:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cond BreakNum</span><br></pre></td></tr></table></figure></p><p>用break if可以将break和condition命令组合成一个步骤<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">break BreakNum if cond  </span><br><span class="line">break 30 if num == 1  #条件语句可以用小括号括起来</span><br></pre></td></tr></table></figure></p><h1 id="临时断点tbreak"><a href="#临时断点tbreak" class="headerlink" title="临时断点tbreak"></a>临时断点tbreak</h1><p>和break类似，但该命令设置的断点在首次到达该指定行后就不再有效  </p><h1 id="删除断点"><a href="#删除断点" class="headerlink" title="删除断点"></a>删除断点</h1><ol><li><p>break 可以基于标志符删除断点</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">delete BreakNum1 #删除指定断点编号 </span><br><span class="line">delte            #删除所有断点</span><br></pre></td></tr></table></figure></li><li><p>clear 依据断点位置，工作方式删除，与break命令对应  </p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">clear function   </span><br><span class="line">clear FileName:function </span><br><span class="line">clear BreakNum  </span><br><span class="line">clear FileName:BreakNum</span><br><span class="line">clear          #清除GDB将执行的下一个指定处的断点</span><br></pre></td></tr></table></figure></li><li><p>禁用与启用断点  </p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">disable BreakPointList  #用空格分隔开的多个断点标志符  </span><br><span class="line">disable                 #禁用现存所有断点  </span><br><span class="line">enable BreakPointList   #启用断点  </span><br><span class="line">enable once BreakPointList  #在下次引起GDB暂停执行后禁用</span><br></pre></td></tr></table></figure></li><li><p>断点查看</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">info break              #查看断点信息</span><br><span class="line">info breakpoints </span><br><span class="line">i b</span><br></pre></td></tr></table></figure></li><li><p>打印相关<br>print或p  表达式   #<br>表达式可以是任何当前正在被测试程序的有效表达式，比如当前正在调试C程序，那么表达式可以是任何C语言的有效表达式，包括数字，变量甚至函数调用。<br>print num         #打印整数num的值<br>print ++num       #把num值加1后打印<br>print name        #显示字符串name的值<br>print func(22)    #将整数22作为参数调用func函数<br>print func(a)     #将变量a作为参数调用func函数<br>display 表达式 #在单步运行时非常有用，使用display命令设置表达式后，将在每次单步进行指令后，紧接着输出被设置的表达式和值。<br>display a<br>whatis    #查询变量或函数的类型<br>info function  #查询函数<br>info locals    #显示当前堆栈页的所有变量  </p></li><li>查询运行信息<br>where/bt        #当前运行的堆栈列表<br>bt backtrace    #显示当前调用堆栈<br>up/down         #改变堆栈显示的深度<br>set args        #指定运行时的参数<br>show args       #查看设置好的参数<br>info program    #查看程序是否在运行，进程号，被暂停的原因  </li><li>使用commands命令设置命令列表<br>让GDB在每次到达某个断点时自动执行一组命令，从而自动完成某一任务  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">commands BreakPointNumber  </span><br><span class="line">......</span><br><span class="line">commands</span><br><span class="line">......</span><br><span class="line">end</span><br></pre></td></tr></table></figure></li></ol><p>实例<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">commands 1     #首先输入GDB命令，进入commands模式</span><br><span class="line"></span><br><span class="line">[silent]       #可选的silent命令，在命令列表开始处设置，避免GDB输出冗长  </span><br><span class="line">printf &quot;fibonacci was passed %d .\n&quot;, n       #设置命令列表，这里的printf和C中printf用法类似，可省略括号。   </span><br><span class="line">end</span><br></pre></td></tr></table></figure></p><h1 id="执行"><a href="#执行" class="headerlink" title="执行"></a>执行</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">step       #单步执行，单步进入 </span><br><span class="line">s          #单步执行</span><br><span class="line">next       #下一步，单步跟踪程序，当遇到函数调用时，不会进入函数体。</span><br><span class="line">n          #下一步</span><br></pre></td></tr></table></figure><p>step与next区别: 在函数调用时，step会进入函数体，而next会导致下一次暂停出现在函数调用之后，而不会进入函数体。<br>setp与next后都可跟可选的一个数值，表要使用step或next执行的额外行数  </p><h1 id="无条件恢复程序执行"><a href="#无条件恢复程序执行" class="headerlink" title="无条件恢复程序执行"></a>无条件恢复程序执行</h1><ol><li>continue<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">continue(简写 c)</span><br></pre></td></tr></table></figure></li></ol><p>无条件恢复程序执行，继续执行，直到遇到下一个断点或程序结束<br>另外continue可接受一个可选的数值参数n，要求GDB忽略接下来的n个断点。  </p><ol><li>finish(fin) 和 until(u)命令恢复<br>finish命令指示GDB恢复执行，运行程序，直到恰好在当前帧完成之后为止(直到当前函数完成返回)，并打印函数返回时的堆栈地址和返回值以及参数值等信息。<br>until命令通常用来在不进一步循环中暂停(除了循环中的中间断点)的情况下完成正在执行的循环。until会执行循环的其余部分，当厌倦了在一个循环体内单步跟踪时，until可以运行程序直到退出循序体。<br>(如果遇到断点，还是会暂停)，让GDB在循环后面的第一行代码处暂停。<br>until命令也可以接受源码中的位置作为参数，用法与break命令相同。  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">until 行号     #运行至某行，不仅仅用来跳出循环  </span><br><span class="line">until 13</span><br><span class="line">until swap </span><br><span class="line">until swapflaw.c:13</span><br><span class="line">until swapflaw.c:swap</span><br></pre></td></tr></table></figure></li></ol><p>上述命令均可方便地使程序一直执行到swap()函数的入口。  </p><p>#监视点<br>监视点是一种特殊类型的断点，区别在于监视点没有”住在”某一行源码中，而是指示GDB每当某个表达式改变了值就暂停<br>执行，即一旦被监视的表达式值改变，gdb将强行终止正在被调试的程序。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">watch a        #设置监视点，watch后跟变量名，也可以是复杂的表达式</span><br></pre></td></tr></table></figure></p><p>监视点只能监视存在切在作用域中的变量，一旦遍历不再存在于调用栈的任何帧中，GDB会自动删除监视点。<br>GDB实际上是在遍历的内存位置改变值时中断。  </p><ol><li>窗口分割<br>layout      #用于分割窗口，可一边查代码一边测试<br>layout src  #显示源码窗口<br>layout asm  #显示反汇编窗口<br>layout regs #显示源码/反汇编和CPU寄存器窗口<br>layout split #显示源码和反汇编窗口<br>Ctrl+L      #涮新窗口</li></ol>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;ol&gt;
-&lt;li&gt;源码编译，在编译前需要加上-g选项。&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;li
-      
-    
-    </summary>
-    
-      <category term="技术" scheme="http://xixiang230.github.io/categories/technique/"/>
-    
-    
-      <category term="GDB" scheme="http://xixiang230.github.io/tags/GDB/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>MySQL常用函数汇总</title>
-    <link href="http://xixiang230.github.io/2016/06/21/MySQL%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0%E6%B1%87%E6%80%BB/"/>
-    <id>http://xixiang230.github.io/2016/06/21/MySQL常用函数汇总/</id>
-    <published>2016-06-21T14:10:13.000Z</published>
-    <updated>2017-12-31T13:37:12.593Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="数序函数"><a href="#数序函数" class="headerlink" title="数序函数"></a>数序函数</h1><table><thead><tr><th>–函数–</th><th>–说明–</th></tr></thead><tbody><tr><td>ABS(x)</td><td>返回x的绝对值</td></tr><tr><td>BIN(x)</td><td>返回x的二进制</td></tr><tr><td>OCT(x)</td><td>返回x的八进制</td></tr><tr><td>HEX(x)</td><td>返回x的十六进制</td></tr><tr><td>CEILING(x)</td><td>返回大于x的最小整数（天花板函数）</td></tr><tr><td>EXP(x)</td><td>返回e的x次方</td></tr><tr><td>FLOOR(x)</td><td>返回小余x的最大整数值（地板砖函数）</td></tr><tr><td>GREATEST(x1, x2, …, xn)</td><td>返回集合中的最大值</td></tr><tr><td>LEAST(x1, x2, …, xn)</td><td>返回集合中的最小值</td></tr><tr><td>LN(x)</td><td>返回x的自然对数</td></tr><tr><td>LOG(x,y)</td><td>返回x的以y为底的对数</td></tr><tr><td>MOD(x/y)</td><td>返回x/y的模(余数)</td></tr><tr><td>PI()</td><td>返回PI值</td></tr><tr><td>RAND()</td><td>返回0到1内的随机值，可通过提供一个种子参数使得RAND()随机数生成一个指定的值</td></tr><tr><td>ROUND(x,y)</td><td>返回参数x的四舍五入值，最多带y位小数</td></tr><tr><td>SIGN(x)</td><td>返回代表数字x的符号的值</td></tr><tr><td>SQRT(x)</td><td>返回x的平方根</td></tr><tr><td>TRUNCATE(x,y)</td><td>返回x的截断值，保留y位小数</td></tr></tbody></table>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h1 id=&quot;数序函数&quot;&gt;&lt;a href=&quot;#数序函数&quot; class=&quot;headerlink&quot; title=&quot;数序函数&quot;&gt;&lt;/a&gt;数序函数&lt;/h1&gt;&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;–函数–&lt;/th&gt;
-&lt;th&gt;–说明–&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;
-      
-    
-    </summary>
-    
-      <category term="技术" scheme="http://xixiang230.github.io/categories/technique/"/>
-    
-    
-      <category term="MySQL" scheme="http://xixiang230.github.io/tags/MySQL/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>MySQL之DUAL表</title>
-    <link href="http://xixiang230.github.io/2016/06/21/MySQL%E4%B9%8BDUAL%E8%A1%A8/"/>
-    <id>http://xixiang230.github.io/2016/06/21/MySQL之DUAL表/</id>
-    <published>2016-06-21T12:46:51.000Z</published>
-    <updated>2017-12-31T13:37:12.593Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="什么是DUAL表"><a href="#什么是DUAL表" class="headerlink" title="什么是DUAL表"></a>什么是DUAL表</h1><p>You are allowed to specify DUAL as a dummy table name in situations where no table no tables are referenced.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT 1 + 1 FROM DUAL;</span><br></pre></td></tr></table></figure></p><p>DUAL is purely for the convenience of people who require that all SELECT statements should have FROM and<br> possibly other clauses. MySQL may ignore the clauses. MySQL does not require FROM DUAL if no tables are referenced.</p><h1 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h1><p>利用MySQL的DUAL表，可达到不插入重复记录的目的。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT express [FROM DUAL];</span><br></pre></td></tr></table></figure></p><p>MySQL总是作为返回该表达式值的普通SELECT语句执行，返回一行记录的结果集，FROM DUAL对MySQL来说是摆设。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT express [FROM DUAL] WHERE 0=2;</span><br></pre></td></tr></table></figure></p><p>先计算WHERE条件，再计算express，返回空集。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">INSERT INTO `demo` (id,name,value) SELECT 1,2,4 from DUAL WHERE NOT EXISTS (SELECT * FROM `demo` WHERE id=1 AND name=2) LIMIT 1;</span><br></pre></td></tr></table></figure></p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">INSERT INTO TableName(column1, column2, column3, ...columnN)</span><br><span class="line">SELECT value1, value2, value3, ...valueN FROM  DUAL</span><br><span class="line">WHERE NOT EXISTS(</span><br><span class="line">    SELECT * </span><br><span class="line">    FROM TableName</span><br><span class="line">    WHERE value = ?</span><br><span class="line">);</span><br></pre></td></tr></table></figure><p>DUAL是为了构建查询语句而存在的表。</p><h1 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">INSERT INTO Class(name, age) VALUES (&apos;baidu&apos;, 5);</span><br><span class="line">INSERT INTO Class(name, age) VALUES (&apos;tecent&apos;,5);</span><br></pre></td></tr></table></figure><p>对于普通的INSERT插入，如果想要保证不插入重复记录，方法之一就是对某个字段创建唯一约束实现，如果没有创建唯一约束，<br>则可使用INSERT INTO IF EXISTS实现。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">INSERT INTO tableName(field1, field2, fieldn) SELECT &apos;field1&apos;, &apos;field2&apos;, &apos;fieldn&apos;</span><br><span class="line">FROM DUAL </span><br><span class="line">WHERE NOT EXISTS(SELECT filed FROM tableName WHERE fiedl = ?)</span><br></pre></td></tr></table></figure></p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">INSERT INTO Class(name, age) SELECT &apos;baidu&apos;, &apos;100&apos; FROM DUAL WHERE NOT EXISTS(SELECT Class FROM name WHERE name = &apos;baidu&apos;) limit1;</span><br><span class="line">INSERT INTO Class(name, age) SELECT &apos;tecent&apos;, &apos;200&apos; FROM DUAL WHERE NOT EXISTS(SELECT Class FROM name WHERE name = &apos;tecent&apos;) limit1;</span><br></pre></td></tr></table></figure><p>上面的limit1用来避免duplicate entry。  </p><h1 id="使用INSERT-IGNORE"><a href="#使用INSERT-IGNORE" class="headerlink" title="使用INSERT IGNORE"></a>使用INSERT IGNORE</h1><p>当使用INSERT IGNORE插入必须有一个唯一索引或者主键，前面介绍的方法则无此条件。  </p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h1 id=&quot;什么是DUAL表&quot;&gt;&lt;a href=&quot;#什么是DUAL表&quot; class=&quot;headerlink&quot; title=&quot;什么是DUAL表&quot;&gt;&lt;/a&gt;什么是DUAL表&lt;/h1&gt;&lt;p&gt;You are allowed to specify DUAL as a dummy tab
-      
-    
-    </summary>
-    
-      <category term="技术" scheme="http://xixiang230.github.io/categories/technique/"/>
-    
-    
-      <category term="MySQL" scheme="http://xixiang230.github.io/tags/MySQL/"/>
     
   </entry>
   

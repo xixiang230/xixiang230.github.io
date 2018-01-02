@@ -246,6 +246,559 @@
             
               
                 
+                <a class="post-title-link" href="/2016/05/28/jQuery中each遍历对象和数组/" itemprop="url">
+                  jQuery中each遍历对象和数组
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-05-28T07:27:29+08:00" content="2016-05-28">
+              2016-05-28
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/technique/" itemprop="url" rel="index">
+                    <span itemprop="name">技术</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/technique/前端/" itemprop="url" rel="index">
+                    <span itemprop="name">前端</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="通用遍历"><a href="#通用遍历" class="headerlink" title="通用遍历"></a>通用遍历</h1><ul>
+<li>遍历对象和数组，回调函数有两个参数，第一个参数未对象的成员或数组的索引，第二个未对应成员或索引的内容，如果需要退出each循环可使回调函数返回false。<br>each()方法为每个匹配的元素规定了运行的函数,如果改函数返回false，可用于及早停止循环。<br>语法：<br>$(selector).each(function(index, element))<br>index 为选择器的index位置<br>element当前元素，也可用this选择器<br>例有如下两个select:<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;select id=&quot;PLANTYPE&quot;&gt;</span><br><span class="line">&lt;option value=&quot;0&quot;&gt;所有&lt;/option&gt;</span><br><span class="line">&lt;option value=&quot;1&quot;&gt;新建&lt;/option&gt;</span><br><span class="line">&lt;option value=&quot;2&quot;&gt;续建&lt;/option&gt;</span><br><span class="line">&lt;/select&gt;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;select id=&quot;AUDITTYPE&quot;&gt;</span><br><span class="line">&lt;option value=&quot;0&quot;&gt;所有&lt;/option&gt;</span><br><span class="line">&lt;option value=&quot;1&quot;&gt;申报&lt;/option&gt;</span><br><span class="line">&lt;option value=&quot;2&quot;&gt;修改&lt;/option&gt;</span><br><span class="line">&lt;/select&gt;</span><br></pre></td></tr></table></figure>
+<p>若想使用each方法获取option中的文本值(即里面包含的”所有，新建，续建”等信息)，可这样  </p>
+<ol>
+<li><p>只使用一个each循环，从option处开始  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$(&quot;option&quot;).each(function(index, data) &#123;</span><br><span class="line">    console.info($(data).text()); //遍历每一个option元素，回调函数中data对应一个option元素对象。</span><br><span class="line">  //console.info($(this).text()); //$(this)指代当前遍历的这个option对象</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>从select处开始  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$(&quot;select&quot;).each(function(indexSelect, dataSelect) &#123;</span><br><span class="line">  $(&quot;option&quot;, dataSelect).each(function(indexOption, dataOption) &#123;</span><br><span class="line">    console.info($(this).text()); //用$(this)指代当前遍历到的对象时，函数可无参</span><br><span class="line">  &#125;) </span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>在这里，$(“option”, dataSelect)一定要加上dataSelect，或者$(“option”, this),表示该对象下的option</p>
+<h1 id="jQuery-each-object-callback-全局方法"><a href="#jQuery-each-object-callback-全局方法" class="headerlink" title="jQuery.each(object, [callback]) 全局方法"></a>jQuery.each(object, [callback]) 全局方法</h1><p>与jQuery对象的$().each()方法不同，jQuery全局each()函数可遍历任何对象  </p>
+<ol>
+<li><p>实现上述功能  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$.each($(&quot;option&quot;).function(index, data) &#123;</span><br><span class="line">    console.info(index + &quot; &quot; + data);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>jQuery全局each()函数可遍历数组  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$.each([0, 1, 2], function(i, value) &#123;</span><br><span class="line">    console.info(&quot;Index: &quot; + i + &quot;: &quot; + n);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>jQuery全局echa()函数遍历对象<br>```<br>$.each({name: “liuzekun”, addr: “Beijing”}), function(key, valeu) {<br> console.info(key + “: “ + valeu);<br>});</p>
+</li>
+</ol>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/05/28/jQuery选择器变量/" itemprop="url">
+                  jQuery选择器变量
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-05-28T07:17:51+08:00" content="2016-05-28">
+              2016-05-28
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/technique/" itemprop="url" rel="index">
+                    <span itemprop="name">技术</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/technique/前端/" itemprop="url" rel="index">
+                    <span itemprop="name">前端</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <ul>
+<li><p>单选择器  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$(&quot;#&quot; + id);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>多选择器  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$(&quot;#&quot; + id1 +&quot;#,&quot; + id2);</span><br><span class="line">$(&quot;#&quot; + [&quot;id1&quot;, &quot;id2&quot;, ...].join(&quot;#,&quot;));</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/05/27/jQuery选择器模糊匹配/" itemprop="url">
+                  jQuery选择器模糊匹配
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-05-27T23:51:42+08:00" content="2016-05-27">
+              2016-05-27
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/technique/" itemprop="url" rel="index">
+                    <span itemprop="name">技术</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/technique/前端/" itemprop="url" rel="index">
+                    <span itemprop="name">前端</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <ol>
+<li>name属性值前缀为liu的所有div的jQuery对象  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$(&quot;div[name^=&apos;liu&apos;]&quot;);</span><br><span class="line">```  </span><br><span class="line">2. name属性值后缀未kun的所有div的jQuery对象</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>$(“div[name$=’kun’]”);<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">3. name属性值中包含ze的所有div的jQuery对象</span><br></pre></td></tr></table></figure></p>
+<p>$(“div[name*=’ze’]”);<br>```  </p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/05/27/jQuery之attr-方法/" itemprop="url">
+                  jQuery之attr()方法
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-05-27T23:38:26+08:00" content="2016-05-27">
+              2016-05-27
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/technique/" itemprop="url" rel="index">
+                    <span itemprop="name">技术</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/technique/前端/" itemprop="url" rel="index">
+                    <span itemprop="name">前端</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="用法"><a href="#用法" class="headerlink" title="用法"></a>用法</h1><p>attr()方法用于设置或返回被选元素的属性值  </p>
+<h2 id="返回属性值"><a href="#返回属性值" class="headerlink" title="返回属性值"></a>返回属性值</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$(selector).attr(attribute);</span><br><span class="line">$(&quot;img&quot;).attr(&quot;width&quot;);</span><br><span class="line">$(&quot;a&quot;).attr(&quot;href&quot;);</span><br><span class="line">```  </span><br><span class="line"></span><br><span class="line">## 设置属性值</span><br></pre></td></tr></table></figure>
+<p>$(selector).attr(attribute, value);<br>$(“img”).attr(“width”, “180”);<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">## 设置多个属性/值</span><br></pre></td></tr></table></figure></p>
+<p>$(selector).attr({attribute1:value1, arrtibute2:value2, …});<br>//用大括号包围多对属性/值对，逗号分隔<br>$(“img”).attr({width:”50”, height:”80”});<br>```</p>
+<h1 id="其他使用jQuery获得内容和属性的方法"><a href="#其他使用jQuery获得内容和属性的方法" class="headerlink" title="其他使用jQuery获得内容和属性的方法"></a>其他使用jQuery获得内容和属性的方法</h1><ul>
+<li>text() 设置或返回所选元素的文本内容，注意只是文本内容  </li>
+<li>html() 设置或返回所选元素的内容(包括HTML标记)  </li>
+<li>val() 设置或返回表单字段值  <h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1>|函数名|说明|例子|<br>|——|—-|—-|<br>|attr(name)|取得第一个匹配元素的属性值|$(“input”).attr(“value”)|<br>|attr(property)|将所有匹配元素以一个”名/值”形式的对象设置其属性|$(“input”).attr({value: “txt”, title: “text”});|<br>|attr(key, value)|为所有匹配的元素设置一个属性值|$(“input”).attr(“value”, “txt”);|<br>|attr(key, fn)|未所有匹配的元素设置一个计算属性值|$(“input”).attr(“title”, function() {return this.value});|<br>|removeAttr(name)|从所有匹配的元素中删除一个属性|$(“input”).removeAttr(“value”);|  </li>
+</ul>
+<h1 id="jQuery访问value，innerHTML"><a href="#jQuery访问value，innerHTML" class="headerlink" title="jQuery访问value，innerHTML"></a>jQuery访问value，innerHTML</h1><p>|—|—|—|<br>|函数名|说明|例子|<br>|val()|获取第一个匹配元素的value值|$(“#txt1”).val()|<br>|val(val)|为匹配的元素shezvalue值|$(“#txt1”).val(“txt1”)|<br>|html()|获取第一个匹配元素的html内容|$(“#dv1”).html()|<br>|html(val)|设置每一个匹配元素的html内容|$(“#dv1”).html(“this is a div”)|<br>|text()|取得所有匹配文本节点的内容，冰将其连接起来|$(“div”).text()|<br>|text(val)|将所有匹配元素的值设置为val|$(“div”).text(“divs”)|  </p>
+<h1 id="使用jQuery操作CSS"><a href="#使用jQuery操作CSS" class="headerlink" title="使用jQuery操作CSS"></a>使用jQuery操作CSS</h1><p>|函数名|说明|例子|<br>|addClass(classes)|为每个匹配的元素添加指定的类名|$(“input”).addClass(“colorRed borderBlack”);|<br>|hasClass(class)|判断匹配元素集合中是否至少有一个包含了指定的css类，如果有返回true|alert($(“input”).hasClass(“borderBlack”));<br>|removeClass([classes])|从匹配元素中移除所有或指定的css类|$(“input”).removeClass(“colorRed borderBlack”);<br>|toggleClass(classes)|如果存在则删除指定类，如果不存在则添加指定类|($(“input”).toogleClass(“colorRed borderBlack”);|<br>|toogleClass(classes, switch)|当switch为true时，添加类，switch为false时，删除类|$(“input”).toggleClass(“colorRed borderBlack”, true);|  </p>
+<p>addClass、removeClass、toggleClass均可添加多个类，多个类之间用空格隔开。<br>removeClass方法的参数可选，如果有参数则删除指定class，如果无参数则删除匹配元素的所有class。  </p>
+<h1 id="修改CSS样式"><a href="#修改CSS样式" class="headerlink" title="修改CSS样式"></a>修改CSS样式</h1><p>|—|—|<br>|函数名|说明|例子|<br>|css(name)|访问第一个匹配元素的样式属性|$(“input”).css(“color”)|<br>|css(properties)|把一个”名/值”对设置给所有匹配元素的样式属性|$(“input”).css({border:”solid 3px silver”, color: “red”})|<br>|css(name, value)|为匹配的元素守则同一个样式属性，如果是数字，将自动转换未像素值|$(“input”).css(“border-width”, “5”);|  </p>
+<p>对于一些常用属性，比如width，height之类，使用attr(“width”)和css(“width”)无法正常获取其值，需要如下方式获取:  </p>
+<ol>
+<li>高、宽相关<br>|–|–|–|<br>|函数名|说明|例子|<br>|width()|获取第一个匹配元素的宽度，默认为px|$(“#txt1”).width()|<br>|width(val)|为匹配的元素设置宽度值，默认为px|$(“#txt1”).width(200)|<br>|height()|获取第一个匹配元素的高度，默认为px|$(“#txt1”).height()|<br>|height(val)|为匹配的元素设置宽度值，默认为px|$(“#txt1”).height(20)|<br>|innerWidth()|获取第一个匹配元素内部区域宽度(包括padding，不包括border)|$(“#txt1”).innerWidth()|<br>|innerHeight()|获取第一个匹配元素内部区域高度(包括padding，不包括border)|$(“#txt1”).innerHeight()|<br>|outerWidth([margin])|获取第一个匹配元素外部区域宽度(包括padding，border)，margin为true则包括margin，否则不包括|$(“#txt1”).outerWidth()|<br>|outerHeight([margin])|获取第一个匹配元素外部区域高度(包括padding，border)，margin为true则包括margin，否则不包括|$(“#txt1”).outerHegiht(true)|</li>
+</ol>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/05/19/Hexo安装部署/" itemprop="url">
                   Hexo安装部署
                 </a>
@@ -917,496 +1470,6 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/05/16/golang之net-url包学习/" itemprop="url">
-                  golang之net/url包学习
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-05-16T11:33:00+08:00" content="2016-05-16">
-              2016-05-16
-            </time>
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="URL编码解码"><a href="#URL编码解码" class="headerlink" title="URL编码解码"></a>URL编码解码</h1><p>escape采用ISO Latin字符集对指定的字符串进行编码。所有的空格符、标点符号、特殊字符以及其他非ASCII字符都将被转化成%xx格式的字符编码(xx等于该字符在字符集表里面的编码的16进制数字)。类escape函数是一个可转换编码的函数,比如javascript 的 ajax 中,向a.php传递参数?city=北京,可先将”北京”用escape重新编码,再进行传递,在服务器端接收后再解码才不会出现乱码。escape一般用于传递URL参数和类似urlencode base64_encode函数是类似的。  </p>
-<pre><code>func QueryEscape(s string) string  
-</code></pre><p>QueryEscape escapes the string so it can be safely placed inside a URL query.  </p>
-<pre><code>func QueryUnescape(s string) (string, error)  
-</code></pre><p>QueryUnescape does the inverse transformation of QueryEscape, converting %AB into the byte 0xAB and ‘+’ into ‘ ‘ (space). It returns an error if any % is not followed by two hexadecimal digits.  </p>
-<pre><code>str := &quot;abc#cba&quot;  
-out := url.QueryEscape(str)  
-fmt.Println(out)                 # abc%23cba
-re, _ := url.QueryUnescape(str)  # abc#cba
-fmt.Println(re)  
-</code></pre><p>QueryUnescape<br>%AB  —-&gt; 0xAB<br>‘+’  —-&gt; ‘ ‘  </p>
-<pre><code>strA := &quot;abc%23cba&quot;  
-strB := &quot;abc+cba&quot;  
-reA, _ := url.QueryUnescape(strA)  
-fmt.Println(reA)  # abc#cba
-reB, _ := url.QueryUnescape(strB)  
-fmt.Println(reB)  # abc cbd  
-</code></pre><hr>
-<h1 id="错误"><a href="#错误" class="headerlink" title="错误"></a>错误</h1><ul>
-<li><p>type Error  </p>
-<pre><code>type Error struct {  
-  Op  string  
-  URL string  
-  Err error  
-}  
-</code></pre></li>
-</ul>
-<p>Error reports an error and the operation and URL that caused it. </p>
-<ul>
-<li>func (e *Error) Error() string    </li>
-<li>func (e *Error) Temporary() bool  </li>
-<li>func (e *Error) Timeout() bool  </li>
-<li>type EscapeError string  </li>
-<li>func (EscapeError) Error() string  </li>
-<li>type InvalidHostError  </li>
-<li>type InvalidHostError string  </li>
-<li>func (e InvalidHostError) Error() string </li>
-</ul>
-<hr>
-<h1 id="请求参数"><a href="#请求参数" class="headerlink" title="请求参数"></a>请求参数</h1><ol>
-<li><p>type Values  </p>
-<pre><code>type Values map[string][]string  
-</code></pre><p>Values maps a string key to a list of values. It is typically used for query parameters and form values. Unlike in the http.Header map, the keys in a Values map are case-sensitive.  </p>
-</li>
-<li><p>func (Values) Add  </p>
-<pre><code>func (v Values) Add(key, value string)  
-</code></pre><p>Add adds the value to key. It appends to any existing values associated with key.  </p>
-</li>
-<li><p>func (Values) Del  </p>
-<pre><code>func (v Values) Del(key string)  
-</code></pre><p>Del deletes the values associated with key.  </p>
-</li>
-<li><p>func (Values) Encode  </p>
-<pre><code>func (v Values) Encode() string  
-</code></pre><p>Encode encodes the values into “URL encoded” form (“bar=baz&amp;foo=quux”) sorted by key.  </p>
-</li>
-<li><p>func (Values) Get  </p>
-<pre><code>func (v Values) Get(key string) string  
-</code></pre><p>Get gets the first value associated with the given key. If there are no values associated with the key, Get returns the empty string. To access multiple values, use the map directly.  </p>
-</li>
-<li><p>func (Values) Set  </p>
-<pre><code>func (v Values) Set(key, value string)  
-</code></pre><p>Set sets the key to value. It replaces any existing values.  </p>
-</li>
-<li><p>func ParseQuery  </p>
-<pre><code>func ParseQuery(query string) (m Values, err error)  
-</code></pre><p>ParseQuery parses the URL-encoded query string and returns a map listing the values specified for each key. ParseQuery always returns a non-nil map containing all the valid query parameters found; err describes the first decoding error encountered, if any.  </p>
-</li>
-</ol>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/05/15/git-push失败-ERROR-Repository-not-found/" itemprop="url">
-                  git push失败 -- ERROR: Repository not found --
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-05-15T17:49:45+08:00" content="2016-05-15">
-              2016-05-15
-            </time>
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h1><pre><code>git push -u origin master  
-ERROR: Repository not found.  
-fatal: The remote end hung up unexpectedly  
-</code></pre><h1 id="解决办法"><a href="#解决办法" class="headerlink" title="解决办法"></a>解决办法</h1><pre><code>ssh -T git@github.com  #make sure what was the github account used
-git remote -v  
-git remote rm origin   #if tips: fatal: remote origin already exists
-git remote add origin git@github.com:xixiang230/blog.git  
-git push -u origin master  
-</code></pre>
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/05/15/git-push本地代码到github出错/" itemprop="url">
-                  git push本地代码到github出错
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-05-15T17:37:27+08:00" content="2016-05-15">
-              2016-05-15
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/technique/" itemprop="url" rel="index">
-                    <span itemprop="name">技术</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p><img src="https://github.com/xixiang230/xixiang230.github.io/blob/master/images/git.png?raw=true" alt=""></p>
-<h1 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h1><pre><code>git push -u origin master  
-To git@github.com:******/Demo.git  
-! [rejected] master -&gt; master (non-fast-forward)  
-error: failed to push some refs to &apos;git@github.com:******/Demo.git&apos;  
-hint: Updates were rejected because the tip of your current branch is behind  
-hint: its remote counterpart. Merge the remote changes (e.g. &apos;git pull&apos;)  
-hint: before pushing again.  
-hint: See the &apos;Note about fast-forwards&apos; in &apos;git push --help&apos; for details.    
-</code></pre><h1 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h1><p>远程repository和本地的repository冲突导致的，在github创建版本库时，在github的版本库页面点击了创建README.md文件的按钮创建了说明文档，但是却没有pull到本地。因为远程仓库比你的本地库更新，这样就产生了版本冲突的问题，所以得先 pull下来，再 push上去就ok了。  </p>
-<h1 id="解决办法"><a href="#解决办法" class="headerlink" title="解决办法"></a>解决办法</h1><ol>
-<li>强制push<br><code>git push -u origin master -f</code><br>这样会使远程修改丢失，一般是不可取的，尤其是多人协作开发的时候。  </li>
-<li><p>push前先将远程repository修改pull下来  </p>
-<pre><code>git pull origin master  
-git push -u origin master
-</code></pre><p>没有设定远程跟踪分支的话 你要使用这个命令 git pull origin master  </p>
-</li>
-<li><p>若不想merge远程和本地修改，可以先创建新的分支：<br><code>git branch [name]</code><br>然后push<br><code>git push -u origin [name]</code>  </p>
-</li>
-</ol>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/05/15/git拉取失败-You-have-not-concluded-your-merge-MERGE-HEAD-exists/" itemprop="url">
-                  git拉取失败 -- You have not concluded your merge (MERGE_HEAD exists)
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-05-15T17:19:19+08:00" content="2016-05-15">
-              2016-05-15
-            </time>
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">git pull  </span><br><span class="line">You have not concluded your merge (MERGE_HEAD exists).  </span><br><span class="line">Please, commit your changes before you can merge.  </span><br><span class="line">```  </span><br><span class="line"># 错误原因  </span><br><span class="line">可能是因为在以前pull下来的代码没有自动合并导致的 </span><br><span class="line"></span><br><span class="line"># 解决办法  </span><br><span class="line">保留本地修改</span><br></pre></td></tr></table></figure>
-<p>git merge –abort<br>git reset –merge<br>git pull           #获取线上仓库<br>``` </p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1452,7 +1515,7 @@ git push -u origin master
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">62</span>
+              <span class="site-state-item-count">66</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -1460,7 +1523,7 @@ git push -u origin master
           
             <div class="site-state-item site-state-categories">
               <a href="/categories">
-                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-count">6</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -1469,7 +1532,7 @@ git push -u origin master
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">36</span>
+                <span class="site-state-item-count">37</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -1551,7 +1614,7 @@ git push -u origin master
         <div class="copyright" >
   
   &copy;  2016 - 
-  <span itemprop="copyrightYear">2017</span>
+  <span itemprop="copyrightYear">2018</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

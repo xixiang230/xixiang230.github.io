@@ -246,6 +246,516 @@
             
               
                 
+                <a class="post-title-link" href="/2016/06/15/linux的感叹号命令/" itemprop="url">
+                  linux的感叹号命令
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-06-15T23:39:00+08:00" content="2016-06-15">
+              2016-06-15
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/technique/" itemprop="url" rel="index">
+                    <span itemprop="name">技术</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>感叹号(!)在shell中称之为事件指示器，用以对历史执行命令条目的引用。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">!!      #引用上一条命令(等效于!-1)  </span><br><span class="line">!cp     #引用最近以cp开头的历史执行命令  </span><br><span class="line">!?cp[?]  引用最近包含cp的命令</span><br></pre></td></tr></table></figure></p>
+<p>把感叹号”!”放在双引号里，执行命令会出错，比如: echo “hello!”，单如果是在一个脚本文件里则没有问题，因为在脚本文件中，bash的历史机制被禁用。  </p>
+<h1 id="从历史记录中使用命令号来运行命令"><a href="#从历史记录中使用命令号来运行命令" class="headerlink" title="从历史记录中使用命令号来运行命令"></a>从历史记录中使用命令号来运行命令</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">history        #先执行history查看历史执行命令的命令号</span><br><span class="line">!8036          #感叹号+命令号，执行该条历史命令(正着来)  </span><br><span class="line">!-1            #执行历史执行命令记录中的倒数第一条(倒着来，用负数表示，等效于 !!)</span><br><span class="line">!-2</span><br></pre></td></tr></table></figure>
+<h1 id="命令参数复用"><a href="#命令参数复用" class="headerlink" title="命令参数复用"></a>命令参数复用</h1><ol>
+<li><p>!$复用上一次执行只带一个参数的命令参数  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ls baidu</span><br><span class="line">ls -l !$    #!$等效于取上一条命令的第一个参数=&gt;  ls -l baidu</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>多参数复用</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">cp file dir</span><br><span class="line">!^      #上次执行命令的第一个参数</span><br><span class="line">!cp:2   #感叹号+命令名:参数序号n，复用上次执行命令的第n个参数  </span><br><span class="line">!*      #复用上次执行命令的所有参数</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/06/14/vim文本选择-复制-粘贴/" itemprop="url">
+                  vim文本选择/复制/粘贴
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-06-14T07:08:46+08:00" content="2016-06-14">
+              2016-06-14
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/technique/" itemprop="url" rel="index">
+                    <span itemprop="name">技术</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="可视化模式"><a href="#可视化模式" class="headerlink" title="可视化模式"></a>可视化模式</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">v        按字符选择，可精确的字符选中  </span><br><span class="line">V        按行选择，一行一行的选中</span><br><span class="line">ctrl+v   按矩形框选择，构造一个矩形框选择</span><br></pre></td></tr></table></figure>
+<h1 id="几个命令复习"><a href="#几个命令复习" class="headerlink" title="几个命令复习"></a>几个命令复习</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">r 替换光标处字符命令，替换后还是命令模式    </span><br><span class="line">s 删除光标处字符开始进入修改编辑模式</span><br><span class="line">ctrl+r 恢复对u命令的使用  </span><br><span class="line">yy 复制当前行的内容到vi缓冲区  </span><br><span class="line">yw 复制当前光标所在位置到单词尾字符的内容到vi缓冲区  </span><br><span class="line">y$ 复制当前光标位置到行尾  </span><br><span class="line">y^ 复制行首到当前光标位置前一字符处  </span><br><span class="line">5yy 复制5行  </span><br><span class="line">5yw 复制5个单词  </span><br><span class="line">:3,5y 复制第3行到第5行的内容到缓冲区(末行模式)  </span><br><span class="line">:s/old/new/c  当前行替换操作，加c确认后才替换  </span><br><span class="line">:s/old/new/gc</span><br><span class="line">:sp filename 在同一编辑窗口中打开第二个文件，可用ctrl+w来切换     </span><br><span class="line">:!cmd   在vim系统中执行系统命令</span><br></pre></td></tr></table></figure>
+<h1 id="临时文件操作"><a href="#临时文件操作" class="headerlink" title="临时文件操作"></a>临时文件操作</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">O 只读打开，不能改变文件内容  </span><br><span class="line">E 继续编辑，不恢复.swp文件保存的内容  </span><br><span class="line">R 将恢复上次编辑未保存的内容  </span><br><span class="line">Q 退出vim </span><br><span class="line">D 删除.swp文件  </span><br><span class="line">vim -r filename 恢复未保存内容</span><br></pre></td></tr></table></figure>
+<h1 id="vim常用命令复习"><a href="#vim常用命令复习" class="headerlink" title="vim常用命令复习"></a>vim常用命令复习</h1><ol>
+<li><p>在代码块中来回切换  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">命令模式下输入 %   </span><br><span class="line">输入&#123; ，跳转到上一个段落  </span><br><span class="line">输入&#125;， 跳转到下一个段落</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>检查当前编辑(比如C/C++)源文件所有的include文件路径是否都存在  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">:checkpath</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>文本折叠  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">自动折叠设置  </span><br><span class="line">:set foldmethod=indent</span><br><span class="line">:set foldenable</span><br><span class="line">创建折叠后，移动鼠标到折叠行，normal模式下输入:  </span><br><span class="line">zo      #打开鼠标所在处的折叠  </span><br><span class="line">zc      #关闭鼠标所在处的最小折叠    </span><br><span class="line">zM      #关闭文件中所有的折叠</span><br><span class="line">zR      #打开文件中所有的折叠  </span><br><span class="line">za      #以toggle的方式打开和关闭折叠</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>设置paste剪贴板的数据，以保持原格式  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">set paste</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>使用命令</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">gd  跳转到变量声明，并高亮所有使用该变量的地方  </span><br><span class="line">gg=G 全篇自动缩进，按gg时首先会跳转到文件首行  </span><br><span class="line">=G  鼠标所在行单行缩进</span><br><span class="line">ctrl+]  #定位到函数原型处  </span><br><span class="line">ctrl+t  #回到上一次跳转处  </span><br><span class="line">ctrl+p #自动补全(编码状态)</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/06/13/PHP之strtotime/" itemprop="url">
+                  PHP之strtotime
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-06-13T23:18:34+08:00" content="2016-06-13">
+              2016-06-13
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/technique/" itemprop="url" rel="index">
+                    <span itemprop="name">技术</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="用途"><a href="#用途" class="headerlink" title="用途"></a>用途</h1><p>strtotime用于将英文文本的日期时间描述解析为unix时间戳。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">strtotim(time, now); // 成功返回时间戳，失败返回FALSE</span><br></pre></td></tr></table></figure></p>
+<p>其中time规定要解析的时间字符串。time字符串参数是必须的，不能为空，否则返回false。<br>now用来计算返回值的时间戳，默认使用系统当前时间，即相当于now参数给出的时间。<br>time和now字符串参数都不区分大小写。  </p>
+<ol>
+<li><p>获取指定日期的unix时间戳  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">strtotime(&quot;2016-06-14&quot;);  //返回2016年06月14日0点0分0秒的时间戳</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>返回英文文本日期的时间戳  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">strtotime(&quot;now&quot;);  </span><br><span class="line">strtotime(&quot;+1 day&quot;);   //打印明天此时的时间戳，相对与此时系统时间(默认)加1天  </span><br><span class="line">strtotime(&quot;+1 days&quot;);  //打印明天此时的时间戳，相对与此时系统时间(默认)加1天  </span><br><span class="line">strtotime(&quot;-1 day&quot;);   //打印昨天此时的时间戳  </span><br><span class="line">strtotime(&quot;+10 days&quot;);   //打印10天后此时的时间戳  </span><br><span class="line">strtotime(&quot;3 October 2016&quot;);  </span><br><span class="line">strtotime(&quot;+5 hours&quot;));  </span><br><span class="line">strtotime(&quot;+1 week&quot;);  </span><br><span class="line">strtotime(&quot;+1 week 3 days 7 hours 5 seconds&quot;);  </span><br><span class="line">strtotime(&quot;next Monday&quot;);  //下周周一</span><br><span class="line">strtotime(&quot;last Sunday&quot;);  //上周周日</span><br><span class="line">echo date(&quot;Y-m-d H:i:s&quot;, time());  </span><br><span class="line">echo date(&quot;Y-m-d H:i:s&quot;, strtotime(&quot;+1 day&quot;));  </span><br><span class="line">echo date(&quot;Y-m-d H:i:s&quot;, strtotime(&quot;-1 day&quot;));  </span><br><span class="line">echo date(&quot;Y-m-d H:i:s&quot;, strtotime(&quot;+1 week&quot;));  </span><br><span class="line">echo date(&quot;Y-m-d H:i:s&quot;, strtotime(&quot;next Thursday&quot;));</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>first、second、third……等关键字<br>为辅助性关键字，可与星期，天等组合使用  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">echo date(&quot;Y-m-d H:i:s&quot;, strtotime(&quot;second sunday&quot;);  //计算当前时间后开始的第一二个星期天</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>previous和next关键字<br>与星期、天等组合，表示指定时间的前一星期或前一天，下一个星期或者下一天。    </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">echo date(&quot;Y-m-d H:i:s&quot;, strtotime(&quot;Previous sunday&quot;, strtotime(&quot;2016-06-13&quot;);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>last关键字<br>即可以作为上一个，也可以作为最后一个。  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">echo date(&quot;Y-m-d H:i:s&quot;, strtotime(&quot;last sunday, strtotime(&quot;2016-06-13&quot;)));</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>back和front关键字<br>对一天中的小时向前或向后操作，back表示将时间设置为指定时间值后一小时的15分位置，front则表示将时间设置为指定小时值前一个小时<br>的45分位置。    </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">echo date(&quot;Y-m-d H:i:s&quot;, strtotime(&quot;back of 24&quot;, strtotime(&quot;2016-06-14&quot;)));  </span><br><span class="line">echo date(&quot;Y-m-d H:i:s&quot;, strtotime(&quot;front of 24&quot;, strtotime(&quot;2016-06-14&quot;)));</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h1 id="strtotime-“-1-month”-求值问题"><a href="#strtotime-“-1-month”-求值问题" class="headerlink" title="strtotime(“-1 month”)求值问题"></a>strtotime(“-1 month”)求值问题</h1><p>对于后一月比前一月天数多的情况下得到的结果可能不是你想要的结果，但如果前一月的今天存在的话会返回正常。不存在，会自动将日期计算到<br>下个月。    </p>
+<h1 id="strtotime函数长用于时间大小比较"><a href="#strtotime函数长用于时间大小比较" class="headerlink" title="strtotime函数长用于时间大小比较"></a>strtotime函数长用于时间大小比较</h1><ol>
+<li>首先通过strtotime函数将指定时间转化为时间戳  </li>
+<li>通过转换后的时间戳值进行比较  </li>
+</ol>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/06/13/PHP之date-default-timezone-set/" itemprop="url">
+                  PHP之date_default_timezone_set
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-06-13T22:36:17+08:00" content="2016-06-13">
+              2016-06-13
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/technique/" itemprop="url" rel="index">
+                    <span itemprop="name">技术</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="用法"><a href="#用法" class="headerlink" title="用法"></a>用法</h1><p>sets the default timezone used by all date/time functions。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">bool date_default_timezone_set(timezone);  </span><br><span class="line">bool date_default_timezone_set(string $timezone_identifier);</span><br></pre></td></tr></table></figure></p>
+<p>其中timezone是必须的，取值可为”UTC”，”Europe/Paris”等。如果时区设置不合法，则会对每个日期时间函数的调用产生一条E_NOTICE级别的错误信息打印出来。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">date_default_timezone_set(&apos;Europe/Paris&apos;);  </span><br><span class="line">date_default_timezone_set(&apos;America/New_York&apos;);  </span><br><span class="line">date_default_timezone_set(&apos;Asia/Chongqing&apos;);  </span><br><span class="line">date_default_timezone_set(&apos;Asia/Shanghai&apos;);  </span><br><span class="line">date_default_timezone_set(&apos;Asia/Harbin&apos;);  </span><br><span class="line">date_default_timezone_set(&apos;PRC&apos;); //中国标准时间</span><br></pre></td></tr></table></figure></p>
+<h1 id="补充"><a href="#补充" class="headerlink" title="补充"></a>补充</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">string date_default_timezone_get ( void );</span><br></pre></td></tr></table></figure>
+<p>Gets the default timezone used by all date/time functions in a script</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/06/12/bootstrap-slider插件/" itemprop="url">
                   bootstrap-slider插件
                 </a>
@@ -937,454 +1447,6 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/06/09/C-11之std-men-fn用法/" itemprop="url">
-                  C++11之std::men_fn用法
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-06-09T10:34:38+08:00" content="2016-06-09">
-              2016-06-09
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/technique/" itemprop="url" rel="index">
-                    <span itemprop="name">技术</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h1 id="mem-fn系列函数介绍"><a href="#mem-fn系列函数介绍" class="headerlink" title="mem_fn系列函数介绍"></a>mem_fn系列函数介绍</h1><p>mem_fn系列函数包括: mem_fun, mem_fun_ref, mem_fn，ptr_fun。 </p>
-<ul>
-<li><p>mem_fun_ref : 把成员函数转为函数对象，使用对象(引用)进行绑定。转为函数为对成员函数引用的实现，主要为兼容泛型算法使用成员函数对容器元素进行操作的场景。  </p>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2016/06/09/C-11之std-men-fn用法/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/06/07/jQuery之事件处理/" itemprop="url">
-                  jQuery之事件处理
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-06-07T22:17:27+08:00" content="2016-06-07">
-              2016-06-07
-            </time>
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/06/07/jQuery-select-context/" itemprop="url">
-                  jQuery([selector, [context]])
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-06-07T16:26:19+08:00" content="2016-06-07">
-              2016-06-07
-            </time>
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">jQuery([selector, [context]])</span><br></pre></td></tr></table></figure>
-<h1 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h1><p>jQuery函数接收一个包含CSS选择器的字符串表达式，然后根据改字符串表达式来查找匹配HTML元素。默认情况下，$()在当前HTML document中查找DOM元素。如果指定了context参数，比如DOM元素集，或者jQuery对象，则才在这个context中查找。  </p>
-<ul>
-<li>selector<br>用来查找的字符串  </li>
-<li><p>context<br>作为待查找的DOM元素集，文档或jQuery对象。</p>
-<h1 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$(selector).action()</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>$ 表明这是一个jQuery语句</p>
-</li>
-<li>(selector)用来选择某个HTML元素。</li>
-<li>action()定义操作该HTML元素的方法。<h1 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h1></li>
-<li><p>查找所有p元素，且这些元素为div元素的子元素  </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$(&quot;div &gt; p&quot;);</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>设置页面背景色<br>$(document.body).css(“background”, “black”);</p>
-</li>
-<li><p>隐藏一个表单中的所有元素  </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$(myForm.elements).hide()</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>在文档的第一个表单中，查找所有的单选按钮(type值为radio的input元素)  </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$(&quot;input:radio&quot;, document.forms[0]);</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>在一个由AJAX返回的XML文档中，查找所以的div元素  </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$(&quot;div&quot;, xml.responseXML);</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/06/07/Golang中的map/" itemprop="url">
-                  Golang中的map
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-06-07T10:28:58+08:00" content="2016-06-07">
-              2016-06-07
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/technique/" itemprop="url" rel="index">
-                    <span itemprop="name">技术</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">计算机科学中最有用的数据结构之一就是hash表。不同的hash表实现提供了很多多特的特效。但基本都包含对元素的增删改查。</span><br></pre></td></tr></table></figure>
-<p>Go语言中的hash表就是map。在创建一个map时，需要指名map键值的具体类型，其中键的类型KeyType必须是可比较的，比如可以是字符串，整形，甚至指针等，而值类型ValueType则可以是任意类型，也可以还是一个map。<br>One of the most useful data structures in computer science is the hash table. Many hash table implementations exist with varying properties, but in general they offer fast lookups, adds, and deletes. Go provides a built-in map type that implements a hash table.<br>var mp map[string]int<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">map是一个引用类型，类似指针或切片，如果只声明了一个map，此时它还是nil，并没有真正指向一个或者说绑定一个map。当写一个还没引用任何真实map实体时，会出panic。为了初始化一个map，可用make函数。</span><br><span class="line">对于map而言，在使用过程中，初次赋值时某个key可以不存在，map会自动创建这个key然后赋值，在取值时如果某个key不存在则返回零值(对于不同类型，其零值各不相同)。</span><br></pre></td></tr></table></figure></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mp := make(map[KeyType]ValueType)  </span><br><span class="line">mp := make(map[string]string)</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">mp[&quot;name&quot;] = &quot;baidu&quot;  //新创建一个键值对(create)</span><br><span class="line">name := mp[&quot;name&quot;]    //获取已存在的键值对(read)</span><br><span class="line">mp[&quot;name&quot;] = &quot;tecent&quot; //更新已存在的键值对(update)</span><br><span class="line">delete(mp, &quot;name&quot;)    //删除已存在的键值对(delete)</span><br><span class="line">fmt.Printf(mp[&quot;name&quot;]) //获取不存在的键值对，打印为空字符串</span><br></pre></td></tr></table></figure>
-<ul>
-<li>map的遍历<br>map可使用range关键字遍历<br>for key, value := range mp {<br>  fmt.Println(“Key: “, key, “—-&gt;”  “Value: “, value)<br>}<br>```<br>m需要说明的是map的遍历顺序是随机的。</li>
-</ul>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1430,7 +1492,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">62</span>
+              <span class="site-state-item-count">66</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -1438,7 +1500,7 @@
           
             <div class="site-state-item site-state-categories">
               <a href="/categories">
-                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-count">6</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -1447,7 +1509,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">36</span>
+                <span class="site-state-item-count">37</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -1529,7 +1591,7 @@
         <div class="copyright" >
   
   &copy;  2016 - 
-  <span itemprop="copyrightYear">2017</span>
+  <span itemprop="copyrightYear">2018</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

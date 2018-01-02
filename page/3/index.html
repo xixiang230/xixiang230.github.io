@@ -246,6 +246,631 @@
             
               
                 
+                <a class="post-title-link" href="/2016/06/26/动态规划/" itemprop="url">
+                  动态规划
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-06-26T20:09:37+08:00" content="2016-06-26">
+              2016-06-26
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/technique/" itemprop="url" rel="index">
+                    <span itemprop="name">技术</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="动态规划简介"><a href="#动态规划简介" class="headerlink" title="动态规划简介"></a>动态规划简介</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dynamic programming is a method for solving a complex proble by breaking it down into a collection of simpler subproblems.</span><br></pre></td></tr></table></figure>
+<p>动态规划是通过将问题拆分，定义问题状态和状态直接的关系，使得问题能够以递推(分治)的方法解决。如何拆分问题，才是动态规划的<br>核心，而拆分问题靠的就是状态的定义和状态转义方程的定义。  </p>
+<h2 id="状态的定义"><a href="#状态的定义" class="headerlink" title="状态的定义"></a>状态的定义</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">给定长度为N的数列，求这个数列的最长上升(递增)子数列(LIS)的长度。以数列:[1, 7, 2, 8, 3, 4]为列，其最长递增子数列为: [1, 2, 3, 4]，</span><br><span class="line">长度为4，次长的长度为3，分别为[1, 7, 8]，[1, 2, 3]。</span><br></pre></td></tr></table></figure>
+<p>要解决这个问题，首先就是要定义这个问题和这个问题的子问题。需要说明的是题目中描述的问题是字面上的问题，找不出子问题，没有<br>子问题，题目就无法利用动态规划求解。<br>于是重新定义问题如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">给定长度为N的数列  </span><br><span class="line">设F(k)为: 以数列中第k项结尾的最长递增子序列的长度  </span><br><span class="line">求F(1)， F(2)，F(3)， ... F(N)中的最大值</span><br></pre></td></tr></table></figure></p>
+<p>显然，新问题和原问题等价。<br>而对于F(k)而言，F(1)，F(2)，F(k-1)都是F(k)的子问题，因为以第k项结尾的最长递增子序列(LIS)，包含着已第1, … k-1中某项结尾<br>的LIS。上面新问题F(k)可以叫做状态，其中”F(k)为数列中第k项结尾的LIS的长度”叫做对对状态的定义。之所以把F(k)称之为”状态”而<br>不是”问题”，一是避免与原问题混淆，二是这个新问题是数学化定义的。  </p>
+<p>对于状态的定义可能不止一种，设置可以是二维的，以完全不同的视角定义，比如这里，还可以这样定义:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">给定一个长度为N的数列，设F(i, k)为在前i项中的，长度为k的最长增长递增子序列中，最后一位的最小值。1&lt;=k&lt;=N。若在前i项中，</span><br><span class="line">不存在长度为k的最长递增子序列，则F(i, k)为正无穷。求最大的x，使得F(N, x)不为正无穷。上述的F(i, k)就是状态，定义中的F(i, k)</span><br><span class="line">为在前i项中，长度为k的最长递增子序列中，最后一位的最小值就是对状态的定义。</span><br></pre></td></tr></table></figure></p>
+<h2 id="状态转义方程"><a href="#状态转义方程" class="headerlink" title="状态转义方程"></a>状态转义方程</h2><p>定义好状态后，状态和状态之间的关系式就叫做状态转义方程。例如对应LIS问题的第一种定义<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">设F(k)为以数列中第k项结尾的最长递增子序列的长度。</span><br></pre></td></tr></table></figure></p>
+<p>设A为题中的数列，状态转移方程为:<br>F(1) = 1 (根据状态定义导出边界情况)<br>F(k) = max(F(i) +1 | A(k) &gt; A(i), i (- (1 .. k-1)) (k &gt; 1)<br>问题解释如下:<br>以第k项结尾的LIS的长度是: 保证第i项比第k项小的情况下，以第i项结尾的LIS长度加1的最大值，取遍i的所有值(i &lt; k)。</p>
+<p>第二种定义：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">设F(i, K)为数列前i项中，长度为k的递增子序列中，最后一位的最小值。</span><br></pre></td></tr></table></figure></p>
+<p>设A为题中数列，状态转义方程为：<br>若A(i) &gt; F(i-1, k-1)，则F(i,k) = min(A(i), F(i-1,k)<br>否则: F(i,k) = F(i-1,k)<br>可以看错，这里的状态转义方程就是定义了问题和子问题之间的关系，可以看出，状态转移方程就是带有条件的地递推式。  </p>
+<h2 id="动态规划思考"><a href="#动态规划思考" class="headerlink" title="动态规划思考"></a>动态规划思考</h2><ol>
+<li>缓存 重叠子问题 记忆化<br>这三个名词，都是在阐述递推式求解的技巧。以Fibonacci数列为例，计算第100项的时候，需要计算第99项和第98项，在计算<br>第101项的时候，需要第100项和第99项，这时你还需要重新计算第99项吗？不需要，只要在第一个计算的时候把他记下来就可以了。</li>
+</ol>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/06/21/GDB学习/" itemprop="url">
+                  GDB调试利器学习
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-06-21T22:33:15+08:00" content="2016-06-21">
+              2016-06-21
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/technique/" itemprop="url" rel="index">
+                    <span itemprop="name">技术</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <ol>
+<li>源码编译，在编译前需要加上-g选项。<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">g++ -g -Wall -o house_roober 198_house_roober.cpp -std=c++11</span><br><span class="line">gcc -g -Wall -o house_roober 198_house_roober.c</span><br><span class="line">g++ -g hello.cpp -o hello</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>其中-g选项表示让编译器将符号表(对应程序的变量和代码行的内存地址列表)保存在生成的可执行文件中，这样在<br>调试时就讷讷个在调试会话中引用源码的变量名和行号。  </p>
+<ol>
+<li>GDB启动<br>调试可执行文件<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">gdb &lt;program可执行文件&gt;</span><br><span class="line">gdb house_roober</span><br><span class="line">gdb a.out</span><br><span class="line">gdb -tui house_roober   #以tui模式运行GDB，可将终端分屏为源码窗口和控制窗口</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>调试core文件，core是程序非法执行后core dump后产生文件。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">gdb &lt;program&gt; &lt;core dump file&gt;</span><br><span class="line">gdb program core.11127</span><br></pre></td></tr></table></figure></p>
+<p>调试服务程序<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">gdb &lt;program&gt; &lt;PID&gt;</span><br><span class="line">gdb hello 11127</span><br></pre></td></tr></table></figure></p>
+<p>根据场景需求，选择相应的方式即可进入GDB调试模式。  </p>
+<ol>
+<li>GDB常用命令  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">回车    #重复上一次命令  </span><br><span class="line">quit    #退出GDB</span><br><span class="line">ctrl+d  #退出GDB</span><br><span class="line">return  #按下回车再次执行最近执行过的那条命令</span><br><span class="line">r或run     #执行程序，遇到断点时停在断点处等待用户输入下一步命令。    </span><br><span class="line">frame num #栈帧编号，当前正在执行的函数的帧编号为0，其父帧编号为1，依次类推。  </span><br><span class="line">up      #调到调用栈中的下一个父帧  </span><br><span class="line">down    #引向相反的方向  </span><br><span class="line">backtrace #显示整个栈  </span><br><span class="line">方向键  #滚动查看代码</span><br><span class="line">p       #输出当前值  </span><br><span class="line">ctrl+p  #浏览上一个GDB命令  </span><br><span class="line">ctrl+n  #浏览下一个GDB命令  </span><br><span class="line">call function(args)   #调用程序中可见的函数，并传递可参数</span><br><span class="line">call TestFun(55)</span><br><span class="line">quit或q #退出gdb</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>如果修改程序重新编译，不必重新启动GDB，GDB会在运行程序之前自动重新加载新的二分表和新的符号表。</p>
+<ol>
+<li><p>查看源码  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">l或list           #不带参数，从第一行开始或接着上一次list命令列出源码，默认每次显示10行  </span><br><span class="line">list LineNumber   #显示当前文件以行号为中心的前后共10行代码</span><br><span class="line">list 函数名       #显示函数名所在函数的源代码</span><br><span class="line">list main</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>断点设置命令  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">break LineNumber  #在LineNumber行上设置断点  </span><br><span class="line">break 16          #在源码第16行处设置断点  </span><br><span class="line">break FileName:LineNumber #在源码文件FileName的LineNumber行处设置断点  </span><br><span class="line">break FunctionName  #在FunctionName函数入口(第一行可执行代码)处设置断点。</span><br><span class="line">break func        #在函数func()入口处设置断点</span><br><span class="line">break FileName:FunctionName #在源码文件FileNaem的函数Function入口处设置断点。  </span><br><span class="line">b fn1 if a &gt; b             #条件断点设置</span><br><span class="line">delete n                   #删除第n个断点  </span><br><span class="line">disable n         #暂停第n个断点  </span><br><span class="line">enable n          #开启第n个断点</span><br><span class="line">lear LineNumber            #清除第n行的断点</span><br><span class="line">info b 或 info breakpoints #显示当前程序的断点设置情况  </span><br><span class="line">delete breakpoints         #清处所有断点</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>在函数名上设置断点相比行断点而言，如果修改了源代码，使得函数位置所在行发生变化，行断点就失去原来的作用了，<br>而函数断点仍然有效。但需要注意函数重载的情况。<br>当GDB使用多个断点中断一行源码时，只会中断一次。  </p>
+<ol>
+<li>条件断点  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">condition BreakNum Cond    #condition后跟断点编号和条件</span><br><span class="line">condition 1 num == 1         #当满足条件num==1时，GDB才会在断点行编号1处暂停程序的执行</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>如果以后要删除条件，但保持断点，键入:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cond BreakNum</span><br></pre></td></tr></table></figure></p>
+<p>用break if可以将break和condition命令组合成一个步骤<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">break BreakNum if cond  </span><br><span class="line">break 30 if num == 1  #条件语句可以用小括号括起来</span><br></pre></td></tr></table></figure></p>
+<h1 id="临时断点tbreak"><a href="#临时断点tbreak" class="headerlink" title="临时断点tbreak"></a>临时断点tbreak</h1><p>和break类似，但该命令设置的断点在首次到达该指定行后就不再有效  </p>
+<h1 id="删除断点"><a href="#删除断点" class="headerlink" title="删除断点"></a>删除断点</h1><ol>
+<li><p>break 可以基于标志符删除断点</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">delete BreakNum1 #删除指定断点编号 </span><br><span class="line">delte            #删除所有断点</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>clear 依据断点位置，工作方式删除，与break命令对应  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">clear function   </span><br><span class="line">clear FileName:function </span><br><span class="line">clear BreakNum  </span><br><span class="line">clear FileName:BreakNum</span><br><span class="line">clear          #清除GDB将执行的下一个指定处的断点</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>禁用与启用断点  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">disable BreakPointList  #用空格分隔开的多个断点标志符  </span><br><span class="line">disable                 #禁用现存所有断点  </span><br><span class="line">enable BreakPointList   #启用断点  </span><br><span class="line">enable once BreakPointList  #在下次引起GDB暂停执行后禁用</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>断点查看</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">info break              #查看断点信息</span><br><span class="line">info breakpoints </span><br><span class="line">i b</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>打印相关<br>print或p  表达式   #<br>表达式可以是任何当前正在被测试程序的有效表达式，比如当前正在调试C程序，那么表达式可以是任何C语言的有效表达式，包括数字，变量甚至函数调用。<br>print num         #打印整数num的值<br>print ++num       #把num值加1后打印<br>print name        #显示字符串name的值<br>print func(22)    #将整数22作为参数调用func函数<br>print func(a)     #将变量a作为参数调用func函数<br>display 表达式 #在单步运行时非常有用，使用display命令设置表达式后，将在每次单步进行指令后，紧接着输出被设置的表达式和值。<br>display a<br>whatis    #查询变量或函数的类型<br>info function  #查询函数<br>info locals    #显示当前堆栈页的所有变量  </p>
+</li>
+<li>查询运行信息<br>where/bt        #当前运行的堆栈列表<br>bt backtrace    #显示当前调用堆栈<br>up/down         #改变堆栈显示的深度<br>set args        #指定运行时的参数<br>show args       #查看设置好的参数<br>info program    #查看程序是否在运行，进程号，被暂停的原因  </li>
+<li>使用commands命令设置命令列表<br>让GDB在每次到达某个断点时自动执行一组命令，从而自动完成某一任务  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">commands BreakPointNumber  </span><br><span class="line">......</span><br><span class="line">commands</span><br><span class="line">......</span><br><span class="line">end</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>实例<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">commands 1     #首先输入GDB命令，进入commands模式</span><br><span class="line"></span><br><span class="line">[silent]       #可选的silent命令，在命令列表开始处设置，避免GDB输出冗长  </span><br><span class="line">printf &quot;fibonacci was passed %d .\n&quot;, n       #设置命令列表，这里的printf和C中printf用法类似，可省略括号。   </span><br><span class="line">end</span><br></pre></td></tr></table></figure></p>
+<h1 id="执行"><a href="#执行" class="headerlink" title="执行"></a>执行</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">step       #单步执行，单步进入 </span><br><span class="line">s          #单步执行</span><br><span class="line">next       #下一步，单步跟踪程序，当遇到函数调用时，不会进入函数体。</span><br><span class="line">n          #下一步</span><br></pre></td></tr></table></figure>
+<p>step与next区别: 在函数调用时，step会进入函数体，而next会导致下一次暂停出现在函数调用之后，而不会进入函数体。<br>setp与next后都可跟可选的一个数值，表要使用step或next执行的额外行数  </p>
+<h1 id="无条件恢复程序执行"><a href="#无条件恢复程序执行" class="headerlink" title="无条件恢复程序执行"></a>无条件恢复程序执行</h1><ol>
+<li>continue<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">continue(简写 c)</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>无条件恢复程序执行，继续执行，直到遇到下一个断点或程序结束<br>另外continue可接受一个可选的数值参数n，要求GDB忽略接下来的n个断点。  </p>
+<ol>
+<li>finish(fin) 和 until(u)命令恢复<br>finish命令指示GDB恢复执行，运行程序，直到恰好在当前帧完成之后为止(直到当前函数完成返回)，并打印函数返回时的堆栈地址和返回值以及参数值等信息。<br>until命令通常用来在不进一步循环中暂停(除了循环中的中间断点)的情况下完成正在执行的循环。until会执行循环的其余部分，当厌倦了在一个循环体内单步跟踪时，until可以运行程序直到退出循序体。<br>(如果遇到断点，还是会暂停)，让GDB在循环后面的第一行代码处暂停。<br>until命令也可以接受源码中的位置作为参数，用法与break命令相同。  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">until 行号     #运行至某行，不仅仅用来跳出循环  </span><br><span class="line">until 13</span><br><span class="line">until swap </span><br><span class="line">until swapflaw.c:13</span><br><span class="line">until swapflaw.c:swap</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>上述命令均可方便地使程序一直执行到swap()函数的入口。  </p>
+<p>#监视点<br>监视点是一种特殊类型的断点，区别在于监视点没有”住在”某一行源码中，而是指示GDB每当某个表达式改变了值就暂停<br>执行，即一旦被监视的表达式值改变，gdb将强行终止正在被调试的程序。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">watch a        #设置监视点，watch后跟变量名，也可以是复杂的表达式</span><br></pre></td></tr></table></figure></p>
+<p>监视点只能监视存在切在作用域中的变量，一旦遍历不再存在于调用栈的任何帧中，GDB会自动删除监视点。<br>GDB实际上是在遍历的内存位置改变值时中断。  </p>
+<ol>
+<li>窗口分割<br>layout      #用于分割窗口，可一边查代码一边测试<br>layout src  #显示源码窗口<br>layout asm  #显示反汇编窗口<br>layout regs #显示源码/反汇编和CPU寄存器窗口<br>layout split #显示源码和反汇编窗口<br>Ctrl+L      #涮新窗口</li>
+</ol>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/06/21/MySQL常用函数汇总/" itemprop="url">
+                  MySQL常用函数汇总
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-06-21T22:10:13+08:00" content="2016-06-21">
+              2016-06-21
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/technique/" itemprop="url" rel="index">
+                    <span itemprop="name">技术</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="数序函数"><a href="#数序函数" class="headerlink" title="数序函数"></a>数序函数</h1><table>
+<thead>
+<tr>
+<th>–函数–</th>
+<th>–说明–</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ABS(x)</td>
+<td>返回x的绝对值</td>
+</tr>
+<tr>
+<td>BIN(x)</td>
+<td>返回x的二进制</td>
+</tr>
+<tr>
+<td>OCT(x)</td>
+<td>返回x的八进制</td>
+</tr>
+<tr>
+<td>HEX(x)</td>
+<td>返回x的十六进制</td>
+</tr>
+<tr>
+<td>CEILING(x)</td>
+<td>返回大于x的最小整数（天花板函数）</td>
+</tr>
+<tr>
+<td>EXP(x)</td>
+<td>返回e的x次方</td>
+</tr>
+<tr>
+<td>FLOOR(x)</td>
+<td>返回小余x的最大整数值（地板砖函数）</td>
+</tr>
+<tr>
+<td>GREATEST(x1, x2, …, xn)</td>
+<td>返回集合中的最大值</td>
+</tr>
+<tr>
+<td>LEAST(x1, x2, …, xn)</td>
+<td>返回集合中的最小值</td>
+</tr>
+<tr>
+<td>LN(x)</td>
+<td>返回x的自然对数</td>
+</tr>
+<tr>
+<td>LOG(x,y)</td>
+<td>返回x的以y为底的对数</td>
+</tr>
+<tr>
+<td>MOD(x/y)</td>
+<td>返回x/y的模(余数)</td>
+</tr>
+<tr>
+<td>PI()</td>
+<td>返回PI值</td>
+</tr>
+<tr>
+<td>RAND()</td>
+<td>返回0到1内的随机值，可通过提供一个种子参数使得RAND()随机数生成一个指定的值</td>
+</tr>
+<tr>
+<td>ROUND(x,y)</td>
+<td>返回参数x的四舍五入值，最多带y位小数</td>
+</tr>
+<tr>
+<td>SIGN(x)</td>
+<td>返回代表数字x的符号的值</td>
+</tr>
+<tr>
+<td>SQRT(x)</td>
+<td>返回x的平方根</td>
+</tr>
+<tr>
+<td>TRUNCATE(x,y)</td>
+<td>返回x的截断值，保留y位小数</td>
+</tr>
+</tbody>
+</table>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/06/21/MySQL之DUAL表/" itemprop="url">
+                  MySQL之DUAL表
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-06-21T20:46:51+08:00" content="2016-06-21">
+              2016-06-21
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/technique/" itemprop="url" rel="index">
+                    <span itemprop="name">技术</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="什么是DUAL表"><a href="#什么是DUAL表" class="headerlink" title="什么是DUAL表"></a>什么是DUAL表</h1><p>You are allowed to specify DUAL as a dummy table name in situations where no table no tables are referenced.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT 1 + 1 FROM DUAL;</span><br></pre></td></tr></table></figure></p>
+<p>DUAL is purely for the convenience of people who require that all SELECT statements should have FROM and<br> possibly other clauses. MySQL may ignore the clauses. MySQL does not require FROM DUAL if no tables are referenced.</p>
+<h1 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h1><p>利用MySQL的DUAL表，可达到不插入重复记录的目的。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT express [FROM DUAL];</span><br></pre></td></tr></table></figure></p>
+<p>MySQL总是作为返回该表达式值的普通SELECT语句执行，返回一行记录的结果集，FROM DUAL对MySQL来说是摆设。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT express [FROM DUAL] WHERE 0=2;</span><br></pre></td></tr></table></figure></p>
+<p>先计算WHERE条件，再计算express，返回空集。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">INSERT INTO `demo` (id,name,value) SELECT 1,2,4 from DUAL WHERE NOT EXISTS (SELECT * FROM `demo` WHERE id=1 AND name=2) LIMIT 1;</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">INSERT INTO TableName(column1, column2, column3, ...columnN)</span><br><span class="line">SELECT value1, value2, value3, ...valueN FROM  DUAL</span><br><span class="line">WHERE NOT EXISTS(</span><br><span class="line">    SELECT * </span><br><span class="line">    FROM TableName</span><br><span class="line">    WHERE value = ?</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+<p>DUAL是为了构建查询语句而存在的表。</p>
+<h1 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">INSERT INTO Class(name, age) VALUES (&apos;baidu&apos;, 5);</span><br><span class="line">INSERT INTO Class(name, age) VALUES (&apos;tecent&apos;,5);</span><br></pre></td></tr></table></figure>
+<p>对于普通的INSERT插入，如果想要保证不插入重复记录，方法之一就是对某个字段创建唯一约束实现，如果没有创建唯一约束，<br>则可使用INSERT INTO IF EXISTS实现。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">INSERT INTO tableName(field1, field2, fieldn) SELECT &apos;field1&apos;, &apos;field2&apos;, &apos;fieldn&apos;</span><br><span class="line">FROM DUAL </span><br><span class="line">WHERE NOT EXISTS(SELECT filed FROM tableName WHERE fiedl = ?)</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">INSERT INTO Class(name, age) SELECT &apos;baidu&apos;, &apos;100&apos; FROM DUAL WHERE NOT EXISTS(SELECT Class FROM name WHERE name = &apos;baidu&apos;) limit1;</span><br><span class="line">INSERT INTO Class(name, age) SELECT &apos;tecent&apos;, &apos;200&apos; FROM DUAL WHERE NOT EXISTS(SELECT Class FROM name WHERE name = &apos;tecent&apos;) limit1;</span><br></pre></td></tr></table></figure>
+<p>上面的limit1用来避免duplicate entry。  </p>
+<h1 id="使用INSERT-IGNORE"><a href="#使用INSERT-IGNORE" class="headerlink" title="使用INSERT IGNORE"></a>使用INSERT IGNORE</h1><p>当使用INSERT IGNORE插入必须有一个唯一索引或者主键，前面介绍的方法则无此条件。  </p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/06/18/HTML5错误用法/" itemprop="url">
                   HTML5错误用法建议
                 </a>
@@ -1008,516 +1633,6 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/06/15/linux的感叹号命令/" itemprop="url">
-                  linux的感叹号命令
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-06-15T23:39:00+08:00" content="2016-06-15">
-              2016-06-15
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/technique/" itemprop="url" rel="index">
-                    <span itemprop="name">技术</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>感叹号(!)在shell中称之为事件指示器，用以对历史执行命令条目的引用。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">!!      #引用上一条命令(等效于!-1)  </span><br><span class="line">!cp     #引用最近以cp开头的历史执行命令  </span><br><span class="line">!?cp[?]  引用最近包含cp的命令</span><br></pre></td></tr></table></figure></p>
-<p>把感叹号”!”放在双引号里，执行命令会出错，比如: echo “hello!”，单如果是在一个脚本文件里则没有问题，因为在脚本文件中，bash的历史机制被禁用。  </p>
-<h1 id="从历史记录中使用命令号来运行命令"><a href="#从历史记录中使用命令号来运行命令" class="headerlink" title="从历史记录中使用命令号来运行命令"></a>从历史记录中使用命令号来运行命令</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">history        #先执行history查看历史执行命令的命令号</span><br><span class="line">!8036          #感叹号+命令号，执行该条历史命令(正着来)  </span><br><span class="line">!-1            #执行历史执行命令记录中的倒数第一条(倒着来，用负数表示，等效于 !!)</span><br><span class="line">!-2</span><br></pre></td></tr></table></figure>
-<h1 id="命令参数复用"><a href="#命令参数复用" class="headerlink" title="命令参数复用"></a>命令参数复用</h1><ol>
-<li><p>!$复用上一次执行只带一个参数的命令参数  </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ls baidu</span><br><span class="line">ls -l !$    #!$等效于取上一条命令的第一个参数=&gt;  ls -l baidu</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>多参数复用</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">cp file dir</span><br><span class="line">!^      #上次执行命令的第一个参数</span><br><span class="line">!cp:2   #感叹号+命令名:参数序号n，复用上次执行命令的第n个参数  </span><br><span class="line">!*      #复用上次执行命令的所有参数</span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/06/14/vim文本选择-复制-粘贴/" itemprop="url">
-                  vim文本选择/复制/粘贴
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-06-14T07:08:46+08:00" content="2016-06-14">
-              2016-06-14
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/technique/" itemprop="url" rel="index">
-                    <span itemprop="name">技术</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="可视化模式"><a href="#可视化模式" class="headerlink" title="可视化模式"></a>可视化模式</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">v        按字符选择，可精确的字符选中  </span><br><span class="line">V        按行选择，一行一行的选中</span><br><span class="line">ctrl+v   按矩形框选择，构造一个矩形框选择</span><br></pre></td></tr></table></figure>
-<h1 id="几个命令复习"><a href="#几个命令复习" class="headerlink" title="几个命令复习"></a>几个命令复习</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">r 替换光标处字符命令，替换后还是命令模式    </span><br><span class="line">s 删除光标处字符开始进入修改编辑模式</span><br><span class="line">ctrl+r 恢复对u命令的使用  </span><br><span class="line">yy 复制当前行的内容到vi缓冲区  </span><br><span class="line">yw 复制当前光标所在位置到单词尾字符的内容到vi缓冲区  </span><br><span class="line">y$ 复制当前光标位置到行尾  </span><br><span class="line">y^ 复制行首到当前光标位置前一字符处  </span><br><span class="line">5yy 复制5行  </span><br><span class="line">5yw 复制5个单词  </span><br><span class="line">:3,5y 复制第3行到第5行的内容到缓冲区(末行模式)  </span><br><span class="line">:s/old/new/c  当前行替换操作，加c确认后才替换  </span><br><span class="line">:s/old/new/gc</span><br><span class="line">:sp filename 在同一编辑窗口中打开第二个文件，可用ctrl+w来切换     </span><br><span class="line">:!cmd   在vim系统中执行系统命令</span><br></pre></td></tr></table></figure>
-<h1 id="临时文件操作"><a href="#临时文件操作" class="headerlink" title="临时文件操作"></a>临时文件操作</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">O 只读打开，不能改变文件内容  </span><br><span class="line">E 继续编辑，不恢复.swp文件保存的内容  </span><br><span class="line">R 将恢复上次编辑未保存的内容  </span><br><span class="line">Q 退出vim </span><br><span class="line">D 删除.swp文件  </span><br><span class="line">vim -r filename 恢复未保存内容</span><br></pre></td></tr></table></figure>
-<h1 id="vim常用命令复习"><a href="#vim常用命令复习" class="headerlink" title="vim常用命令复习"></a>vim常用命令复习</h1><ol>
-<li><p>在代码块中来回切换  </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">命令模式下输入 %   </span><br><span class="line">输入&#123; ，跳转到上一个段落  </span><br><span class="line">输入&#125;， 跳转到下一个段落</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>检查当前编辑(比如C/C++)源文件所有的include文件路径是否都存在  </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">:checkpath</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>文本折叠  </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">自动折叠设置  </span><br><span class="line">:set foldmethod=indent</span><br><span class="line">:set foldenable</span><br><span class="line">创建折叠后，移动鼠标到折叠行，normal模式下输入:  </span><br><span class="line">zo      #打开鼠标所在处的折叠  </span><br><span class="line">zc      #关闭鼠标所在处的最小折叠    </span><br><span class="line">zM      #关闭文件中所有的折叠</span><br><span class="line">zR      #打开文件中所有的折叠  </span><br><span class="line">za      #以toggle的方式打开和关闭折叠</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>设置paste剪贴板的数据，以保持原格式  </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">set paste</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>使用命令</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">gd  跳转到变量声明，并高亮所有使用该变量的地方  </span><br><span class="line">gg=G 全篇自动缩进，按gg时首先会跳转到文件首行  </span><br><span class="line">=G  鼠标所在行单行缩进</span><br><span class="line">ctrl+]  #定位到函数原型处  </span><br><span class="line">ctrl+t  #回到上一次跳转处  </span><br><span class="line">ctrl+p #自动补全(编码状态)</span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/06/13/PHP之strtotime/" itemprop="url">
-                  PHP之strtotime
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-06-13T23:18:34+08:00" content="2016-06-13">
-              2016-06-13
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/technique/" itemprop="url" rel="index">
-                    <span itemprop="name">技术</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="用途"><a href="#用途" class="headerlink" title="用途"></a>用途</h1><p>strtotime用于将英文文本的日期时间描述解析为unix时间戳。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">strtotim(time, now); // 成功返回时间戳，失败返回FALSE</span><br></pre></td></tr></table></figure></p>
-<p>其中time规定要解析的时间字符串。time字符串参数是必须的，不能为空，否则返回false。<br>now用来计算返回值的时间戳，默认使用系统当前时间，即相当于now参数给出的时间。<br>time和now字符串参数都不区分大小写。  </p>
-<ol>
-<li><p>获取指定日期的unix时间戳  </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">strtotime(&quot;2016-06-14&quot;);  //返回2016年06月14日0点0分0秒的时间戳</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>返回英文文本日期的时间戳  </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">strtotime(&quot;now&quot;);  </span><br><span class="line">strtotime(&quot;+1 day&quot;);   //打印明天此时的时间戳，相对与此时系统时间(默认)加1天  </span><br><span class="line">strtotime(&quot;+1 days&quot;);  //打印明天此时的时间戳，相对与此时系统时间(默认)加1天  </span><br><span class="line">strtotime(&quot;-1 day&quot;);   //打印昨天此时的时间戳  </span><br><span class="line">strtotime(&quot;+10 days&quot;);   //打印10天后此时的时间戳  </span><br><span class="line">strtotime(&quot;3 October 2016&quot;);  </span><br><span class="line">strtotime(&quot;+5 hours&quot;));  </span><br><span class="line">strtotime(&quot;+1 week&quot;);  </span><br><span class="line">strtotime(&quot;+1 week 3 days 7 hours 5 seconds&quot;);  </span><br><span class="line">strtotime(&quot;next Monday&quot;);  //下周周一</span><br><span class="line">strtotime(&quot;last Sunday&quot;);  //上周周日</span><br><span class="line">echo date(&quot;Y-m-d H:i:s&quot;, time());  </span><br><span class="line">echo date(&quot;Y-m-d H:i:s&quot;, strtotime(&quot;+1 day&quot;));  </span><br><span class="line">echo date(&quot;Y-m-d H:i:s&quot;, strtotime(&quot;-1 day&quot;));  </span><br><span class="line">echo date(&quot;Y-m-d H:i:s&quot;, strtotime(&quot;+1 week&quot;));  </span><br><span class="line">echo date(&quot;Y-m-d H:i:s&quot;, strtotime(&quot;next Thursday&quot;));</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>first、second、third……等关键字<br>为辅助性关键字，可与星期，天等组合使用  </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">echo date(&quot;Y-m-d H:i:s&quot;, strtotime(&quot;second sunday&quot;);  //计算当前时间后开始的第一二个星期天</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>previous和next关键字<br>与星期、天等组合，表示指定时间的前一星期或前一天，下一个星期或者下一天。    </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">echo date(&quot;Y-m-d H:i:s&quot;, strtotime(&quot;Previous sunday&quot;, strtotime(&quot;2016-06-13&quot;);</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>last关键字<br>即可以作为上一个，也可以作为最后一个。  </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">echo date(&quot;Y-m-d H:i:s&quot;, strtotime(&quot;last sunday, strtotime(&quot;2016-06-13&quot;)));</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>back和front关键字<br>对一天中的小时向前或向后操作，back表示将时间设置为指定时间值后一小时的15分位置，front则表示将时间设置为指定小时值前一个小时<br>的45分位置。    </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">echo date(&quot;Y-m-d H:i:s&quot;, strtotime(&quot;back of 24&quot;, strtotime(&quot;2016-06-14&quot;)));  </span><br><span class="line">echo date(&quot;Y-m-d H:i:s&quot;, strtotime(&quot;front of 24&quot;, strtotime(&quot;2016-06-14&quot;)));</span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-<h1 id="strtotime-“-1-month”-求值问题"><a href="#strtotime-“-1-month”-求值问题" class="headerlink" title="strtotime(“-1 month”)求值问题"></a>strtotime(“-1 month”)求值问题</h1><p>对于后一月比前一月天数多的情况下得到的结果可能不是你想要的结果，但如果前一月的今天存在的话会返回正常。不存在，会自动将日期计算到<br>下个月。    </p>
-<h1 id="strtotime函数长用于时间大小比较"><a href="#strtotime函数长用于时间大小比较" class="headerlink" title="strtotime函数长用于时间大小比较"></a>strtotime函数长用于时间大小比较</h1><ol>
-<li>首先通过strtotime函数将指定时间转化为时间戳  </li>
-<li>通过转换后的时间戳值进行比较  </li>
-</ol>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/06/13/PHP之date-default-timezone-set/" itemprop="url">
-                  PHP之date_default_timezone_set
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-06-13T22:36:17+08:00" content="2016-06-13">
-              2016-06-13
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/technique/" itemprop="url" rel="index">
-                    <span itemprop="name">技术</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="用法"><a href="#用法" class="headerlink" title="用法"></a>用法</h1><p>sets the default timezone used by all date/time functions。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">bool date_default_timezone_set(timezone);  </span><br><span class="line">bool date_default_timezone_set(string $timezone_identifier);</span><br></pre></td></tr></table></figure></p>
-<p>其中timezone是必须的，取值可为”UTC”，”Europe/Paris”等。如果时区设置不合法，则会对每个日期时间函数的调用产生一条E_NOTICE级别的错误信息打印出来。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">date_default_timezone_set(&apos;Europe/Paris&apos;);  </span><br><span class="line">date_default_timezone_set(&apos;America/New_York&apos;);  </span><br><span class="line">date_default_timezone_set(&apos;Asia/Chongqing&apos;);  </span><br><span class="line">date_default_timezone_set(&apos;Asia/Shanghai&apos;);  </span><br><span class="line">date_default_timezone_set(&apos;Asia/Harbin&apos;);  </span><br><span class="line">date_default_timezone_set(&apos;PRC&apos;); //中国标准时间</span><br></pre></td></tr></table></figure></p>
-<h1 id="补充"><a href="#补充" class="headerlink" title="补充"></a>补充</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">string date_default_timezone_get ( void );</span><br></pre></td></tr></table></figure>
-<p>Gets the default timezone used by all date/time functions in a script</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1563,7 +1678,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">62</span>
+              <span class="site-state-item-count">66</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -1571,7 +1686,7 @@
           
             <div class="site-state-item site-state-categories">
               <a href="/categories">
-                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-count">6</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -1580,7 +1695,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">36</span>
+                <span class="site-state-item-count">37</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -1662,7 +1777,7 @@
         <div class="copyright" >
   
   &copy;  2016 - 
-  <span itemprop="copyrightYear">2017</span>
+  <span itemprop="copyrightYear">2018</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
