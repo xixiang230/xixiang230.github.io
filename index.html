@@ -289,30 +289,27 @@
 
       
         
-          
-            <h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>分布式系统本质上来说就是不同节点上的进程并发执行，并且相互之间对进程的行为进行协调处理的过程。不同节点上的进程互相协调行为的过程叫做分布式同步。许多分布式系统都需要一个进程来作为任务的协调者，执行一些其它进程并不执行的特殊操作，自动选举出一个协调者的过程就是分布式选举，Zookeeper正是为了解决这一系列问题。</p>
-<h1 id="ZK服务启动"><a href="#ZK服务启动" class="headerlink" title="ZK服务启动"></a>ZK服务启动</h1><p>Zk服务的启动方式有：单机模式，伪分布式模式，分布式模式。</p>
-<h1 id="单机模式"><a href="#单机模式" class="headerlink" title="单机模式"></a>单机模式</h1><p>单机模式意味着只有一台机器，流程简单，通过读物conf目录下的zoo.cfg配置文件启动。几个重要参数：</p>
-<ol>
-<li>tickTime：用于ZK服务端和客户端的会话控制，包括心跳，一般会话超时时间为该值得两倍，单位为毫秒。</li>
-<li>dataDir：该目录用来存放数据库的镜像和操作数据库的日志。</li>
-<li>clientPort：ZK服务端监听客户端的端口，默认2181。<br>ZK服务启动后，可通过ps或jps命令查看。<br>也可以通过启动脚本自带参数status来查看ZK进程状态<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./zkServer.sh status</span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-<p>ZK服务运行后，可以通过命令行工具访问之<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./zkCli.sh -server localhost:2181</span><br></pre></td></tr></table></figure></p>
-<h1 id="分布式模式"><a href="#分布式模式" class="headerlink" title="分布式模式"></a>分布式模式</h1><p>多台ZK机器构成一个集群，集群内的所有机器成为quorum。集群最小配置为3台，最佳配置为5台。其中1台为Leader，另外4台为Follower，一旦Leader宕机，剩余的Follower就会重新选举出Leader。<br>分布式字段</p>
+          <!-- vim-markdown-toc GFM -->
 <ul>
-<li>initLimit：follower对于leader的初始化连接timeout时间；</li>
-<li>syncLimit：follower对于leader的同步timeout时间</li>
-<li>timeout的计算公式为：initLimit<em>tickTime，syncLimit</em>tickTime<br>另外，对于配置：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">server.ID=node1:port1:port2</span><br></pre></td></tr></table></figure>
+<li><a href="#背景">背景</a></li>
+<li><a href="#zk服务部署">ZK服务部署</a><ul>
+<li><a href="#单机模式">单机模式</a></li>
+<li><a href="#分布式模式">分布式模式</a></li>
+</ul>
+</li>
+<li><a href="#启动流程源码解析">启动流程源码解析</a><ul>
+<li><a href="#zkserversh">zkServer.sh</a></li>
+<li><a href="#quorumpeermain">QuorumPeerMain</a></li>
+</ul>
 </li>
 </ul>
-<p>其中port1用于follower和leader之间的通信，采用TCP方式，port2用于选举leader用。</p>
-<h1 id="流程源码解释"><a href="#流程源码解释" class="headerlink" title="流程源码解释"></a>流程源码解释</h1><p>ZK的启动由zkServer.sh发起，真正的起源是Java类QuorumPeerMain，然后进行一系列配置后启动负责ZK服务的线程。</p>
-<h2 id="zkServer-sh"><a href="#zkServer-sh" class="headerlink" title="zkServer.sh"></a>zkServer.sh</h2><p>这个脚本有好几种参数选择，包括start，start-foregroud，print-cmd，stop等<br>对于start方法，脚本使用nohup命令提交作业</p>
-<h2 id="QuorumPeerMain"><a href="#QuorumPeerMain" class="headerlink" title="QuorumPeerMain"></a>QuorumPeerMain</h2><p>QuorumPeerMain类的Main函数很简单，直接调用initializeAndRun方法，参数即为zkServer.sh传入的参数，比如“start”，在initializeAndRun方法内部，首先启动的是定时清除镜像任务，默认设置为保留3分，由于<br>purgeInterval 这个参数默认设置为 0，所以不会启动镜像定时清除机制<br>接下来，如果配置的 ZooKeeper 服务器大于 1 台，调用 runFromConfig<br>方法进行集群信息配置，并启动 QuorumPeer 线程。<br>每个 QuorumPeer 线程启动之前都会先启动一个 cnxnFactory 线程，首先初始化<br>ServerCnxnFactory，这个是用来接收来自客户端的连接的，也就是这里启动的是一个 TCP<br>服务器。在 ZooKeeper 里提供两种 TCP 服务器的实现，一个是使用 Java 原生 NIO<br>的方式，另外一个是使用 NETTY。默认是 NIO 的方式，一个典型的 Reactor 模型，</p>
-
-          
+<!-- vim-markdown-toc -->
+<h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>分布式系统本质上就是&lt;font color=”red&gt;在不同节点上并发执行进程，并且相互之间对进程的行为进行协调处理的过程。不同节点上的进程互相协调行为的过程叫做分布式同步。许多分布式系统都需要一个进程作为任务的协调者，该进程会执行一些其它进程并不执行的特殊操作，而自动选举出一个协调者的过程就是分布式选举，Zookeeper正是为了解决这一系列问题。<br>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2018/01/02/ZooKeeper源码阅读之服务启动/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
         
       
     </div>
@@ -626,6 +623,102 @@
 <h1 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h1><p><img src="https://github.com/xixiang230/xixiang230.github.io/blob/master/images/trunk.jpg?raw=true" alt="trunk"><br>上图两台交换机的f0/1口配置为VLAN2，f0/0口配置成trunk接口，这样R1和R2就相当于直连可以互相ping通。R1发出的包，经过SW1在二层上呗打上VLAN2的标记，通过trunk链路转发到SW2，SW2去掉帧上的VLAN2的标记，经过VLAN2的端口即f0/1口发送到R2。</p>
 
           
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/12/31/Go并发/" itemprop="url">
+                  Go并发
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2017-12-31T23:01:51+08:00" content="2017-12-31">
+              2017-12-31
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h1 id="goroutine"><a href="#goroutine" class="headerlink" title="goroutine"></a>goroutine</h1><p>goruotine本质上就是协程，比线程颗粒更小，十几个goroutine可能提现在底层就是五六个线程，且Go语言内部已经帮你实现了goroutine直接的内存共享。执行一个groutine只需要极小的栈内存(4~5KB)，具体会根据相应的数据伸缩。正因为如此，可同时运行成千上万个并发任务，goroutine比thread更易用、高效、轻便。<br>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2017/12/31/Go并发/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
         
       
     </div>
@@ -1363,101 +1456,6 @@ fs.BoolVar(&amp;s.EnableAggregatorRouting, &quot;enable-aggregator-routing&quot;
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2017/09/11/Docker源码结构/" itemprop="url">
-                  Docker源码结构
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2017-09-11T14:05:01+08:00" content="2017-09-11">
-              2017-09-11
-            </time>
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>.<br>├── api<br>│   ├── common.go<br>│   ├── common_unix.go<br>│   ├── common_windows.go<br>│   ├── errdefs<br>│   ├── README.md<br>│   ├── server<br>│   ├── swagger-gen.yaml<br>│   ├── swagger.yaml<br>│   ├── templates<br>│   └── types<br>├── AUTHORS<br>├── builder<br>│   ├── builder.go<br>│   ├── dockerfile<br>│   ├── dockerignore<br>│   ├── fscache<br>│   └── remotecontext<br>├── CHANGELOG.md<br>├── cli          //docker命令动作实现<br>│   ├── cobra.go<br>│   ├── config<br>│   ├── debug<br>│   ├── error.go<br>│   └── required.go<br>├── client<br>│   ├── build_prune.go<br>│   ├── checkpoint_create.go<br>│   ├── checkpoint_create_test.go<br>│   ├── checkpoint_delete.go<br>│   ├── checkpoint_delete_test.go<br>│   ├── checkpoint_list.go<br>│   ├── checkpoint_list_test.go<br>│   ├── client.go<br>│   ├── client_mock_test.go<br>│   ├── client_test.go<br>│   ├── client_unix.go<br>│   ├── client_windows.go<br>│   ├── config_create.go<br>│   ├── config_create_test.go<br>│   ├── config_inspect.go<br>│   ├── config_inspect_test.go<br>│   ├── config_list.go<br>│   ├── config_list_test.go<br>│   ├── config_remove.go<br>│   ├── config_remove_test.go<br>│   ├── config_update.go<br>│   ├── config_update_test.go<br>│   ├── container_attach.go<br>│   ├── container_commit.go<br>│   ├── container_commit_test.go<br>│   ├── container_copy.go<br>│   ├── container_copy_test.go<br>│   ├── container_create.go<br>│   ├── container_create_test.go<br>│   ├── container_diff.go<br>│   ├── container_diff_test.go<br>│   ├── container_exec.go<br>│   ├── container_exec_test.go<br>│   ├── container_export.go<br>│   ├── container_export_test.go<br>│   ├── container_inspect.go<br>│   ├── container_inspect_test.go<br>│   ├── container_kill.go<br>│   ├── container_kill_test.go<br>│   ├── container_list.go<br>│   ├── container_list_test.go<br>│   ├── container_logs.go<br>│   ├── container_logs_test.go<br>│   ├── container_pause.go<br>│   ├── container_pause_test.go<br>│   ├── container_prune.go<br>│   ├── container_prune_test.go<br>│   ├── container_remove.go<br>│   ├── container_remove_test.go<br>│   ├── container_rename.go<br>│   ├── container_rename_test.go<br>│   ├── container_resize.go<br>│   ├── container_resize_test.go<br>│   ├── container_restart.go<br>│   ├── container_restart_test.go<br>│   ├── container_start.go<br>│   ├── container_start_test.go<br>│   ├── container_stats.go<br>│   ├── container_stats_test.go<br>│   ├── container_stop.go<br>│   ├── container_stop_test.go<br>│   ├── container_top.go<br>│   ├── container_top_test.go<br>│   ├── container_unpause.go<br>│   ├── container_unpause_test.go<br>│   ├── container_update.go<br>│   ├── container_update_test.go<br>│   ├── container_wait.go<br>│   ├── container_wait_test.go<br>│   ├── disk_usage.go<br>│   ├── disk_usage_test.go<br>│   ├── distribution_inspect.go<br>│   ├── distribution_inspect_test.go<br>│   ├── errors.go<br>│   ├── events.go<br>│   ├── events_test.go<br>│   ├── hijack.go<br>│   ├── image_build.go<br>│   ├── image_build_test.go<br>│   ├── image_create.go<br>│   ├── image_create_test.go<br>│   ├── image_history.go<br>│   ├── image_history_test.go<br>│   ├── image_import.go<br>│   ├── image_import_test.go<br>│   ├── image_inspect.go<br>│   ├── image_inspect_test.go<br>│   ├── image_list.go<br>│   ├── image_list_test.go<br>│   ├── image_load.go<br>│   ├── image_load_test.go<br>│   ├── image_prune.go<br>│   ├── image_prune_test.go<br>│   ├── image_pull.go<br>│   ├── image_pull_test.go<br>│   ├── image_push.go<br>│   ├── image_push_test.go<br>│   ├── image_remove.go<br>│   ├── image_remove_test.go<br>│   ├── image_save.go<br>│   ├── image_save_test.go<br>│   ├── image_search.go<br>│   ├── image_search_test.go<br>│   ├── image_tag.go<br>│   ├── image_tag_test.go<br>│   ├── info.go<br>│   ├── info_test.go<br>│   ├── interface_experimental.go<br>│   ├── interface.go<br>│   ├── interface_stable.go<br>│   ├── login.go<br>│   ├── network_connect.go<br>│   ├── network_connect_test.go<br>│   ├── network_create.go<br>│   ├── network_create_test.go<br>│   ├── network_disconnect.go<br>│   ├── network_disconnect_test.go<br>│   ├── network_inspect.go<br>│   ├── network_inspect_test.go<br>│   ├── network_list.go<br>│   ├── network_list_test.go<br>│   ├── network_prune.go<br>│   ├── network_prune_test.go<br>│   ├── network_remove.go<br>│   ├── network_remove_test.go<br>│   ├── node_inspect.go<br>│   ├── node_inspect_test.go<br>│   ├── node_list.go<br>│   ├── node_list_test.go<br>│   ├── node_remove.go<br>│   ├── node_remove_test.go<br>│   ├── node_update.go<br>│   ├── node_update_test.go<br>│   ├── ping.go<br>│   ├── ping_test.go<br>│   ├── plugin_create.go<br>│   ├── plugin_disable.go<br>│   ├── plugin_disable_test.go<br>│   ├── plugin_enable.go<br>│   ├── plugin_enable_test.go<br>│   ├── plugin_inspect.go<br>│   ├── plugin_inspect_test.go<br>│   ├── plugin_install.go<br>│   ├── plugin_list.go<br>│   ├── plugin_list_test.go<br>│   ├── plugin_push.go<br>│   ├── plugin_push_test.go<br>│   ├── plugin_remove.go<br>│   ├── plugin_remove_test.go<br>│   ├── plugin_set.go<br>│   ├── plugin_set_test.go<br>│   ├── plugin_upgrade.go<br>│   ├── README.md<br>│   ├── request.go<br>│   ├── request_test.go<br>│   ├── secret_create.go<br>│   ├── secret_create_test.go<br>│   ├── secret_inspect.go<br>│   ├── secret_inspect_test.go<br>│   ├── secret_list.go<br>│   ├── secret_list_test.go<br>│   ├── secret_remove.go<br>│   ├── secret_remove_test.go<br>│   ├── secret_update.go<br>│   ├── secret_update_test.go<br>│   ├── service_create.go<br>│   ├── service_create_test.go<br>│   ├── service_inspect.go<br>│   ├── service_inspect_test.go<br>│   ├── service_list.go<br>│   ├── service_list_test.go<br>│   ├── service_logs.go<br>│   ├── service_logs_test.go<br>│   ├── service_remove.go<br>│   ├── service_remove_test.go<br>│   ├── service_update.go<br>│   ├── service_update_test.go<br>│   ├── session.go<br>│   ├── swarm_get_unlock_key.go<br>│   ├── swarm_get_unlock_key_test.go<br>│   ├── swarm_init.go<br>│   ├── swarm_init_test.go<br>│   ├── swarm_inspect.go<br>│   ├── swarm_inspect_test.go<br>│   ├── swarm_join.go<br>│   ├── swarm_join_test.go<br>│   ├── swarm_leave.go<br>│   ├── swarm_leave_test.go<br>│   ├── swarm_unlock.go<br>│   ├── swarm_unlock_test.go<br>│   ├── swarm_update.go<br>│   ├── swarm_update_test.go<br>│   ├── task_inspect.go<br>│   ├── task_inspect_test.go<br>│   ├── task_list.go<br>│   ├── task_list_test.go<br>│   ├── task_logs.go<br>│   ├── testdata<br>│   ├── tlsconfig_clone.go<br>│   ├── tlsconfig_clone_go17.go<br>│   ├── transport.go<br>│   ├── utils.go<br>│   ├── version.go<br>│   ├── volume_create.go<br>│   ├── volume_create_test.go<br>│   ├── volume_inspect.go<br>│   ├── volume_inspect_test.go<br>│   ├── volume_list.go<br>│   ├── volume_list_test.go<br>│   ├── volume_prune.go<br>│   ├── volume_remove.go<br>│   └── volume_remove_test.go<br>├── cmd<br>│   └── dockerd<br>├── container<br>│   ├── archive.go<br>│   ├── container.go<br>│   ├── container_linux.go<br>│   ├── container_notlinux.go<br>│   ├── container_unit_test.go<br>│   ├── container_unix.go<br>│   ├── container_windows.go<br>│   ├── env.go<br>│   ├── env_test.go<br>│   ├── health.go<br>│   ├── history.go<br>│   ├── memory_store.go<br>│   ├── memory_store_test.go<br>│   ├── monitor.go<br>│   ├── mounts_unix.go<br>│   ├── mounts_windows.go<br>│   ├── state.go<br>│   ├── state_solaris.go<br>│   ├── state_test.go<br>│   ├── state_unix.go<br>│   ├── state_windows.go<br>│   ├── store.go<br>│   ├── stream<br>│   ├── view.go<br>│   └── view_test.go<br>├── contrib<br>│   ├── apparmor<br>│   ├── builder<br>│   ├── check-config.sh<br>│   ├── desktop-integration<br>│   ├── docker-device-tool<br>│   ├── dockerize-disk.sh<br>│   ├── docker-machine-install-bundle.sh<br>│   ├── download-frozen-image-v1.sh<br>│   ├── download-frozen-image-v2.sh<br>│   ├── editorconfig<br>│   ├── gitdm<br>│   ├── httpserver<br>│   ├── init<br>│   ├── mac-install-bundle.sh<br>│   ├── mkimage<br>│   ├── mkimage-alpine.sh<br>│   ├── mkimage-archarm-pacman.conf<br>│   ├── mkimage-arch-pacman.conf<br>│   ├── mkimage-arch.sh<br>│   ├── mkimage-crux.sh<br>│   ├── mkimage-pld.sh<br>│   ├── mkimage.sh<br>│   ├── mkimage-yum.sh<br>│   ├── nnp-test<br>│   ├── nuke-graph-directory.sh<br>│   ├── project-stats.sh<br>│   ├── README.md<br>│   ├── report-issue.sh<br>│   ├── reprepro<br>│   ├── REVIEWERS<br>│   ├── selinux-fedora-24<br>│   ├── selinux-oraclelinux-7<br>│   ├── syntax<br>│   ├── syscall-test<br>│   ├── udev<br>│   └── vagrant-docker<br>├── CONTRIBUTING.md<br>├── daemon         //<br>│   ├── apparmor_default.go<br>│   ├── apparmor_default_unsupported.go<br>│   ├── archive.go<br>│   ├── archive_tarcopyoptions.go<br>│   ├── archive_tarcopyoptions_unix.go<br>│   ├── archive_tarcopyoptions_windows.go<br>│   ├── archive_unix.go<br>│   ├── archive_windows.go<br>│   ├── attach.go<br>│   ├── auth.go<br>│   ├── bindmount_solaris.go<br>│   ├── bindmount_unix.go<br>│   ├── build.go<br>│   ├── cache.go<br>│   ├── caps<br>│   ├── changes.go<br>│   ├── checkpoint.go<br>│   ├── cluster<br>│   ├── cluster.go<br>│   ├── commit.go<br>│   ├── config<br>│   ├── configs.go<br>│   ├── configs_linux.go<br>│   ├── configs_unsupported.go<br>│   ├── configs_windows.go<br>│   ├── container.go<br>│   ├── container_linux.go<br>│   ├── container_operations.go<br>│   ├── container_operations_solaris.go<br>│   ├── container_operations_unix.go<br>│   ├── container_operations_windows.go<br>│   ├── container_windows.go<br>│   ├── create.go<br>│   ├── create_unix.go<br>│   ├── create_windows.go<br>│   ├── daemon_experimental.go<br>│   ├── daemon.go<br>│   ├── daemon_linux.go<br>│   ├── daemon_linux_test.go<br>│   ├── daemon_solaris.go<br>│   ├── daemon_test.go<br>│   ├── daemon_unix.go<br>│   ├── daemon_unix_test.go<br>│   ├── daemon_unsupported.go<br>│   ├── daemon_windows.go<br>│   ├── debugtrap_unix.go<br>│   ├── debugtrap_unsupported.go<br>│   ├── debugtrap_windows.go<br>│   ├── delete.go<br>│   ├── delete_test.go<br>│   ├── dependency.go<br>│   ├── discovery<br>│   ├── disk_usage.go<br>│   ├── errors.go<br>│   ├── events<br>│   ├── events.go<br>│   ├── events_test.go<br>│   ├── exec<br>│   ├── exec.go<br>│   ├── exec_linux.go<br>│   ├── exec_solaris.go<br>│   ├── exec_windows.go<br>│   ├── export.go<br>│   ├── getsize_unix.go<br>│   ├── graphdriver<br>│   ├── health.go<br>│   ├── health_test.go<br>│   ├── image_delete.go<br>│   ├── image_exporter.go<br>│   ├── image.go<br>│   ├── image_history.go<br>│   ├── image_inspect.go<br>│   ├── image_pull.go<br>│   ├── image_push.go<br>│   ├── images.go<br>│   ├── image_tag.go<br>│   ├── import.go<br>│   ├── info.go<br>│   ├── info_unix.go<br>│   ├── info_unix_test.go<br>│   ├── info_windows.go<br>│   ├── initlayer<br>│   ├── inspect.go<br>│   ├── inspect_solaris.go<br>│   ├── inspect_unix.go<br>│   ├── inspect_windows.go<br>│   ├── keys.go<br>│   ├── keys_unsupported.go<br>│   ├── kill.go<br>│   ├── links<br>│   ├── links.go<br>│   ├── listeners<br>│   ├── list.go<br>│   ├── list_unix.go<br>│   ├── list_windows.go<br>│   ├── logdrivers_linux.go<br>│   ├── logdrivers_windows.go<br>│   ├── logger<br>│   ├── logs.go<br>│   ├── logs_test.go<br>│   ├── metrics.go<br>│   ├── metrics_unix.go<br>│   ├── metrics_unsupported.go<br>│   ├── monitor.go<br>│   ├── monitor_linux.go<br>│   ├── monitor_solaris.go<br>│   ├── monitor_windows.go<br>│   ├── mounts.go<br>│   ├── names<br>│   ├── names.go<br>│   ├── network<br>│   ├── network.go<br>│   ├── oci_linux.go<br>│   ├── oci_solaris.go<br>│   ├── oci_windows.go<br>│   ├── pause.go<br>│   ├── prune.go<br>│   ├── reload.go<br>│   ├── reload_test.go<br>│   ├── rename.go<br>│   ├── resize.go<br>│   ├── restart.go<br>│   ├── search.go<br>│   ├── search_test.go<br>│   ├── seccomp_disabled.go<br>│   ├── seccomp_linux.go<br>│   ├── seccomp_unsupported.go<br>│   ├── secrets.go<br>│   ├── secrets_linux.go<br>│   ├── secrets_unsupported.go<br>│   ├── secrets_windows.go<br>│   ├── selinux_linux.go<br>│   ├── selinux_unsupported.go<br>│   ├── start.go<br>│   ├── start_unix.go<br>│   ├── start_windows.go<br>│   ├── stats<br>│   ├── stats_collector.go<br>│   ├── stats.go<br>│   ├── stats_unix.go<br>│   ├── stats_windows.go<br>│   ├── stop.go<br>│   ├── testdata<br>│   ├── top_unix.go<br>│   ├── top_unix_test.go<br>│   ├── top_windows.go<br>│   ├── trustkey.go<br>│   ├── trustkey_test.go<br>│   ├── unpause.go<br>│   ├── update.go<br>│   ├── update_linux.go<br>│   ├── update_solaris.go<br>│   ├── update_windows.go<br>│   ├── volumes.go<br>│   ├── volumes_unit_test.go<br>│   ├── volumes_unix.go<br>│   ├── volumes_unix_test.go<br>│   ├── volumes_windows.go<br>│   ├── wait.go<br>│   └── workdir.go<br>├── distribution<br>│   ├── config.go<br>│   ├── errors.go<br>│   ├── fixtures<br>│   ├── metadata<br>│   ├── pull.go<br>│   ├── pull_v1.go<br>│   ├── pull_v2.go<br>│   ├── pull_v2_test.go<br>│   ├── pull_v2_unix.go<br>│   ├── pull_v2_windows.go<br>│   ├── push.go<br>│   ├── push_v1.go<br>│   ├── push_v2.go<br>│   ├── push_v2_test.go<br>│   ├── registry.go<br>│   ├── registry_unit_test.go<br>│   ├── utils<br>│   └── xfer<br>├── Dockerfile<br>├── Dockerfile.aarch64<br>├── Dockerfile.armhf<br>├── Dockerfile.ppc64le<br>├── Dockerfile.s390x<br>├── Dockerfile.simple<br>├── Dockerfile.solaris<br>├── Dockerfile.windows<br>├── dockerversion<br>│   ├── useragent.go<br>│   └── version_lib.go<br>├── docs<br>│   ├── api<br>│   └── static_files<br>├── hack<br>│   ├── dind<br>│   ├── dockerfile<br>│   ├── generate-authors.sh<br>│   ├── generate-swagger-api.sh<br>│   ├── integration-cli-on-swarm<br>│   ├── Jenkins<br>│   ├── make<br>│   ├── make.ps1<br>│   ├── make.sh<br>│   ├── README.md<br>│   ├── release.sh<br>│   ├── test<br>│   ├── validate<br>│   └── vendor.sh<br>├── image<br>│   ├── cache<br>│   ├── fs.go<br>│   ├── fs_test.go<br>│   ├── image.go<br>│   ├── image_test.go<br>│   ├── rootfs.go<br>│   ├── spec<br>│   ├── store.go<br>│   ├── store_test.go<br>│   ├── tarexport<br>│   └── v1<br>├── integration<br>│   ├── container<br>│   ├── doc.go<br>│   ├── service<br>│   └── util<br>├── integration-cli<br>│   ├── benchmark_test.go<br>│   ├── checker<br>│   ├── check_test.go<br>│   ├── cli<br>│   ├── daemon<br>│   ├── daemon_swarm_hack_test.go<br>│   ├── docker_api_attach_test.go<br>│   ├── docker_api_auth_test.go<br>│   ├── docker_api_build_test.go<br>│   ├── docker_api_containers_test.go<br>│   ├── docker_api_containers_windows_test.go<br>│   ├── docker_api_create_test.go<br>│   ├── docker_api_events_test.go<br>│   ├── docker_api_exec_resize_test.go<br>│   ├── docker_api_exec_test.go<br>│   ├── docker_api_images_test.go<br>│   ├── docker_api_info_test.go<br>│   ├── docker_api_inspect_test.go<br>│   ├── docker_api_inspect_unix_test.go<br>│   ├── docker_api_ipcmode_test.go<br>│   ├── docker_api_logs_test.go<br>│   ├── docker_api_network_test.go<br>│   ├── docker_api_resize_test.go<br>│   ├── docker_api_session_test.go<br>│   ├── docker_api_stats_test.go<br>│   ├── docker_api_stats_unix_test.go<br>│   ├── docker_api_swarm_config_test.go<br>│   ├── docker_api_swarm_node_test.go<br>│   ├── docker_api_swarm_secret_test.go<br>│   ├── docker_api_swarm_service_test.go<br>│   ├── docker_api_swarm_test.go<br>│   ├── docker_api_test.go<br>│   ├── docker_api_update_unix_test.go<br>│   ├── docker_api_version_test.go<br>│   ├── docker_api_volumes_test.go<br>│   ├── docker_cli_attach_test.go<br>│   ├── docker_cli_attach_unix_test.go<br>│   ├── docker_cli_authz_plugin_v2_test.go<br>│   ├── docker_cli_authz_unix_test.go<br>│   ├── docker_cli_build_test.go<br>│   ├── docker_cli_build_unix_test.go<br>│   ├── docker_cli_by_digest_test.go<br>│   ├── docker_cli_commit_test.go<br>│   ├── docker_cli_config_create_test.go<br>│   ├── docker_cli_config_inspect_test.go<br>│   ├── docker_cli_config_ls_test.go<br>│   ├── docker_cli_cp_from_container_test.go<br>│   ├── docker_cli_cp_test.go<br>│   ├── docker_cli_cp_to_container_test.go<br>│   ├── docker_cli_cp_to_container_unix_test.go<br>│   ├── docker_cli_cp_utils_test.go<br>│   ├── docker_cli_create_test.go<br>│   ├── docker_cli_create_unix_test.go<br>│   ├── docker_cli_daemon_plugins_test.go<br>│   ├── docker_cli_daemon_test.go<br>│   ├── docker_cli_diff_test.go<br>│   ├── docker_cli_events_test.go<br>│   ├── docker_cli_events_unix_test.go<br>│   ├── docker_cli_exec_test.go<br>│   ├── docker_cli_exec_unix_test.go<br>│   ├── docker_cli_experimental_test.go<br>│   ├── docker_cli_export_import_test.go<br>│   ├── docker_cli_external_graphdriver_unix_test.go<br>│   ├── docker_cli_external_volume_driver_unix_test.go<br>│   ├── docker_cli_health_test.go<br>│   ├── docker_cli_history_test.go<br>│   ├── docker_cli_images_test.go<br>│   ├── docker_cli_import_test.go<br>│   ├── docker_cli_info_test.go<br>│   ├── docker_cli_info_unix_test.go<br>│   ├── docker_cli_inspect_test.go<br>│   ├── docker_cli_kill_test.go<br>│   ├── docker_cli_links_test.go<br>│   ├── docker_cli_links_unix_test.go<br>│   ├── docker_cli_login_test.go<br>│   ├── docker_cli_logout_test.go<br>│   ├── docker_cli_logs_bench_test.go<br>│   ├── docker_cli_logs_test.go<br>│   ├── docker_cli_nat_test.go<br>│   ├── docker_cli_netmode_test.go<br>│   ├── docker_cli_network_unix_test.go<br>│   ├── docker_cli_oom_killed_test.go<br>│   ├── docker_cli_pause_test.go<br>│   ├── docker_cli_plugins_logdriver_test.go<br>│   ├── docker_cli_plugins_test.go<br>│   ├── docker_cli_port_test.go<br>│   ├── docker_cli_proxy_test.go<br>│   ├── docker_cli_prune_unix_test.go<br>│   ├── docker_cli_ps_test.go<br>│   ├── docker_cli_pull_local_test.go<br>│   ├── docker_cli_pull_test.go<br>│   ├── docker_cli_pull_trusted_test.go<br>│   ├── docker_cli_push_test.go<br>│   ├── docker_cli_registry_user_agent_test.go<br>│   ├── docker_cli_rename_test.go<br>│   ├── docker_cli_restart_test.go<br>│   ├── docker_cli_rmi_test.go<br>│   ├── docker_cli_rm_test.go<br>│   ├── docker_cli_run_test.go<br>│   ├── docker_cli_run_unix_test.go<br>│   ├── docker_cli_save_load_test.go<br>│   ├── docker_cli_save_load_unix_test.go<br>│   ├── docker_cli_search_test.go<br>│   ├── docker_cli_secret_create_test.go<br>│   ├── docker_cli_secret_inspect_test.go<br>│   ├── docker_cli_secret_ls_test.go<br>│   ├── docker_cli_service_create_test.go<br>│   ├── docker_cli_service_health_test.go<br>│   ├── docker_cli_service_logs_test.go<br>│   ├── docker_cli_service_scale_test.go<br>│   ├── docker_cli_service_update_test.go<br>│   ├── docker_cli_sni_test.go<br>│   ├── docker_cli_start_test.go<br>│   ├── docker_cli_stats_test.go<br>│   ├── docker_cli_stop_test.go<br>│   ├── docker_cli_swarm_test.go<br>│   ├── docker_cli_swarm_unix_test.go<br>│   ├── docker_cli_tag_test.go<br>│   ├── docker_cli_top_test.go<br>│   ├── docker_cli_update_test.go<br>│   ├── docker_cli_update_unix_test.go<br>│   ├── docker_cli_userns_test.go<br>│   ├── docker_cli_v2_only_test.go<br>│   ├── docker_cli_version_test.go<br>│   ├── docker_cli_volume_test.go<br>│   ├── docker_cli_wait_test.go<br>│   ├── docker_deprecated_api_v124_test.go<br>│   ├── docker_deprecated_api_v124_unix_test.go<br>│   ├── docker_experimental_network_test.go<br>│   ├── docker_hub_pull_suite_test.go<br>│   ├── docker_utils_test.go<br>│   ├── environment<br>│   ├── events_utils_test.go<br>│   ├── fixtures<br>│   ├── fixtures_linux_daemon_test.go<br>│   ├── registry<br>│   ├── request<br>│   ├── requirement<br>│   ├── requirements_test.go<br>│   ├── requirements_unix_test.go<br>│   ├── test_vars_exec_test.go<br>│   ├── test_vars_noexec_test.go<br>│   ├── test_vars_noseccomp_test.go<br>│   ├── test_vars_seccomp_test.go<br>│   ├── test_vars_test.go<br>│   ├── test_vars_unix_test.go<br>│   ├── test_vars_windows_test.go<br>│   ├── trust_server_test.go<br>│   └── utils_test.go<br>├── internal<br>│   ├── test<br>│   └── testutil<br>├── layer<br>│   ├── empty.go<br>│   ├── empty_test.go<br>│   ├── filestore.go<br>│   ├── filestore_test.go<br>│   ├── filestore_unix.go<br>│   ├── filestore_windows.go<br>│   ├── layer.go<br>│   ├── layer_store.go<br>│   ├── layer_store_windows.go<br>│   ├── layer_test.go<br>│   ├── layer_unix.go<br>│   ├── layer_unix_test.go<br>│   ├── layer_windows.go<br>│   ├── migration.go<br>│   ├── migration_test.go<br>│   ├── mounted_layer.go<br>│   ├── mount_test.go<br>│   ├── ro_layer.go<br>│   ├── ro_layer_unix.go<br>│   └── ro_layer_windows.go<br>├── libcontainerd<br>│   ├── client.go<br>│   ├── client_linux.go<br>│   ├── client_solaris.go<br>│   ├── client_unix.go<br>│   ├── client_windows.go<br>│   ├── container.go<br>│   ├── container_unix.go<br>│   ├── container_windows.go<br>│   ├── oom_linux.go<br>│   ├── oom_solaris.go<br>│   ├── pausemonitor_unix.go<br>│   ├── process.go<br>│   ├── process_unix.go<br>│   ├── process_windows.go<br>│   ├── queue_unix.go<br>│   ├── queue_unix_test.go<br>│   ├── remote.go<br>│   ├── remote_unix.go<br>│   ├── remote_windows.go<br>│   ├── types.go<br>│   ├── types_linux.go<br>│   ├── types_solaris.go<br>│   ├── types_windows.go<br>│   ├── utils_linux.go<br>│   ├── utils_solaris.go<br>│   ├── utils_windows.go<br>│   └── utils_windows_test.go<br>├── LICENSE<br>├── MAINTAINERS<br>├── Makefile<br>├── migrate<br>│   └── v1<br>├── NOTICE<br>├── oci<br>│   ├── defaults.go<br>│   ├── devices_linux.go<br>│   ├── devices_unsupported.go<br>│   └── namespaces.go<br>├── opts<br>│   ├── env.go<br>│   ├── env_test.go<br>│   ├── hosts.go<br>│   ├── hosts_test.go<br>│   ├── hosts_unix.go<br>│   ├── hosts_windows.go<br>│   ├── ip.go<br>│   ├── ip_test.go<br>│   ├── opts.go<br>│   ├── opts_test.go<br>│   ├── opts_unix.go<br>│   ├── opts_windows.go<br>│   ├── quotedstring.go<br>│   ├── quotedstring_test.go<br>│   ├── runtime.go<br>│   ├── ulimit.go<br>│   └── ulimit_test.go<br>├── pkg<br>│   ├── aaparser<br>│   ├── archive<br>│   ├── authorization<br>│   ├── broadcaster<br>│   ├── chrootarchive<br>│   ├── devicemapper<br>│   ├── directory<br>│   ├── discovery<br>│   ├── filenotify<br>│   ├── fileutils<br>│   ├── fsutils<br>│   ├── homedir<br>│   ├── idtools<br>│   ├── ioutils<br>│   ├── jsonlog<br>│   ├── jsonmessage<br>│   ├── locker<br>│   ├── longpath<br>│   ├── loopback<br>│   ├── mount<br>│   ├── namesgenerator<br>│   ├── parsers<br>│   ├── pidfile<br>│   ├── platform<br>│   ├── plugingetter<br>│   ├── plugins<br>│   ├── pools<br>│   ├── progress<br>│   ├── promise<br>│   ├── pubsub<br>│   ├── README.md<br>│   ├── reexec<br>│   ├── signal<br>│   ├── stdcopy<br>│   ├── streamformatter<br>│   ├── stringid<br>│   ├── stringutils<br>│   ├── symlink<br>│   ├── sysinfo<br>│   ├── system<br>│   ├── tailfile<br>│   ├── tarsum<br>│   ├── term<br>│   ├── testutil<br>│   ├── truncindex<br>│   ├── urlutil<br>│   └── useragent<br>├── plugin<br>│   ├── backend_linux.go<br>│   ├── backend_unsupported.go<br>│   ├── blobstore.go<br>│   ├── defs.go<br>│   ├── errors.go<br>│   ├── events.go<br>│   ├── manager.go<br>│   ├── manager_linux.go<br>│   ├── manager_solaris.go<br>│   ├── manager_test.go<br>│   ├── manager_windows.go<br>│   ├── store.go<br>│   ├── store_test.go<br>│   └── v2<br>├── poule.yml<br>├── profiles<br>│   ├── apparmor<br>│   └── seccomp<br>├── project<br>│   ├── ARM.md<br>│   ├── BRANCHES-AND-TAGS.md<br>│   ├── CONTRIBUTING.md -&gt; ../CONTRIBUTING.md<br>│   ├── GOVERNANCE.md<br>│   ├── IRC-ADMINISTRATION.md<br>│   ├── ISSUE-TRIAGE.md<br>│   ├── PACKAGE-REPO-MAINTENANCE.md<br>│   ├── PACKAGERS.md<br>│   ├── PATCH-RELEASES.md<br>│   ├── PRINCIPLES.md<br>│   ├── README.md<br>│   ├── RELEASE-CHECKLIST.md<br>│   ├── RELEASE-PROCESS.md<br>│   ├── REVIEWING.md<br>│   └── TOOLS.md<br>├── README.md<br>├── reference<br>│   ├── errors.go<br>│   ├── store.go<br>│   └── store_test.go<br>├── registry<br>│   ├── auth.go<br>│   ├── auth_test.go<br>│   ├── config.go<br>│   ├── config_test.go<br>│   ├── config_unix.go<br>│   ├── config_windows.go<br>│   ├── endpoint_test.go<br>│   ├── endpoint_v1.go<br>│   ├── errors.go<br>│   ├── registry.go<br>│   ├── registry_mock_test.go<br>│   ├── registry_test.go<br>│   ├── resumable<br>│   ├── service.go<br>│   ├── service_v1.go<br>│   ├── service_v1_test.go<br>│   ├── service_v2.go<br>│   ├── session.go<br>│   └── types.go<br>├── reports<br>│   ├── 2017-05-01.md<br>│   ├── 2017-05-08.md<br>│   ├── 2017-05-15.md<br>│   ├── 2017-06-05.md<br>│   ├── 2017-06-12.md<br>│   ├── 2017-06-26.md<br>│   └── builder<br>├── restartmanager<br>│   ├── restartmanager.go<br>│   └── restartmanager_test.go<br>├── ROADMAP.md<br>├── runconfig<br>│   ├── config.go<br>│   ├── config_test.go<br>│   ├── config_unix.go<br>│   ├── config_windows.go<br>│   ├── errors.go<br>│   ├── fixtures<br>│   ├── hostconfig.go<br>│   ├── hostconfig_solaris.go<br>│   ├── hostconfig_test.go<br>│   ├── hostconfig_unix.go<br>│   ├── hostconfig_windows.go<br>│   ├── hostconfig_windows_test.go<br>│   └── opts<br>├── TESTING.md<br>├── vendor<br>│   ├── archive<br>│   ├── cloud.google.com<br>│   ├── github.com<br>│   ├── golang.org<br>│   └── google.golang.org<br>├── vendor.conf<br>├── VENDORING.md<br>├── VERSION<br>└── volume<br>    ├── drivers<br>    ├── local<br>    ├── store<br>    ├── testutils<br>    ├── validate.go<br>    ├── validate_test.go<br>    ├── validate_unix_test.go<br>    ├── validate_windows_test.go<br>    ├── volume_copy.go<br>    ├── volume_copy_unix.go<br>    ├── volume_copy_windows.go<br>    ├── volume.go<br>    ├── volume_linux.go<br>    ├── volume_linux_test.go<br>    ├── volume_propagation_linux.go<br>    ├── volume_propagation_linux_test.go<br>    ├── volume_propagation_unsupported.go<br>    ├── volume_test.go<br>    ├── volume_unix.go<br>    ├── volume_unsupported.go<br>    └── volume_windows.go</p>
-<p>168 directories, 759 files</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1503,7 +1501,7 @@ fs.BoolVar(&amp;s.EnableAggregatorRouting, &quot;enable-aggregator-routing&quot;
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">66</span>
+              <span class="site-state-item-count">67</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>

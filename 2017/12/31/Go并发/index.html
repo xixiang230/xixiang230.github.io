@@ -68,7 +68,7 @@
 <link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="Go," />
 
 
 
@@ -86,16 +86,18 @@
 
 
 
-<meta name="description" content="求知若饥，虛心若愚">
-<meta property="og:type" content="website">
-<meta property="og:title" content="云梦泽">
-<meta property="og:url" content="http://xixiang230.github.io/categories/technique/page/5/index.html">
+<meta name="description" content="goroutinegoruotine本质上就是协程，比线程颗粒更小，十几个goroutine可能提现在底层就是五六个线程，且Go语言内部已经帮你实现了goroutine直接的内存共享。执行一个groutine只需要极小的栈内存(4~5KB)，具体会根据相应的数据伸缩。正因为如此，可同时运行成千上万个并发任务，goroutine比thread更易用、高效、轻便。">
+<meta name="keywords" content="Go">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Go并发">
+<meta property="og:url" content="http://xixiang230.github.io/2017/12/31/Go并发/index.html">
 <meta property="og:site_name" content="云梦泽">
-<meta property="og:description" content="求知若饥，虛心若愚">
+<meta property="og:description" content="goroutinegoruotine本质上就是协程，比线程颗粒更小，十几个goroutine可能提现在底层就是五六个线程，且Go语言内部已经帮你实现了goroutine直接的内存共享。执行一个groutine只需要极小的栈内存(4~5KB)，具体会根据相应的数据伸缩。正因为如此，可同时运行成千上万个并发任务，goroutine比thread更易用、高效、轻便。">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-01-03T12:42:32.911Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="云梦泽">
-<meta name="twitter:description" content="求知若饥，虛心若愚">
+<meta name="twitter:title" content="Go并发">
+<meta name="twitter:description" content="goroutinegoruotine本质上就是协程，比线程颗粒更小，十几个goroutine可能提现在底层就是五六个线程，且Go语言内部已经帮你实现了goroutine直接的内存共享。执行一个groutine只需要极小的栈内存(4~5KB)，具体会根据相应的数据伸缩。正因为如此，可同时运行成千上万个并发任务，goroutine比thread更易用、高效、轻便。">
 
 
 
@@ -113,7 +115,7 @@
   };
 </script>
 
-  <title> 分类: 技术 | 云梦泽 </title>
+  <title> Go并发 | 云梦泽 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -134,7 +136,7 @@
     
   
 
-  <div class="container one-collumn sidebar-position-left  ">
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -222,107 +224,126 @@
           <div id="content" class="content">
             
 
-  <section id="posts" class="posts-collapse">
-    <div class="collection-title">
-      <h2 >
-        技术
-        <small>分类</small>
-      </h2>
-    </div>
-
+  <div id="posts" class="posts-expand">
     
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h1 class="post-title">
-        
-            <a class="post-title-link" href="/2016/05/15/git-push本地代码到github出错/" itemprop="url">
-              
-                <span itemprop="name">git push本地代码到github出错</span>
-              
-            </a>
-        
-      </h1>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2016-05-15T17:37:27+08:00"
-              content="2016-05-15" >
-          05-15
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-    
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h1 class="post-title">
-        
-            <a class="post-title-link" href="/2016/05/15/markdown基本语法/" itemprop="url">
-              
-                <span itemprop="name">markdown基本语法</span>
-              
-            </a>
-        
-      </h1>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2016-05-15T16:10:40+08:00"
-              content="2016-05-15" >
-          05-15
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-    
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h1 class="post-title">
-        
-            <a class="post-title-link" href="/2016/05/15/hexo-标签无法显示/" itemprop="url">
-              
-                <span itemprop="name">hexo 标签无法显示</span>
-              
-            </a>
-        
-      </h1>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2016-05-15T15:38:34+08:00"
-              content="2016-05-15" >
-          05-15
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-    
-  </section>
 
   
-  <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/categories/technique/page/4/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/categories/technique/">1</a><span class="space">&hellip;</span><a class="page-number" href="/categories/technique/page/4/">4</a><span class="page-number current">5</span>
-  </nav>
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Go并发
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2017-12-31T23:01:51+08:00" content="2017-12-31">
+              2017-12-31
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
 
 
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="goroutine"><a href="#goroutine" class="headerlink" title="goroutine"></a>goroutine</h1><p>goruotine本质上就是协程，比线程颗粒更小，十几个goroutine可能提现在底层就是五六个线程，且Go语言内部已经帮你实现了goroutine直接的内存共享。执行一个groutine只需要极小的栈内存(4~5KB)，具体会根据相应的数据伸缩。正因为如此，可同时运行成千上万个并发任务，goroutine比thread更易用、高效、轻便。<br><a id="more"></a></p>
+<h1 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h1><p>通过go关键字即可启动一个goroutine，例:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">package main</span><br><span class="line">import (</span><br><span class="line">  &quot;fmt&quot;</span><br><span class="line">  &quot;runtime&quot;</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">func say(s string) &#123;</span><br><span class="line">  for i := 0; i &lt; 5; i++ &#123;</span><br><span class="line">      runtime.Gosched()</span><br><span class="line">      fmt.Println(s)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">func main() &#123;</span><br><span class="line">    go say(&quot;world&quot;)  // 开一个新的Goroutine执行</span><br><span class="line">    say(&quot;hello&quot;)     // 当前Goroutine执行</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Go/" rel="tag">#Go</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/12/31/hello-world/" rel="next" title="Hexo 学习">
+                <i class="fa fa-chevron-left"></i> Hexo 学习
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/01/01/TRUNK介绍/" rel="prev" title="TRUNK介绍">
+                TRUNK介绍 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -330,6 +351,10 @@
 
 
           
+  <div class="comments" id="comments">
+    
+  </div>
+
 
         </div>
         
@@ -349,8 +374,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel  sidebar-panel-active ">
+      <section class="site-overview sidebar-panel ">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/avatar.png"
@@ -445,6 +479,17 @@
 
       </section>
 
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#goroutine"><span class="nav-number">1.</span> <span class="nav-text">goroutine</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#使用"><span class="nav-number">2.</span> <span class="nav-text">使用</span></a></li></ol></div>
+            
+          </div>
+        </section>
       
 
     </div>
@@ -548,6 +593,10 @@
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
 
   
 
